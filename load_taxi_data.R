@@ -1,12 +1,20 @@
 library(readr)
 library(ggplot)
 
-csvs <- Sys.glob('*_tripdata_2015-*.csv')
-taxi <- data.frame()
-for (csv in csvs)
+green_csvs <- Sys.glob('green_tripdata_2015-*.csv')
+green_taxi <- data.frame()
+for (csv in green_csvs)
 {
   tmp <- read_csv(csv)
-  taxi <- rbind(tmp, taxi)
+  green_taxi <- rbind(tmp, green_taxi)
 }
 
-save(taxi, "taxidata.Rdata")
+yellow_cvs <- Sys.glob('yellow_tripdata_2015-*.csv')
+yellow_taxi <- data.frame()
+for (csv in yellow_csvs)
+{
+  tmp <- read_csv(csv)
+  yellow_taxi <- rbind(tmp, yellow_taxi)
+}
+
+save(yellow_taxi, green_taxi "taxidata.Rdata")
