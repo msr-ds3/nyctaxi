@@ -48,6 +48,7 @@ Notes from today's brainstorming meeting, in no particular order.
   * [Outlier Detection in Large-Scale Taxi Trip Records](https://www.cs.uic.edu/~urbcomp2012/papers/UrbComp2012_Paper18_J.T.Zhang.pdf)
   * [Detecting Traffic Anomalies Using Taxi GPS Data](http://www.hindawi.com/journals/mpe/2015/809582/)
   * [Effect of Taxi Information System on Efficiency and Quality of Taxi Services](http://trrjournalonline.trb.org/doi/abs/10.3141/1903-11?journalCode=trr) (under paywall)
+  * [Measuring the Efficiency  of the Urban Taxi Service System:](http://www2.cs.uic.edu/~urbcomp2013/urbcomp2014/papers/Zhang_Efficiency_taxi.pdf)
 
 ## Data questions
   * Do we have an id for the medallion or for individual drivers?
