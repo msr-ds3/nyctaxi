@@ -41,7 +41,11 @@ Notes from today's brainstorming meeting, in no particular order.
   * Why can't you find a taxi in the rain
   * [Best and worst times of day](http://iquantny.tumblr.com/post/93845043909/quantifying-the-best-and-worst-times-of-day-to-hit)
     * 5am great, lunch bad
-  * [538 posts](https://github.com/fivethirtyeight/uber-tlc-foil-response)
+  * [538 posts on Uber vs TLC](http://fivethirtyeight.com/tag/uber/)
+  * [Uber data](https://github.com/fivethirtyeight/uber-tlc-foil-response)
+  * [Outlier Detection in Large-Scale Taxi Trip Records](https://www.cs.uic.edu/~urbcomp2012/papers/UrbComp2012_Paper18_J.T.Zhang.pdf)
+  * [Detecting Traffic Anomalies Using Taxi GPS Data](http://www.hindawi.com/journals/mpe/2015/809582/)
+  * [Effect of Taxi Information System on Efficiency and Quality of Taxi Services](http://trrjournalonline.trb.org/doi/abs/10.3141/1903-11?journalCode=trr) (under paywall)
 
 ## Data questions
   * Do we have an id for the medallion or for individual drivers?
