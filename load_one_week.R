@@ -9,13 +9,13 @@ range_begin <- as.Date("2013-07-06")
 range_end <- as.Date("2013-07-14")
 
 trip_fare <- read_csv("trip_fare_7.csv")
-trip_fare <- trip_fare %>% mutate( ymd_pickup = as.Date(parse_datetime(pickup_datetime, "%Y-%m-%d %H:%M:%S"))) %>% 
+trip_fare <- trip_fare %>% mutate( ymd_pickup = as.Date(parse_datetime(pickup_datetime, "%Y-%m-%d"))) %>% 
                            filter(as.Date(ymd_pickup) > range_begin & as.Date(ymd_pickup) < range_end)
 
-write_csv(fare_data, "week_trip_fare.csv")
+write_csv(trip_fare, "week_trip_fare.csv")
 
 
 trip_data <- read_csv("trip_data_7.csv")
-trip_data <- trip_data %>% mutate( ymd_pickup = as.Date(parse_datetime(pickup_datetime, "%Y-%m-%d %H:%M:%S"))) %>% 
+trip_data <- trip_data %>% mutate( ymd_pickup = as.Date(parse_datetime(pickup_datetime, "%Y-%m-%d"))) %>% 
                            filter(as.Date(ymd_pickup) > range_begin & as.Date(ymd_pickup) < range_end)
 write_csv(trip_data, "week_trip_data.csv")
