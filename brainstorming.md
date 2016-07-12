@@ -35,6 +35,8 @@ Notes from today's brainstorming meeting, in no particular order.
     * Where most trips happen (by borough)
 	* "Average taxi" (or [randomly sampled one](http://nyctaxi.herokuapp.com))
   * Todd Schneider's analysis
+  * [Visualizing taxi trips](http://minimaxir.com/2015/11/nyc-ggplot2-howto/)
+  * The trip data can also be accessed through [Google BigQuery](https://cloud.google.com/bigquery/public-data/nyc-tlc-trips) ([some](https://www.reddit.com/r/bigquery/comments/28ialf/173_million_2013_nyc_taxi_rides_shared_on_bigquery/) [examples](https://github.com/hack-c/taxidata/blob/master/taxidata.sql))
   * Efficiency of urban taxi systems
     * Can reduce 20% to 90% of vacant taxi trips
   * Special behavior of taxis around holidays
