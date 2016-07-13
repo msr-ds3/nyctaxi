@@ -1,8 +1,6 @@
 library(ggplot2)
 library(dplyr)
 
-
-
 # let's just use Jake's theme
 theme_set(theme_bw())
 
