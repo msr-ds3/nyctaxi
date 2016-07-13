@@ -1,7 +1,7 @@
 library(readr)
 library(dplyr)
 library(broom)
-library(httr)
+library(lubridate)
 
 parse_datetime <- function(s, format="%Y-%m-%d %H:%M:%S") {
   as.POSIXct(as.character(s), format=format)
