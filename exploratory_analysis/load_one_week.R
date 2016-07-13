@@ -2,6 +2,7 @@ library(readr)
 library(dplyr)
 library(broom)
 library(httr)
+library(lubridate)
 
 parse_datetime <- function(s, format="%Y-%m-%d %H:%M:%S") {
   as.POSIXct(as.character(s), format=format)
@@ -20,7 +21,7 @@ trip_data <- trip_data %>% mutate( ymd_pickup = as.Date(parse_datetime(pickup_da
                            filter(as.Date(ymd_pickup) >= range_begin & as.Date(ymd_pickup) <= range_end)
 
 taxi <- inner_join(trip_data, trip_fare, by=c("medallion", "hack_license", "vendor_id", "pickup_datetime", "ymd_pickup"))
-taxi <- taxi %>% mutate(hour = hour(pickup_datetime)) 
+taxi <- taxi %>% mutate(hour = hour(pickup_datetime),  days_of_the_week = wday(ymd_pickup,label = TRUE)) 
 
 save(taxi, file = 'one_week_taxi.Rdata')
 
