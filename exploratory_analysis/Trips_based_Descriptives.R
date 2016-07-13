@@ -8,7 +8,7 @@ theme_set(theme_bw())
 ggplot(taxi, aes(trip_time_in_secs/60)) + geom_density() + xlab("trip time in minutes") + xlim(0,100)
 
 
-# distribution of trip start time
+# distribution of trip fare amount
 ggplot(taxi, aes(fare_amount)) + geom_density() + xlab("fare amount")  + xlim(0, 200)
 
 
@@ -48,6 +48,6 @@ ggplot(taxi_day_of_week , aes(hour, avg_tip)) + geom_line() + xlab("hours") + yl
 
 
 
-
+ggsave("../figures/distribution_trip_duration.png")
 
 
