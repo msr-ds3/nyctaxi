@@ -36,6 +36,7 @@ coordinates(spdf) <- ~pickup_longitude +pickup_latitude
 proj4string(spdf) <- proj4string(nyc_neighborhoods)
 matches <- over(spdf, nyc_neighborhoods)
 taxi_clean <- cbind(taxi_clean, matches)
+rm(spdf, nyc_df, min_lng, min_lat, max_lng, max_lat)
 
 # rename fields created for pickup neighborhoods
 taxi_clean <- rename(taxi_clean, pickup_neighborhood = neighborhood,pickup_borough=borough, pickup_boroughCode = boroughCode, pickup_X.id = X.id)
@@ -64,7 +65,6 @@ trip_based_stats <- taxi_clean %>% group_by(day_of_the_week, hour, pickup_neighb
                     third_quartile = quantile(trip_time_in_secs, 0.75), max_time_in_sec = max(trip_time_in_secs), min_time_in_sec = min(trip_time_in_secs), sd_time_in_sec = sd(trip_time_in_secs))
 
   
-View(trip_based_stats)
 
 
 
