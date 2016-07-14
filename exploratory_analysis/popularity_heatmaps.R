@@ -1,6 +1,6 @@
 library(leaflet)
 library(tigris)
-library(colorspace)
+library(RColorBrewer)
 
 source("one_week_analysis.R")
 
@@ -10,7 +10,7 @@ source("one_week_analysis.R")
 # returns a continous color palette within a range
 set_pal <- function(range, na_color="#808080")
 {
-  colorNumeric(palette = diverge_hsv(max(range)),
+  colorNumeric(palette = rev(brewer.pal(11, "Spectral")), #diverge_hsv(max(range)),
                domain = range, na.color = na_color)
 }
 
@@ -53,7 +53,7 @@ taxi_by_src_nbhd <- taxi_clean %>% group_by(pickup_neighborhood) %>% summarize(l
 map_data <- geo_join(nyc_neighborhoods, taxi_by_src_nbhd, "neighborhood", "pickup_neighborhood")
 
 # get color palette
-pal <- set_pal(range = range(map_data@data$logcount, na.rm = T), na_color = "green")
+pal <- set_pal(range = range(map_data@data$logcount, na.rm = T))
 
 # get map (transform function translates log vals into human radable vals)
 pickup_heatmap <- get_map(data = map_data, 
@@ -74,7 +74,7 @@ taxi_by_dst_nbhd <- taxi_clean %>% group_by(dropoff_neighborhood) %>% summarize(
 map_data <- geo_join(nyc_neighborhoods, taxi_by_dst_nbhd, "neighborhood", "dropoff_neighborhood")
 
 # overlay rides on map
-pal <- set_pal(range= range(map_data@data$logcount, na.rm=T), na_color = "green")
+pal <- set_pal(range= range(map_data@data$logcount, na.rm=T))
 
 dropoff_heatmap <- get_map(data = map_data, color_by_data = map_data@data$logcount,
                            popup_data = map_data@data$neighborhood, pal=pal, 
@@ -87,7 +87,7 @@ neighborhood <- "Williamsburg"
 src_by_dst <- taxi_clean %>% filter(pickup_neighborhood == neighborhood) %>% group_by(dropoff_neighborhood) %>% summarize(logcount = log(n()))
 
 map_data <- geo_join(nyc_neighborhoods, src_by_dst, "neighborhood", "dropoff_neighborhood")
-pal <- set_pal(range = range(map_data@data$logcount, na.rm = T), na_color = "green")
+pal <- set_pal(range = range(map_data@data$logcount, na.rm = T))
 
 from_X_heatmap <- get_map(data = map_data, 
                           color_by_data = map_data@data$logcount, 
@@ -102,7 +102,7 @@ neighborhood <- "Chelsea"
 dst_by_src <- taxi_clean %>% filter(dropoff_neighborhood == neighborhood) %>% group_by(pickup_neighborhood) %>% summarize(logcount = log(n()))
 
 map_data <- geo_join(nyc_neighborhoods, dst_by_src, "neighborhood", "pickup_neighborhood")
-pal <- set_pal(range = range(map_data@data$logcount, na.rm = T), na_color = "green")
+pal <- set_pal(range = range(map_data@data$logcount, na.rm = T))
 
 to_X_heatmap <- get_map(data = map_data, 
                           color_by_data = map_data@data$logcount, 
