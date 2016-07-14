@@ -1,10 +1,6 @@
 source("one_week_analysis.R")
 source("heatmap_functions.R")
 
-#value = 1 retrieves hours, value = 2 retrieves minute
-get_hr_or_min <- function(s, value){
-  as.integer(strsplit(s, ":" )[[1]][value])
-}
 #########################
 # pickup heatmap
 #########################

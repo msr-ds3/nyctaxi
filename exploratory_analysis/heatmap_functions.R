@@ -47,35 +47,38 @@ transform_type <- function(bool){
   }
 }
 
-#value = 1 retrieves hours, value = 2 retrieves minute
+# converts string in form of "#:##" in ints: value = 1 retrieves hours, value = 2 retrieves minutes
 get_hr_or_min <- function(s, value){
   as.integer(strsplit(s, ":" )[[1]][value])
 }
 
+# converts timestmaps in form of "#:##" into num of minutes since midnight
+get_timestamp_in_minutes_from_midnight <- function(s)
+{
+  get_hr_or_min(s, value = 1) * 60 + get_hr_or_min(s, value = 2)
+}
+
 #given neigborhood X, create heatmap by popular destination or origins (based on is_source). Toggle log scale by using is_log
-get_map_by_neighborhood <- function(data = taxi_clean, neighborhood  = NULL ,starttime = "0:00", endtime = "23:59", is_source = TRUE, is_log =  TRUE){
-  starttime <- get_hr_or_min(starttime, value = 1) * 60 + get_hr_or_min(starttime, value = 2)
-  endtime <- get_hr_or_min(endtime, value = 1) * 60 + get_hr_or_min(endtime, value = 2)
-  data <- data %>% mutate(starttime_in_min = hour * 60 + pickup_minute, endtime_in_min = dropoff_hour * 60 + dropoff_minute) %>% 
-    filter(starttime_in_min > starttime & starttime_in_min < endtime)
+get_map_by_neighborhood <- function(data = taxi_clean, neighborhood  = NULL ,begin = "0:00", end = "23:59", is_source = TRUE, is_log =  TRUE){
+  begin <- get_timestamp_in_minutes_from_midnight(begin)
+  end <- get_timestamp_in_minutes_from_midnight(end)
+  direction <- ifelse(is_source, "From","To")
+  group_by_neighborhood <- ifelse(is_source, "dropoff_neighborhood", "pickup_neighborhood")
+  
+  data <- data %>% mutate(starttime_in_min = hour * 60 + pickup_minute) %>% 
+    filter(starttime_in_min > begin & starttime_in_min < end)
   if (!is.null(neighborhood))
   {
-    #exp <- lazyeval::interp(quote(x == y), x = as.name(ifelse(is_source,"pickup_neighborhood", "dropoff_neighborhood")), y=neighborhood)
-   if(is_source){
-     data <- data %>% filter(pickup_neighborhood == neighborhood)
-     
-   }
-   else {
+    if(is_source){
+      data <- data %>% filter(pickup_neighborhood == neighborhood)
+   } else {
      data <- data %>% filter(dropoff_neighborhood == neighborhood)
    } 
   }
-  data <- data %>% group_by_(ifelse(is_source, "dropoff_neighborhood", "pickup_neighborhood")) %>% summarize(summary = ifelse(is_log, log(n()), n()))
-  map_data <- geo_join(nyc_neighborhoods, data, "neighborhood", ifelse(is_source, "dropoff_neighborhood", "pickup_neighborhood"))
+  data <- data %>% group_by_(group_by_neighborhood) %>% summarize(summary = ifelse(is_log, log(n()/7), n()/7))
+  map_data <- geo_join(nyc_neighborhoods, data, "neighborhood", group_by_neighborhood)
   pal <- set_pal(range = range(map_data@data$summary, na.rm = T)) 
-  direction <- ifelse(is_source, "From","To")
-  get_map(data = map_data, 
-          color_by_data = map_data@data$summary, 
-          popup_data = map_data@data$neighborhood, 
-          pal=pal,
-          legend_title = paste("Rides",  direction, neighborhood),transform = transform_type(is_log))
+  
+  get_map(data = map_data, color_by_data = map_data@data$summary, popup_data = map_data@data$neighborhood, 
+          pal=pal,  legend_title = paste("Rides", direction, neighborhood), transform = transform_type(is_log))
 }
