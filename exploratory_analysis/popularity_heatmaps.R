@@ -1,7 +1,6 @@
 source("one_week_analysis.R")
 source("heatmap_functions.R")
 
-plot_map <- function(data, group_by, )
 #########################
 # pickup heatmap
 #########################
