@@ -89,7 +89,7 @@ from_X_heatmap <- get_map(data = map_data,
                           color_by_data = map_data@data$logcount, 
                           popup_data = map_data@data$neighborhood, 
                           pal=pal,
-                          legend_title = paste("Rides From", neighborhood),transform = log_transform)
+                          legend_title = paste("Rides To", neighborhood),transform = log_transform)
 
 ##########################################################
 # given a neighborhood X, what are the sources?
@@ -104,4 +104,4 @@ to_X_heatmap <- get_map(data = map_data,
                           color_by_data = map_data@data$logcount, 
                           popup_data = map_data@data$neighborhood, 
                           pal=pal,
-                          legend_title = paste("Rides To", neighborhood),transform = log_transform)
+                          legend_title = paste("Rides From", neighborhood),transform = log_transform)
