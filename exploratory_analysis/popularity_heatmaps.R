@@ -37,12 +37,11 @@ get_map <- function(data, color_by_data, popup_data, pal, boundary_color = "dark
 add_legend <- function(map, pal, legend_title, values, opacity = 0.4,
                        transform=identity, legend_position = "bottomright")
 {
-  map %>% addLegend(legend_position, pal = pal, values=values,
-                           title = legend_title,
-                           opacity = opacity,
-                           labFormat = labelFormat(transform =transform))
+  map %>% addLegend(legend_position, pal = pal, values=values, title = legend_title,
+                           opacity = opacity, labFormat = labelFormat(transform =transform))
 }
 
+log_transform <- function(x) { round(exp(x)) }
 #########################
 # pickup heatmap
 #########################
@@ -57,11 +56,8 @@ pal <- set_pal(range = range(map_data@data$logcount, na.rm = T))
 
 # get map (transform function translates log vals into human radable vals)
 pickup_heatmap <- get_map(data = map_data, 
-        color_by_data = map_data@data$logcount, 
-        popup_data = map_data@data$neighborhood, 
-        pal=pal,
-        legend_title = "pickup",
-        transform = function(x) round(exp(x)))
+        color_by_data = map_data@data$logcount, popup_data = map_data@data$neighborhood, 
+        pal=pal, legend_title = "pickup locations", transform = log_transform)
 
 
 #########################
@@ -78,7 +74,7 @@ pal <- set_pal(range= range(map_data@data$logcount, na.rm=T))
 
 dropoff_heatmap <- get_map(data = map_data, color_by_data = map_data@data$logcount,
                            popup_data = map_data@data$neighborhood, pal=pal, 
-                           legend_title = "dropoff",transform = function(x) round(exp(x)))
+                           legend_title = "dropoff locations",transform = log_transform)
 
 ##########################################################
 # given a neighborhood X, what are destinations?
@@ -93,7 +89,7 @@ from_X_heatmap <- get_map(data = map_data,
                           color_by_data = map_data@data$logcount, 
                           popup_data = map_data@data$neighborhood, 
                           pal=pal,
-                          legend_title = paste("from", neighborhood),transform = function(x) round(exp(x)))
+                          legend_title = paste("Rides From", neighborhood),transform = log_transform)
 
 ##########################################################
 # given a neighborhood X, what are the sources?
@@ -108,4 +104,4 @@ to_X_heatmap <- get_map(data = map_data,
                           color_by_data = map_data@data$logcount, 
                           popup_data = map_data@data$neighborhood, 
                           pal=pal,
-                          legend_title = paste("to", neighborhood),transform = function(x) round(exp(x)))
+                          legend_title = paste("Rides To", neighborhood),transform = log_transform)
