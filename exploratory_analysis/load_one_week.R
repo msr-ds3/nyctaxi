@@ -7,6 +7,10 @@ parse_datetime <- function(s, format="%Y-%m-%d %H:%M:%S") {
   as.POSIXct(as.character(s), format=format)
 }
 
+parse_minute <- function(s, format = "%M"){
+  as.integer(strftime(s, format = format))
+  }
+
 #FILE DEPENDENCIES - TRIP_FARE_7 AND TRIP_DATA_7 CSVS
 
 # range of dates we're interested in
@@ -24,7 +28,8 @@ trip_data <- trip_data %>% mutate( ymd_pickup = as.Date(parse_datetime(pickup_da
 
 # join the two dataframes and save to Rdata file
 taxi <- inner_join(trip_data, trip_fare, by=c("medallion", "hack_license", "vendor_id", "pickup_datetime", "ymd_pickup"))
-taxi <- taxi %>% mutate(hour = hour(pickup_datetime),  day_of_the_week = wday(ymd_pickup,label = TRUE)) 
+taxi <- taxi %>% mutate(hour = hour(pickup_datetime),  day_of_the_week = wday(ymd_pickup,label = TRUE), pickup_time = parse_minute(pickup_datetime),
+                        dropoff_time = parse_minute(dropoff_datetime)) 
 
 save(taxi, file = 'one_week_taxi.Rdata')
 
