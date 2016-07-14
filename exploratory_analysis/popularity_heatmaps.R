@@ -1,6 +1,10 @@
 source("one_week_analysis.R")
 source("heatmap_functions.R")
 
+#value = 1 retrieves hours, value = 2 retrieves minute
+get_hr_or_min <- function(s, value){
+  as.integer(strsplit(s, ":" )[[1]][value])
+}
 #########################
 # pickup heatmap
 #########################
@@ -64,3 +68,24 @@ to_X_heatmap <- get_map(data = map_data,
                           popup_data = map_data@data$neighborhood, 
                           pal=pal,
                           legend_title = paste("Rides To", neighborhood),transform = log_transform)
+
+get_map_by_neighborhood <- function(data = taxi_clean, neighborhood ,starttime = "0:00", endtime = "23:59", is_source = TRUE, is_log =  TRUE){
+  exp <- lazyeval::interp(quote(x == y), x = as.name(ifelse(is_source,"pickup_neighborhood", "dropoff_neighborhood")), y=neighborhood)
+  
+  
+  starttime <- get_hr_or_min(starttime, value = 1) * 60 + get_hr_or_min(starttime, value = 2)
+  endtime <- get_hr_or_min(endtime, value = 1) * 60 + get_hr_or_min(endtime, value = 2)
+  data <- data %>% mutate(starttime_in_min = hour * 60 + pickup_minute, endtime_in_min = dropoff_hour * 60 + dropoff_minute) %>% 
+                  filter(starttime_in_min > starttime & endtime_in_min < endtime) %>%
+    filter_(exp) %>%
+    group_by_(ifelse(is_source, "dropoff_neighborhood", "pickup_neighborhood")) %>% summarize(summary = ifelse(is_log, log(n()), n()))
+    map_data <- geo_join(nyc_neighborhoods, data, "neighborhood", ifelse(is_source, "dropoff_neighborhood", "pickup_neighborhood"))
+    pal <- set_pal(range = range(map_data@data$summary, na.rm = T)) 
+    direction <- ifelse(is_source, "From","To")
+    get_map(data = map_data, 
+          color_by_data = map_data@data$summary, 
+          popup_data = map_data@data$neighborhood, 
+          pal=pal,
+          legend_title = paste("Rides",  direction, neighborhood),transform = transform_type(is_log))
+}
+ 
