@@ -36,7 +36,7 @@ coordinates(spdf) <- ~pickup_longitude +pickup_latitude
 proj4string(spdf) <- proj4string(nyc_neighborhoods)
 matches <- over(spdf, nyc_neighborhoods)
 taxi_clean <- cbind(taxi_clean, matches)
-rm(spdf, nyc_df, min_lng, min_lat, max_lng, max_lat)
+
 
 # rename fields created for pickup neighborhoods
 taxi_clean <- rename(taxi_clean, pickup_neighborhood = neighborhood,pickup_borough=borough, pickup_boroughCode = boroughCode, pickup_X.id = X.id)
@@ -51,7 +51,7 @@ taxi_clean <- cbind(taxi_clean, matches)
 # rename dropoff neighborhood field
 taxi_clean <- rename(taxi_clean, dropoff_neighborhood = neighborhood,dropoff_borough=borough, dropoff_boroughCode = boroughCode, dropoff_X.id = X.id)
 
-
+rm(spdf, nyc_df, min_lng, min_lat, max_lng, max_lat)
 
 # display stats by day of week, hour, pickup neighborhood, and dropoff neighborhood
 trip_based_stats <- taxi_clean %>% group_by(day_of_the_week, hour, pickup_neighborhood, dropoff_neighborhood) %>% 
