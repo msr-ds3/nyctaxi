@@ -10,3 +10,4 @@
 * Neighborhood popularity plots (in R) are [here](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/one_week_neighborhood_popularity.R)
 * Interactive popularity heatmaps by neighborhood can be created using [this](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/popularity_heatmaps.R) script 
 * Ggmap (not-interactive) popularity heatmaps can be created using the functions in [here](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/ggheatmaps.R)
+* Cool figures, plots, and maps (output of some of the above) are in [this](https://github.com/msr-ds3/nyctaxi/tree/master/figures) dir
