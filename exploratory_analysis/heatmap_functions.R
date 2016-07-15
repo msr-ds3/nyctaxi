@@ -8,6 +8,16 @@ set_pal <- function(range, na_color="#808080", pal = rev(brewer.pal(11, "Spectra
   colorNumeric(palette = pal, domain = range, na.color = na_color)
 }
 
+set_quanpal <- function(range, na_color="#808080", pal = rev(brewer.pal(11, "Spectral")))
+{
+  colorQuantile(palette = pal, domain = range, na.color = na_color, n=11)
+}
+
+set_binpal <- function(range, na_color="#808080", pal = rev(brewer.pal(11, "Spectral")))
+{
+  colorBin(palette = pal, domain = range, na.color = na_color, bins=11)
+}
+
 # returns a map based on parameters. ignore legend_title if no legend needed.
 get_map <- function(data, color_by_data, popup_data, pal, boundary_color = "darkblue", boundary_weight=1, opacity=0.4,
                     lng=-73.96, lat=40.75, zoom_level=11, legend_title=NULL, transform=identity, legend_position = "bottomright")
@@ -47,20 +57,9 @@ transform_type <- function(bool){
   }
 }
 
-# converts string in form of "#:##" in ints: value = 1 retrieves hours, value = 2 retrieves minutes
-get_hr_or_min <- function(s, value){
-  as.integer(strsplit(s, ":" )[[1]][value])
-}
-
-# converts timestmaps in form of "#:##" into num of minutes since midnight
-minutes_from_midnight <- function(s)
-{
-  get_hr_or_min(s, value = 1) * 60 + get_hr_or_min(s, value = 2)
-}
-
 #given neigborhood X (or the Null Neighborhood), create heatmap by popular destination or origins (based on is_source). 
 #Toggle log scale by using is_log
-get_map_by_neighborhood <- function(data = taxi_clean, neighborhood  = NULL ,begin = 0, end = 23, is_source = TRUE, is_log =  TRUE){
+get_map_by_neighborhood <- function(data = taxi_clean, neighborhood  = NULL ,begin = 0, end = 24, is_source = TRUE, is_log =  TRUE){
   
   direction <- ifelse(is_source, "From","To")
   neighborhoods_of_interest <- ifelse(is_source, "dropoff_neighborhood", "pickup_neighborhood")
@@ -70,10 +69,11 @@ get_map_by_neighborhood <- function(data = taxi_clean, neighborhood  = NULL ,beg
   if (!is.null(neighborhood)) { data <- filter_by_neighborhood(data, neighborhood, is_source) }
   else { neighborhood <- "Everywhere"}
   
-  data <- data %>% group_by_(neighborhoods_of_interest) %>% summarize(summary = ifelse(is_log, log(n()), n()))
+  data <- data %>% group_by_(neighborhoods_of_interest) %>% summarize(summary = ifelse(is_log, log(n()/(7*(end-begin))), n()/(7*(end-begin))))
   
   map_data <- geo_join(nyc_neighborhoods, data, "neighborhood", neighborhoods_of_interest)
-  pal <- set_pal(range = range(map_data@data$summary, na.rm = T)) 
+ 
+  pal <- set_binpal(range =map_data@data$summary)
   
   get_map(data = map_data, color_by_data = map_data@data$summary, popup_data = map_data@data$neighborhood, 
           pal=pal,  legend_title = paste("Rides", direction, neighborhood), transform = transform_type(is_log))
@@ -88,5 +88,5 @@ filter_by_neighborhood <- function(data, neighborhood, is_source) {
 }
 
 filter_by_range <- function(data, begin, end) {
-  data %>% filter(hour >= begin & hour <= end)
+  data %>% filter(hour >= begin & hour < end)
 }
