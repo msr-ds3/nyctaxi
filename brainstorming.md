@@ -30,7 +30,7 @@ Notes from today's brainstorming meeting, in no particular order.
   * ["Hunting or waiting? Discovering passenger-finding strategies from a large-scale real-world taxi dataset"]("Hunting or waiting? Discovering passenger-finding strategies from a large-scale real-world taxi dataset.")
   * [Problems w/ anonymization](https://tech.vijayp.ca/of-taxis-and-rainbows-f6bc289679a1)
   * [When to quit / driver elasticities](http://www.decisionsciencenews.com/2014/11/19/nyc-cab-drivers-quit-early-rains/)
-  	*[Link to paper] (https://github.com/msr-ds3/nyctaxi/blob/master/NBER_WORKING_PAPER_SERIES.pdf)  
+  	* [Link to paper] (https://github.com/msr-ds3/nyctaxi/blob/master/NBER_WORKING_PAPER_SERIES.pdf)  
   * [Optimal strategies?](https://github.com/samuelklee/taxi-strategy)
   * [Analysis from Berkeley student](https://www.ocf.berkeley.edu/~dlevitt/2015/12/13/final-project-nyc-taxi-and-uber-data/)
     * Where most trips happen (by borough)
