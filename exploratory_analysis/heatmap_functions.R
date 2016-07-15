@@ -19,7 +19,7 @@ set_binpal <- function(range, na_color="#808080", pal = rev(brewer.pal(11, "Spec
 }
 
 # returns a map based on parameters. ignore legend_title if no legend needed.
-get_map <- function(data, color_by_data, popup_data, pal, boundary_color = "darkblue", boundary_weight=1, opacity=0.4,
+get_leaflet_map <- function(data, color_by_data, popup_data, pal, boundary_color = "darkblue", boundary_weight=1, opacity=0.4,
                     lng=-73.96, lat=40.75, zoom_level=11, legend_title=NULL, transform=identity, legend_position = "bottomright")
 {
   map <- leaflet(data) %>%
@@ -45,7 +45,7 @@ add_legend <- function(map, pal, legend_title, values, opacity = 0.4,
                     opacity = opacity, labFormat = labelFormat(transform =transform))
 }
 
-log_transform <- function(x) { round(exp(x)) }
+log_transform <- function(x) { round(10^(x)) }
 
 # return transform function based on bool
 transform_type <- function(bool){
@@ -69,13 +69,13 @@ get_map_by_neighborhood <- function(data = taxi_clean, neighborhood  = NULL ,beg
   if (!is.null(neighborhood)) { data <- filter_by_neighborhood(data, neighborhood, is_source) }
   else { neighborhood <- "Everywhere"}
   
-  data <- data %>% group_by_(neighborhoods_of_interest) %>% summarize(summary = ifelse(is_log, log(n()/(7*(end-begin))), n()/(7*(end-begin))))
+  data <- data %>% group_by_(neighborhoods_of_interest) %>% summarize(summary = ifelse(is_log, log10(n()/(7*(end-begin))), n()/(7*(end-begin))))
   
   map_data <- geo_join(nyc_neighborhoods, data, "neighborhood", neighborhoods_of_interest)
  
   pal <- set_binpal(range =map_data@data$summary)
   
-  get_map(data = map_data, color_by_data = map_data@data$summary, popup_data = map_data@data$neighborhood, 
+  get_leaflet_map(data = map_data, color_by_data = map_data@data$summary, popup_data = map_data@data$neighborhood, 
           pal=pal,  legend_title = paste("Rides", direction, neighborhood), transform = transform_type(is_log))
 }
 
