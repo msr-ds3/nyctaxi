@@ -24,5 +24,7 @@ driver_data <- filtered_drivers %>%  gather("variable", "datetime", 6:7)
 
 driver_data$hack_license <- factor(driver_data$hack_license, levels = rev(driver_levels$hack_license))
 
+
 ggplot(driver_data, aes(datetime, as.factor(hack_license), color=variable)) + geom_point(size = 1.5, alpha = .75) + 
-  scale_x_datetime(date_breaks = "4 hour",labels=date_format("%H")) + scale_y_discrete(labels= NULL) + xlab("hour of day") + ylab("100 random drivers")
+  scale_x_datetime(date_breaks = "2 hour",labels=date_format("%H")) + scale_y_discrete(labels= NULL) + xlab("hour of day") + ylab("100 random drivers")  
+            
