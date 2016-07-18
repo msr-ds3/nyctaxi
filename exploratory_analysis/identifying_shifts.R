@@ -2,7 +2,7 @@ load("one_week_taxi.Rdata")
 library(tidyr)
 
 shifts <- taxi_clean %>% group_by(medallion, hack_license, day_of_the_week) %>% 
-  summarize(first = min(pickup_datetime), last = max(pickup_datetime), active_hours = n_distinct(hour), num_of_trips = n(), revenue = sum(total_amount))
+  summarize(first = min(pickup_datetime), last = max(pickup_datetime), active_hours = n_distinct(pickup_hour), num_of_trips = n(), revenue = sum(total_amount))
 ggplot(shifts, aes(revenue)) + geom_histogram(binwidth = 1) 
 random_drivers <- sample(taxi_clean$hack_license, 100)
 

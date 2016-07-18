@@ -28,7 +28,7 @@ trip_data <- trip_data %>% mutate( ymd_pickup = as.Date(parse_datetime(pickup_da
 
 # join the two dataframes and save to Rdata file
 taxi <- inner_join(trip_data, trip_fare, by=c("medallion", "hack_license", "vendor_id", "pickup_datetime", "ymd_pickup"))
-taxi <- taxi %>% mutate(hour = hour(pickup_datetime), dropoff_hour = hour(dropoff_datetime),day_of_the_week = wday(ymd_pickup,label = TRUE), 
+taxi <- taxi %>% mutate(pickup_hour = hour(pickup_datetime), dropoff_hour = hour(dropoff_datetime),day_of_the_week = wday(ymd_pickup,label = TRUE), 
                         pickup_minute = parse_minute(pickup_datetime), dropoff_minute = parse_minute(dropoff_datetime)) 
 
 save(taxi, file = 'one_week_taxi.Rdata')

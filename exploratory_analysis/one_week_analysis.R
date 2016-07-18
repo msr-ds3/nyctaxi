@@ -53,8 +53,8 @@ taxi_clean <- rename(taxi_clean, dropoff_neighborhood = neighborhood,dropoff_bor
 
 rm(spdf, nyc_df, min_lng, min_lat, max_lng, max_lat)
 
-# display stats by day of week, hour, pickup neighborhood, and dropoff neighborhood
-trip_based_stats <- taxi_clean %>% group_by(day_of_the_week, hour, pickup_neighborhood, dropoff_neighborhood) %>% 
+# display stats by day of week, pickup_hour, pickup neighborhood, and dropoff neighborhood
+trip_based_stats <- taxi_clean %>% group_by(day_of_the_week, pickup_hour, pickup_neighborhood, dropoff_neighborhood) %>% 
          summarize(count=n(), avg_distance = mean(trip_distance), first_quartile_dist = quantile(trip_distance,0.25), median_dist = median(trip_distance), 
                    third_quartile_dist = quantile(trip_distance, 0.75), max_dist = max(trip_distance), min_dist = min(trip_distance), sd_distance = sd(trip_distance),
                     avg_tip = mean(tip_amount), first_quartile_tip = quantile(tip_amount, 0.25), median_tip = median(tip_amount),
