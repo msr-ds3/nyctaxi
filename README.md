@@ -1,7 +1,7 @@
 # nyctaxi
 * Download the 2013 taxi data using [this](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/download_original_taxidata_2013.sh) shell script.
     * To download the 2015 taxi data (includes both yellow and green taxi data but lacks medallion and hack license info), use [this](https://github.com/msr-ds3/nyctaxi/blob/master/download_taxidata.sh) one. To load in R, use [this](https://github.com/msr-ds3/nyctaxi/blob/master/load_taxi_data.R) script.
-* Load the csvs for one week in july as a dataframe in R using [this R script](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/load_one_week.R).
+* Load the csvs for one week in july as a dataframe in R using [this R script] (NOTE: AS OF 7/18/2016 4:15 PM YOU SHOULD RERUN THIS SCRIPT TO REFLECT NECESSARY CHANGES)(https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/load_one_week.R).
 
 ## Descriptives
 
