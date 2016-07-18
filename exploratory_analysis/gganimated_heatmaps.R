@@ -1,3 +1,12 @@
+library(ggmap)
+
+library(maptools)
+library(gganimate)
+library(scales)
+source("one_week_anaylsis.R")
+
+nyc_map <- get_map(location = c(lon = -73.95, lat = 40.71), maptype = "terrain", zoom = 11, color="bw")
+
 data <- taxi_clean %>% group_by(pickup_neighborhood, hour) %>% summarize(summary = n()/7)
 
 plot_data <- tidy(nyc_neighborhoods, region="neighborhood") %>% 
@@ -9,4 +18,4 @@ p <- ggmap(nyc_map) +
 
 theme_nothing(legend = T)
 
-gg_animate(p, pause=.5, filename = "pickup_by_hour_heatmap.gif", saver = "gif")
+gg_animate(p, pause=.5,ani.width =960, ani.height=960)
