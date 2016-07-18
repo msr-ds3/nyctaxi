@@ -1,15 +1,24 @@
+/**
+ * Description: Generates all possible NYC TLC yellow taxi medallion numbers, as well as driver hack licenses
+ * 
+ * L = letter ; N = number
+ * Medallion formats: NLNN ; LLNNN ; LLLNNN
+ * Hack_license format: NNNNNN
+ * 
+ * NOTE: as of version 1.0, this only returns 4 and 5 character medallions
+ * 
+ * @author Jai Punjwani
+ * @version 1.0
+ */
+
 public class Generate_Licenses {
-	// L = letter ; N = number
-	//Medallion formats: NLNN ; LLNNN ; LLLNNN
-	//Hack_license format: NNNNNN
+	
 	
 	public static final char[] DIGITS = {'0','1','2','3','4','5','6','7','8','9'};
 	public static final char[] LETTERS = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T',
 		'U','V','W','X','Y','Z'};
 	
 	/**
-	 * 
-	 * 
 	 * @return array of all licenses in format: NLNN
 	 */
 	public static String[] generateMedallion1()
@@ -114,12 +123,12 @@ public class Generate_Licenses {
 	{
 		String[] format1 = generateMedallion1();
 		String[] format2 = generateMedallion2();
-		//String[] format3 = generateMedallion3();
+		String[] format3 = generateMedallion3();
 		
 		int format1Len = format1.length;
 		int format2Len = format2.length;
-		//int format3Len = format3.length;
-		int length = format1Len+format2Len;//+format3Len;
+		int format3Len = format3.length;
+		int length = format1Len+format2Len+format3Len;
 		
 		String[] allMedallions = new String[length];
 		int allMedallionsIndex =0;
@@ -136,19 +145,50 @@ public class Generate_Licenses {
 			allMedallionsIndex++;
 		}
 		
-		/**
+		
 		for(int i =0; i<format3Len; i++)
 		{
 			allMedallions[allMedallionsIndex] = format3[i];
 			allMedallionsIndex++;
 		}
-		*/
+		
 		return allMedallions;
 		
 	}
 	
 	/**
 	 * 
+	 * @param medallionArrays - number of arrays to split medallions into
+	 */
+	public static String[][] generateMedallionAll(int numArrays)
+	{
+		String[] medallions = generateMedallionAll();
+		int medallionSize = medallions.length;
+		int medallionIndex =0;
+		int arrSize = (medallions.length/numArrays) + 1;
+		String[][] medallionArrays = new String[numArrays][arrSize];
+		
+		outerloop:
+		for(int array =0; array<numArrays; array++)
+		{
+			for(int i =0; i<medallionArrays[array].length; i++)
+			{
+				medallionArrays[array][i] = medallions[medallionIndex];
+				medallionIndex++;
+				if(medallionIndex == medallionSize)
+				{
+					break outerloop;
+				}
+			}
+			
+		}
+		
+		return medallionArrays;
+		
+	}
+	
+	
+	/**
 	 * @return array of possible hack licenses - NOTE: 6-digit and 7-digit possible
 	 */
 	public static String[] generateHackLicenses()
@@ -174,6 +214,7 @@ public class Generate_Licenses {
 		
 		return hackLicenses;
 	}
+	
 	/**
 	 * 
 	 * @return string array of all possible 6 digit license numbers
