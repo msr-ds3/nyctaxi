@@ -40,8 +40,8 @@ ggplot(taxi_drivers_medallion,  aes(numCars)) + geom_density() + xlab("num medal
 
 ###Time####
 ## number of drivers per hour 
-taxi_drivers<- taxi_clean %>% group_by(hack_license, day_of_the_week, hour) %>% summarize(numTrips = n()) %>% ungroup() %>% group_by(day_of_the_week,hour) %>% summarize(numdriverss=n())
-ggplot(taxi_drivers , aes(hour, numdriverss)) + geom_line() + xlab("hours") + ylab("num driverss") + facet_grid(~ day_of_the_week)
+taxi_drivers<- taxi_clean %>% group_by(hack_license, day_of_the_week, pickup_hour) %>% summarize(numTrips = n()) %>% ungroup() %>% group_by(day_of_the_week,pickup_hour) %>% summarize(numdriverss=n())
+ggplot(taxi_drivers , aes(pickup_hour, numdriverss)) + geom_line() + xlab("Pickup Hour") + ylab("num drivers") + facet_grid(~ day_of_the_week)
 
 
 

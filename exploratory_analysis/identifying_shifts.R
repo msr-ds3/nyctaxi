@@ -1,5 +1,4 @@
-# load("one_week_taxi.Rdata")
-source("one_week_analysis.R")
+ load("one_week_taxi.Rdata")
 library(ggplot2)
 library(scales)
 library(tidyr)
@@ -7,7 +6,7 @@ library(tidyr)
 theme_set(theme_minimal())
 # examine shifts and active hours
 shifts <- taxi_clean %>% group_by(medallion, hack_license, day_of_the_week) %>% 
-  summarize(first = min(pickup_datetime), last = max(pickup_datetime), active_hours = n_distinct(hour), num_of_trips = n(), revenue = sum(total_amount))
+  summarize(first = min(pickup_datetime), last = max(pickup_datetime), active_hours = n_distinct(pickup_hour), num_of_trips = n(), revenue = sum(total_amount))
 
 ggplot(shifts, aes(revenue)) + geom_histogram(binwidth = 1) 
 

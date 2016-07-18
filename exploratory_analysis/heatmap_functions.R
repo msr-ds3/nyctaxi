@@ -88,5 +88,5 @@ filter_by_neighborhood <- function(data, neighborhood, is_source) {
 }
 
 filter_by_range <- function(data, begin, end) {
-  data %>% filter(hour >= begin & hour < end)
+  data %>% filter(pickup_hour >= begin & pickup_hour < end)
 }

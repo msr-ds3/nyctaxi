@@ -26,7 +26,7 @@ get_plot_df <- function(spdf, df, join_by){
    left_join(., df, by=join_by)
 }
 
-get_map_by_range <- function(df, begin=0, end=24, group_by, filter_by ="hour"){
+get_map_by_range <- function(df, begin=0, end=24, group_by, filter_by ="pickup_hour"){
   data <- df %>% filter_(paste(filter_by, ">=", begin, "&", filter_by, "<", end)) %>%
     group_by_(group_by) %>%
     summarize(summary = n()/(7*(end-begin)))
