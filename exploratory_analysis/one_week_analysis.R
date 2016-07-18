@@ -31,7 +31,7 @@ taxi_clean <- filter(taxi,  pickup_longitude >= min_lng & pickup_longitude <= ma
                       dropoff_longitude >= min_lng & dropoff_longitude <= max_lat & dropoff_latitude >= min_lat & dropoff_latitude <= max_lat)
 
 # join the neighborhood info for pickup
-spdf <- taxi_clean
+spdf <- as.data.frame(taxi_clean)
 coordinates(spdf) <- ~pickup_longitude +pickup_latitude
 proj4string(spdf) <- proj4string(nyc_neighborhoods)
 matches <- over(spdf, nyc_neighborhoods)
@@ -42,7 +42,7 @@ taxi_clean <- cbind(taxi_clean, matches)
 taxi_clean <- rename(taxi_clean, pickup_neighborhood = neighborhood,pickup_borough=borough, pickup_boroughCode = boroughCode, pickup_X.id = X.id)
 
 #  join the neighborhood info for dropoff
-spdf <- taxi_clean
+spdf <- as.data.frame(taxi_clean)
 coordinates(spdf) <- ~dropoff_longitude +dropoff_latitude
 proj4string(spdf) <- proj4string(nyc_neighborhoods)
 matches <- over(spdf, nyc_neighborhoods)
