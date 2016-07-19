@@ -21,7 +21,8 @@ trip_based_stats <- taxi_clean %>% group_by(day_of_the_week, pickup_hour, pickup
                     avg_fare = mean(fare_amount), first_quartile_fare = quantile(fare_amount, 0.25), median_fare = median(fare_amount), 
                     third_quartile_fare = quantile(fare_amount, 0.75), max_fare = max(fare_amount), min_fare = min(fare_amount), sd_fare = sd(fare_amount),
                     avg_time_in_sec = mean(trip_time_in_secs), first_quartile = quantile(trip_time_in_secs, 0.25), median_time_in_sec = median(trip_time_in_secs), 
-                    third_quartile = quantile(trip_time_in_secs, 0.75), max_time_in_sec = max(trip_time_in_secs), min_time_in_sec = min(trip_time_in_secs), sd_time_in_sec = sd(trip_time_in_secs))
+                    third_quartile = quantile(trip_time_in_secs, 0.75), max_time_in_sec = max(trip_time_in_secs), min_time_in_sec = min(trip_time_in_secs), sd_time_in_sec = sd(trip_time_in_secs)) %>%
+  ungroup()
 
   
 
