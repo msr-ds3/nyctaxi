@@ -2,6 +2,7 @@
 library(ggplot2)
 library(scales)
 library(tidyr)
+library(dplyr)
 
 theme_set(theme_minimal())
 # examine shifts and active hours
@@ -11,7 +12,7 @@ shifts <- taxi_clean %>% group_by(medallion, hack_license, day_of_the_week) %>%
 ggplot(shifts, aes(revenue)) + geom_histogram(binwidth = 1) 
 
 ## see pickups and dropoffs for hundred random taixs throught the week
-random_drivers <- sample(taxi_clean$hack_license, 100)
+random_drivers <- sample(unique(taxi_clean$hack_license), 100)
 
 filtered_drivers <- taxi_clean %>% filter(hack_license %in% random_drivers)
 
@@ -25,5 +26,4 @@ driver_data$hack_license <- factor(driver_data$hack_license, levels = rev(driver
 
 
 ggplot(driver_data, aes(datetime, as.factor(hack_license), color=variable)) + geom_point(size = 1.5, alpha = .75) + 
-  scale_x_datetime(date_breaks = "2 hour",labels=date_format("%H")) + scale_y_discrete(labels= NULL) + xlab("hour of day") + ylab("100 random drivers")  
-            
+  scale_x_datetime(date_breaks = "2 hour",labels=date_format("%H")) + scale_y_discrete(labels= NULL) + xlab("hour of day") + ylab("100 random drivers")
