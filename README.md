@@ -6,7 +6,7 @@
 ## Descriptives
 
 * Cool figures, plots, and maps (output of some of the scripts below) are in [this](https://github.com/msr-ds3/nyctaxi/tree/master/figures) dir
-* [This](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/visualize_trips.R) script plots a day's worth of rides made by random taxicab driver.
+* [This](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/map_visualization_functions.R) script creates a function (``visualize_trips``) that can plot thr route of a random taxicab driver over a day or a week.
 
 ### Trip-based
 * Stats for one week of taxi rides by day of week, hour of day, pickup location, and dropoff location are computed by [this R script](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/one_week_analysis.R).
