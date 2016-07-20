@@ -51,7 +51,9 @@ shifts_no_NA <- shifts_no_NA %>% mutate(index = cumsum(is_start_shift))
 shifts_no_NA <- shifts_no_NA %>% group_by(hack_license, index) %>% 
   summarize(start_shift = first(pickup_datetime), 
             end_shift = last(dropoff_datetime),
-            revenue= sum(fare_amount)) %>%
+            revenue= sum(fare_amount),
+            total_trip_duration = sum(trip_time_in_secs),
+            active_hours =length(unique(c(pickup_hour, dropoff_hour))) ) %>%
   mutate(shift_length =  difftime(end_shift,start_shift, units = "hours"))
 
 
