@@ -50,17 +50,13 @@ reshape_location_data = function(df)
 visualize_trips = function(df, hacklicense, day= NULL)
 {
   df = filter_by_driver(df, hacklicense)
-  print(nrow(df))
   if (!is.null(day))
   {
     df = filter_by_day(df, day)
   }
   df = df %>% arrange (pickup_datetime) %>% 
     mutate(minutes_since_midnight = pickup_hour *60 + pickup_minute)
-             
-  print(nrow(df))
   df = reshape_location_data(df)
-  print(nrow(df))
   generate_map(df) + facet_wrap(~day_of_the_week)
   
 }
