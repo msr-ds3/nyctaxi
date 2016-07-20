@@ -1,7 +1,6 @@
 library(ggplot2)
 library(dplyr)
 library(tidyr)
-#library(scales)
 
 load('one_week_taxi.Rdata')
 
