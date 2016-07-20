@@ -24,41 +24,34 @@ shifts = taxi_clean %>%
             total_revenue_per_total_trip_time = total_revenue/total_trip_time
             )
 
-# add threshold for minimum number of trip time and hours (to avoid divide by 0 
-# AND to have more reliable data)
+# threshold - no less than 1.5 SD's less than mean of the number of trips 
+min_num_of_trips = ceiling(mean(shifts$num_of_trips) - 
+                             1.5*sd(shifts$num_of_trips))
+#filter by threshold
+shifts_filtered = shifts %>% filter(num_of_trips >= min_num_of_trips)
 
-ggplot(shifts) + 
-  geom_density(aes(x=total_revenue_per_active_hour)) + 
-  xlim(0,100) +
-  xlab("Total Revenue Per Active Hour")
-
-ggplot(shifts) + 
-  geom_density(aes(x=total_revenue_per_total_trip_time)) + 
-  xlim(0,200)+ 
-  xlab("Total Revenue Per Hour Driven")
-
-ggplot(shifts) +
+ggplot(shifts_filtered) +
   geom_density(aes(x=fare_per_active_hour)) + 
   scale_x_continuous(breaks = seq(0, 100, 10), limits = c(0,100))  + 
   xlab("Total Fare Amount Per Active Hour")
                                                                                                  
-ggplot(shifts) + geom_density(aes(x=fare_per_total_trip_time))  + 
+ggplot(shifts_filtered) + geom_density(aes(x=fare_per_total_trip_time))  + 
   scale_x_continuous(breaks = seq(0, 200, 10), limits = c(0,200)) +
   xlab("Total Fare Amount Per Hour Driven")
 
 #HIGH VS. LOW EARNERS ANALYSIS
-avg = mean(shifts$fare_per_active_hour)
-sdv = sd(shifts$fare_per_active_hour)
+avg = mean(shifts_filtered$fare_per_active_hour)
+sdv = sd(shifts_filtered$fare_per_active_hour)
 
 source('map_visualization_functions.R')
 
-low_earners = shifts %>% filter(fare_per_active_hour <= avg - sdv,
+low_earners = shifts_filtered %>% filter(fare_per_active_hour <= avg - sdv,
                                 fare_per_active_hour >= avg - 2*sdv)
 random = sample(1:nrow(low_earners), size = 1)
 visualize_trips(taxi_clean, low_earners[random,]$hack_license, 
                 low_earners[random,]$day_of_the_week)
 
-high_earners = shifts %>% filter(fare_per_active_hour >= avg + sdv,
+high_earners = shifts_filtered %>% filter(fare_per_active_hour >= avg + sdv,
                                 fare_per_active_hour <= avg + 2*sdv)
 random = sample(1:nrow(high_earners), size = 1)
 visualize_trips(taxi_clean, high_earners[random,]$hack_license, 
