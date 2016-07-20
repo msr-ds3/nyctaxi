@@ -59,8 +59,6 @@ shifts_clean <- taxi_clean_shifts %>% group_by(hack_license, index) %>%
             ) %>%
   mutate(shift_length =  difftime(end_shift,start_shift, units = "hours"))
 
-shifts_clean %>% filter(shift_length > 24) %>% nrow()
-
 save(shifts_clean, taxi_clean_shifts, file = 'shifts.Rdata')
 
 
