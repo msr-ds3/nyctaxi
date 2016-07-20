@@ -22,6 +22,7 @@
 * Visualize shifts by plotting pickup and dropoff times for 100 random drivers over the course of a week and by seeing active hours, first and last time seen, and more, using [this R script](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/identifying_shifts.R).
 * Shift cutoff plotting [here](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/Downtime_Cutoff.R).
 * The start time shift and end time shift for each driver [here] (https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/Load_shift_interval.R)
+* Made some corrections about the shift interval [here] (https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/Shift_Interval.R)
 
 ## Other work
 ###De-anonymization
