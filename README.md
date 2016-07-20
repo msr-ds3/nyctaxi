@@ -1,9 +1,9 @@
 # nyctaxi
-## prerequisites
+## Prerequisites
 * Download the 2013 taxi data using [this](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/download_original_taxidata_2013.sh) shell script.
     * To download the 2015 taxi data (includes both yellow and green taxi data but lacks medallion and hack license info), use [this](https://github.com/msr-ds3/nyctaxi/blob/master/download_taxidata.sh) one. To load in R, use [this](https://github.com/msr-ds3/nyctaxi/blob/master/load_taxi_data.R) script.
-* Load the csvs for one week in july as a dataframe in R using [this R script] (https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/load_one_week.R). (NOTE: AS OF 7/18/2016 4:15 PM YOU SHOULD RERUN THIS SCRIPT TO REFLECT NECESSARY CHANGES)
-
+* [This R script] (https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/load_one_week.R) loads the csvs, adds necessary and convenient columns (e.g. neighborhood names) and saves them as `taxi_clean` in `one_week_taxi.Rdata`. To use the dataframe, simply call `load('one_week_taxi.Rdata')`. (NOTE: AS OF 7/18/2016 4:15 PM YOU SHOULD RERUN THIS SCRIPT TO REFLECT NECESSARY CHANGES)
+* [This R script](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/Shift_Interval.R) uses `taxi_clean` to create a dataframe calles `shifts_intervals` of drivers (`hack_license`s) and their shifts (as measured by the cutoff analysis [here](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/Downtime_Cutoff.R)), and stores it in an Rdata file called `shifts_intervals.Rdata`
 ## Descriptives
 
 * Cool figures, plots, and maps (output of some of the scripts below) are in [this](https://github.com/msr-ds3/nyctaxi/tree/master/figures) dir
@@ -20,9 +20,6 @@
 ### Driver-based
 * Driver based descriptive plotting (distributions of distance, time, fare, etc, by number of drivers) are [here](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/Drivers_Descriptives.R)
 * Visualize shifts by plotting pickup and dropoff times for 100 random drivers over the course of a week and by seeing active hours, first and last time seen, and more, using [this R script](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/identifying_shifts.R).
-* Shift cutoff plotting [here](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/Downtime_Cutoff.R).
-* The start time shift and end time shift for each driver [here] (https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/Load_shift_interval.R)
-* Made some corrections about the shift interval [here] (https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/Shift_Interval.R)
 
 ## Other work
 ###De-anonymization
