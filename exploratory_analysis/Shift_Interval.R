@@ -48,13 +48,17 @@ shifts_no_NA <- shifts_no_NA %>% mutate(index = cumsum(is_start_shift))
 #Added revenue and shift length
 ###############################
 
-shifts_no_NA <- shifts_no_NA %>% group_by(hack_license, index) %>% 
+shifts_clean <- shifts_no_NA %>% group_by(hack_license, index) %>% 
   summarize(start_shift = first(pickup_datetime), 
             end_shift = last(dropoff_datetime),
             revenue= sum(fare_amount),
             total_trip_duration = sum(trip_time_in_secs),
-            active_hours =length(unique(c(pickup_hour, dropoff_hour))) ) %>%
+            active_hours =length(unique(c(pickup_hour, dropoff_hour))) ,
+            total_trips = n(),
+            total_distance = sum(trip_distance)
+            ) %>%
   mutate(shift_length =  difftime(end_shift,start_shift, units = "hours"))
+
 
 
 save(Shift_Interval, file = 'Shift_Interval.Rdata')
