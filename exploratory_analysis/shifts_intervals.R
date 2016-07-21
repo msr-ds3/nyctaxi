@@ -11,9 +11,9 @@ theme_set(theme_minimal())
 ###########################################
 shifts <- taxi_clean %>% group_by(hack_license) %>% 
   arrange(pickup_datetime) %>% 
-  mutate(downtime = difftime(lead(pickup_datetime), 
+  mutate(downtime = as.numeric(difftime(lead(pickup_datetime), 
                              dropoff_datetime, 
-                             units = "secs")/3600) 
+                             units = "hours")))
 
 ###################################
 #Creating the is_end_shift function
@@ -60,7 +60,9 @@ shifts_clean <- taxi_clean_shifts %>% group_by(hack_license, index) %>%
             total_distance = sum(trip_distance), 
             total_duration_in_seconds = sum(trip_time_in_secs)
             ) %>%
-  mutate(shift_length =  as.numeric(difftime(end_shift,start_shift, units = "hours")))
+  mutate(shift_length = as.numeric(difftime(end_shift, 
+                                            start_shift, 
+                                            units = "hours")))
 
 save(shifts_clean, taxi_clean_shifts, file = 'shifts.Rdata')
 
