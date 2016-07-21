@@ -20,7 +20,7 @@
 
 ### Driver-based
 * Driver based descriptive plotting (distributions of distance, time, fare, etc, by number of drivers) are [here](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/Drivers_Descriptives.R)
-* Visualize shifts by plotting pickup and dropoff times for 100 random drivers over the course of a week and by seeing active hours, first and last time seen, and more, using [this R script](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/identifying_shifts.R).
+* Visualize shifts, and rides within them, for n random drivers by calling the `visualize_rides_and_shifts()` function created by [this R script](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/identifying_shifts.R).
 
 ## Other work
 ###De-anonymization
