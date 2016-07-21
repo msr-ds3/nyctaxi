@@ -33,6 +33,12 @@ filter_by_day = function(df, day)
     filter(day_of_the_week == day)
 }
 
+filter_by_shift = function(df, shift)
+{
+  df %>% 
+    filter(index == shift)
+}
+
 reshape_location_data = function(df)
 {
   
@@ -47,7 +53,7 @@ reshape_location_data = function(df)
   
 }
 
-visualize_trips = function(df, hacklicense, day= NULL)
+visualize_trips_by_day = function(df, hacklicense, day= NULL)
 {
   df = filter_by_driver(df, hacklicense)
   if (!is.null(day))
@@ -61,16 +67,16 @@ visualize_trips = function(df, hacklicense, day= NULL)
   
 }
 
-visualize_trips_by_shift(df, hacklicense, shift = NULL)
+visualize_trips_by_shift = function(df, hacklicense, shift = NULL)
 {
   df = filter_by_driver(df, hacklicense)
   if (!is.null(shift))
   {
-    df = filter_by_day(df, day)
+    df = filter_by_shift(df, shift)
   }
   df = df %>% arrange (pickup_datetime) %>% 
     mutate(minutes_since_midnight = pickup_hour *60 + pickup_minute)
   df = reshape_location_data(df)
-  generate_map(df) #+ facet_wrap(~index)
+  generate_map(df) + facet_wrap(~index)
   
 }
