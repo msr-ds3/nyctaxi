@@ -4,7 +4,7 @@ library(scales)
 library(tidyr)
 library(dplyr)
 
-theme_set(theme_minimal())
+theme_set(theme_bw())
 
 ###########################################
 #examine shifts, active hours, and downtime
@@ -17,12 +17,15 @@ shifts <- taxi_clean %>% group_by(hack_license) %>%
 ##########################################################
 #plotting the number of intervals aver the downtime period
 ##########################################################
-ggplot(shifts) + geom_density(aes(as.numeric(downtime) ), na.rm = T) + 
+downtime_distribution <- 
+  ggplot(shifts) + 
+  geom_density(aes(as.numeric(downtime) ), na.rm = T) + 
   scale_x_log10(label = comma, breaks = seq(1, 10, 2)) +
   xlab("downtime in hours (log scale)") +
   geom_vline(xintercept = 6)
 #The cutoff time is 6 hours
-ggsave(filename = "downtime_distribution.png")
+ggsave(filename = "../figures/downtime_distribution.png", 
+       plot = downtime_distribution)
 
 
 
