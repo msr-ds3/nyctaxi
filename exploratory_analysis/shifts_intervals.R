@@ -60,7 +60,7 @@ shifts_clean <- taxi_clean_shifts %>% group_by(hack_license, index) %>%
             total_distance = sum(trip_distance), 
             total_duration_in_seconds = sum(trip_time_in_secs)
             ) %>%
-  mutate(shift_length =  difftime(end_shift,start_shift, units = "hours"))
+  mutate(shift_length =  as.numeric(difftime(end_shift,start_shift, units = "hours")))
 
 save(shifts_clean, taxi_clean_shifts, file = 'shifts.Rdata')
 
