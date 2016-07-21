@@ -36,7 +36,7 @@ ggplot(shifts_clean_num_trips, aes(x= total_trips, y = num_shifts)) +
 shifts_clean_fare_amount <- shifts_clean %>% group_by(fare) %>% 
   summarize(num_shifts= n())
 
-ggplot(shifts_clean_fare_amount, aes(x = revenue, y = num_shifts)) + 
+ggplot(shifts_clean_fare_amount, aes(x = fare, y = num_shifts)) + 
                                            geom_point() + xlim(0,1000)
 
 ### Total distance:
