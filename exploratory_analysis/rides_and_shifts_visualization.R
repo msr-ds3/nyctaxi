@@ -68,6 +68,12 @@ visualize_rides_and_shifts <- function(x = taxi_clean_shifts, n=100)
                                  random_drivers = random_drivers)
   levels <- get_driver_levels(rides)
   rides$hack_license <- set_driver_levels(rides, levels)
-  shifs$hack_license <- set_driver_levels(shifts, levels)
+  shifts$hack_license <- set_driver_levels(shifts, levels)
   plot_(rides, shifts, n)
 }
+
+
+rides_and_shifts <- visualize_rides_and_shifts()
+ggsave("../figures/100_random_drivers_rides_n_shfits.png", 
+       plot = rides_and_shifts,
+       scale = 3)

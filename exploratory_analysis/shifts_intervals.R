@@ -57,7 +57,8 @@ shifts_clean <- taxi_clean_shifts %>% group_by(hack_license, index) %>%
             fare= sum(fare_amount),
             active_hours =length(unique(c(pickup_hour, dropoff_hour))) ,
             total_trips = n(),
-            total_distance = sum(trip_distance)
+            total_distance = sum(trip_distance), 
+            total_duration_in_seconds = sum(trip_time_in_secs)
             ) %>%
   mutate(shift_length =  difftime(end_shift,start_shift, units = "hours"))
 
