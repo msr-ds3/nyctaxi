@@ -9,6 +9,7 @@
 * Cool figures, plots, and maps (output of some of the scripts below) are in [this](https://github.com/msr-ds3/nyctaxi/tree/master/figures) dir
 * [This](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/map_visualization_functions.R) script creates a function (``visualize_trips``) that can plot the route of a random taxicab driver over a day or a week.
    * Usage: ``visualize_trips(df, hacklicense, day = NULL)``. `df` is the dataframe (usually `taxi_clean` but sometimes a subset of that. `hacklicense` is the `hack_license` of the driver (usually randomly chosen from `df`). `day` is optional - it takes a day in the format of `"Sun"`, `"Mon"`, etc; when ommitted, results will be shown for the entire week, faceted by ``day_of_the_week``
+*Some plots using shift intervals [here] (https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/plots_with_shift_interval.R)
 
 ### Trip-based
 * Stats for one week of taxi rides by day of week, hour of day, pickup location, and dropoff location are computed by [this R script](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/one_week_analysis.R).
@@ -19,7 +20,7 @@
 
 ### Driver-based
 * Driver based descriptive plotting (distributions of distance, time, fare, etc, by number of drivers) are [here](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/Drivers_Descriptives.R)
-* Visualize shifts by plotting pickup and dropoff times for 100 random drivers over the course of a week and by seeing active hours, first and last time seen, and more, using [this R script](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/identifying_shifts.R).
+* Visualize shifts, and rides within them, for n random drivers by calling the `visualize_rides_and_shifts()` function created by [this R script](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/identifying_shifts.R).
 
 ## Other work
 ###De-anonymization
