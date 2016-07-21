@@ -6,8 +6,6 @@ library(dplyr)
 
 theme_set(theme_minimal())
 
-#shifts_clean_shif_less_24 <- shifts_clean %>% filter(shift_length < 24)
-
 #########################################
 ## num shift per week:
 ########################################
@@ -21,7 +19,7 @@ ggplot(shifts_clean_num_shift, aes(num_shift)) + geom_histogram(binwidth = 1) +
 ggplot(shifts_clean, aes(shift_length)) + geom_density() + xlim(0,24)
 
 #######################################
-### Discriptive shift stats
+### Descriptive shift stats
 #######################################
 ### Total trips:
 
