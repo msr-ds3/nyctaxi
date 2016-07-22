@@ -9,7 +9,7 @@ driver_efficiency = shifts_clean %>%
   summarize( 
     num_shifts = n(),
     fare_per_shift = sum(fare)/num_shifts,
-    fare_per_shift_length = sum(fare)/sum(as.numeric(shift_length)), #note: this average is WEIGHTED, and is not the average of each shift's efficiency
+    fare_per_shift_length = sum(fare)/sum(shift_length), #note: this average is WEIGHTED, and is not the average of each shift's efficiency
     total_trips = sum(total_trips),
     trips_per_shift = total_trips/num_shifts
   ) %>% 

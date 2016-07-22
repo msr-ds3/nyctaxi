@@ -19,7 +19,7 @@ shifts <- taxi_clean %>% group_by(hack_license) %>%
 ##########################################################
 downtime_distribution <- 
   ggplot(shifts) + 
-  geom_density(aes(as.numeric(downtime) ), na.rm = T) + 
+  geom_density(aes(downtime), na.rm = T) + 
   scale_x_log10(label = comma, breaks = seq(1, 10, 2)) +
   xlab("downtime in hours (log scale)") +
   geom_vline(xintercept = 6)
