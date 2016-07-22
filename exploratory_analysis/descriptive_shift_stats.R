@@ -36,12 +36,13 @@ shifts_clean_fare_amount <- shifts_clean %>% group_by(fare) %>%
 
 ggplot(shifts_clean_fare_amount, aes(x = fare, y = num_shifts)) + 
                                            geom_point() + xlim(0,1000)
+ggplot(shifts_clean) + geom_histogram(aes(fare)) + xlim(0,500)
 
 ### Total distance:
-shifts_clean_total_distance<- shifts_clean %>% group_by(total_distance) %>% 
+shifts_clean_total_distance<- shifts_clean %>% mutate(bin= round(total_distance /5)*5) %>% group_by(bin) %>% 
   summarize(num_shifts= n())
 
-ggplot(shifts_clean_total_distance, aes(x = total_distance, y = num_shifts)) + 
+ggplot(shifts_clean_total_distance, aes(x = bin, y = num_shifts)) + 
                                                   geom_point() + xlim(0,250)
 
 

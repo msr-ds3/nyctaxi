@@ -37,4 +37,15 @@ visualize_trips_by_shift(taxi_clean_shifts,
                          high_earning_shifts[random_row, ]$hack_license,
                          high_earning_shifts[random_row, ]$shift_num)
 
+#####################################################
+#Plotting the shift efficiency over the shift length
+#####################################################
+shift_efficiency_vs_shift_length <- ggplot(shift_efficiency, 
+                                           aes(x = shift_length, y = shift_efficiency)) + geom_point() + ylim(0,100) + 
+  geom_hline(yintercept = mean(shift_efficiency$shift_efficiency)) + 
+  geom_vline( xintercept = mean(shift_efficiency$shift_length)) + xlim(0,24) + 
+  xlab("shift length") + ylab("shift efficiecncy")
+
+ggsave('../figures/shift_efficiency_vs_shift_length.png', 
+       plot = shift_efficiency_vs_shift_length)
 
