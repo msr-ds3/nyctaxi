@@ -2,6 +2,8 @@ library(dplyr)
 
 load("shifts.Rdata")
 
+# Add the high threshold for shift efficiency
+
 #SHIFT EFFICIENCY
 # create shift_efficiency column
 shift_efficiency_no_threshold <- shifts_clean %>% filter(shift_length != 0) %>%
