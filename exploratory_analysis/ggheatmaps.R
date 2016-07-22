@@ -70,7 +70,7 @@ get_map_by_driver <- function(df, driver, shift = NULL)
   if (!is.null(shift))
   {
     data <- data %>% 
-      filter(index == shift) 
+      filter(shift_num == shift) 
   }
     data <- data %>% 
       gather("type", "neighborhood", 

@@ -45,13 +45,13 @@ taxi_clean_shifts <- taxi_clean_shifts %>%
   mutate(is_start_shift = lag(is_end_shift, default = 1)) 
 
 taxi_clean_shifts <- taxi_clean_shifts %>% 
-  mutate(index = cumsum(is_start_shift))
+  mutate(shift_num = cumsum(is_start_shift))
 
 ###############################
 #Added fare and shift length
 ###############################
 
-shifts_clean <- taxi_clean_shifts %>% group_by(hack_license, index) %>% 
+shifts_clean <- taxi_clean_shifts %>% group_by(hack_license, shift_num) %>% 
   summarize(start_shift = first(pickup_datetime), 
             end_shift = last(dropoff_datetime),
             fare= sum(fare_amount),

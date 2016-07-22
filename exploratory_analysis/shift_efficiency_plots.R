@@ -27,7 +27,7 @@ random_row = sample(1:nrow(low_earning_shifts), 1)
 
 visualize_trips_by_shift(taxi_clean_shifts, 
                          low_earning_shifts[random_row, ]$hack_license,
-                         low_earning_shifts[random_row, ]$index)
+                         low_earning_shifts[random_row, ]$shift_num)
 
 
 #View random high earner
@@ -35,6 +35,6 @@ random_row = sample(1:nrow(high_earning_shifts), 1)
 
 visualize_trips_by_shift(taxi_clean_shifts, 
                          high_earning_shifts[random_row, ]$hack_license,
-                         high_earning_shifts[random_row, ]$index)
+                         high_earning_shifts[random_row, ]$shift_num)
 
 

@@ -36,7 +36,7 @@ filter_by_day = function(df, day)
 filter_by_shift = function(df, shift)
 {
   df %>% 
-    filter(index == shift)
+    filter(shift_num == shift)
 }
 
 reshape_location_data = function(df)
@@ -77,6 +77,6 @@ visualize_trips_by_shift = function(df, hacklicense, shift = NULL)
   df = df %>% arrange (pickup_datetime) %>% 
     mutate(minutes_since_midnight = pickup_hour *60 + pickup_minute)
   df = reshape_location_data(df)
-  generate_map(df) + facet_wrap(~index)
+  generate_map(df) + facet_wrap(~shift_num)
   
 }
