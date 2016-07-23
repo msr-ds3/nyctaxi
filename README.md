@@ -1,3 +1,6 @@
+---
+output: html_document
+---
 # nyctaxi
 ## Prerequisites
 * Download the 2013 taxi data using [this](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/download_original_taxidata_2013.sh) shell script.
@@ -8,7 +11,7 @@
 ##Descriptives
 * Cool figures, plots, and maps (output of some of the scripts below) are in [this](https://github.com/msr-ds3/nyctaxi/tree/master/figures) dir
 * [This](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/map_visualization_functions.R) script creates a function (``visualize_trips``) that can plot the route of a random taxicab driver over a day or a week.
-   * Usage: ``visualize_trips(df, hacklicense, day = NULL)``. `df` is the dataframe (usually `taxi_clean` but sometimes a subset of that. `hacklicense` is the `hack_license` of the driver (usually randomly chosen from `df`). `day` is optional - it takes a day in the format of `"Sun"`, `"Mon"`, etc; when ommitted, results will be shown for the entire week, faceted by ``day_of_the_week``
+    * Usage: ``visualize_trips(df, hacklicense, day = NULL)``. `df` is the dataframe (usually `taxi_clean` but sometimes a subset of that. `hacklicense` is the `hack_license` of the driver (usually randomly chosen from `df`). `day` is optional - it takes a day in the format of `"Sun"`, `"Mon"`, etc; when ommitted, results will be shown for the entire week, faceted by ``day_of_the_week``
 
 ### Trip-based
 * Stats for one week of taxi rides by day of week, hour of day, pickup location, and dropoff location are computed by [this R script](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/one_week_analysis.R).

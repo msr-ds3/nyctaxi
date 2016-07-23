@@ -1,3 +1,4 @@
+load("shifts.Rdata")
 #creating model for shift efficiency
 library(lubridate)
 library(dplyr)
@@ -38,4 +39,9 @@ shifts_design_matrix = taxi_clean_shifts %>%
   ) %>%
   mutate(shift_length = as.numeric(difftime(shift_end, shift_start, units = "hours")),
          occupancy_pct = total_trip_time/shift_length,
-         efficiency = total_fare/shift_length)
+         efficiency = total_fare/shift_length) %>%
+  filter(total_trips >= threshold &
+                  shift_length <= 24 &
+                  shift_efficiency <= 75 &
+                  start_shift >= as.POSIXct("2013-07-07 02:00:00") & 
+                  end_shift <= as.POSIXct("2013-07-13 14:00:00")) #using UTC offset to limit dataframe to full shifts  
