@@ -1,6 +1,14 @@
+library(httr)
+library(rgdal)
 library(leaflet)
 library(tigris)
 library(RColorBrewer)
+
+
+get_nyc_neighborhoods <- function(){
+  r <- GET('http://data.beta.nyc//dataset/0ff93d2d-90ba-457c-9f7e-39e47bf2ac5f/resource/35dd04fb-81b3-479b-a074-a27a37888ce7/download/d085e2f8d0b54d4590b1e7d1f35594c1pediacitiesnycneighborhoods.geojson')
+  return(readOGR(content(r,'text'), 'OGRGeoJSON', verbose = F))
+}
 
 # returns a continous color palette within a range to use for use in leaflet maps
 set_pal <- function(range, na_color="#808080", pal = rev(brewer.pal(11, "Spectral")))
@@ -90,3 +98,5 @@ filter_by_neighborhood <- function(data, neighborhood, is_source) {
 filter_by_range <- function(data, begin, end) {
   data %>% filter(pickup_hour >= begin & pickup_hour < end)
 }
+
+nyc_neighborhoods <- get_nyc_neighborhoods()

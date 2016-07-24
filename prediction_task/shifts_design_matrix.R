@@ -20,17 +20,6 @@ popular_dropoff_neighborhoods <- taxi_clean_shifts %>%
   summarize(numtrips = n()) %>% 
   top_n(n, numtrips)
 
-popular_pickup_neighborhoods <- taxi_clean_shifts %>%
-  group_by(pickup_neighborhood) %>% 
-  summarize(numtrips = n()) %>% 
-  top_n(n, numtrips)
-
-# findtop n  dropoff neighborhoods
-popular_dropoff_neighborhoods <- taxi_clean_shifts %>%
-  group_by(dropoff_neighborhood) %>% 
-  summarize(numtrips = n()) %>% 
-  top_n(n, numtrips)
-
 # returns 1 if this == that, otherwise 0
 is_equal_to <- function(this, that)
 {
@@ -106,7 +95,7 @@ shifts_design_matrix = taxi_clean_shifts %>%
   ) %>%
   filter(num_trips >= threshold & 
            length <= 24 &
-           efficiency <= 75 &
+           #efficiency <= 75 &
            start >= as.POSIXct("2013-07-07 06:00:00", tz = "EDT") & 
            end <= as.POSIXct("2013-07-13 18:00:00", tz = "EDT")) 
 
