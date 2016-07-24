@@ -41,7 +41,8 @@ shinyUI(fluidPage(
                    min = 0,
                    max = 23,
                    value = range(9:12), 
-                   step = 1)
+                   step = 1,
+                   animate = T)
     ),
     
     # Show the generated map
