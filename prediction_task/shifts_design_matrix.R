@@ -3,17 +3,60 @@ load("../exploratory_analysis/shifts.Rdata")
 library(lubridate)
 library(dplyr)
 
+# set threshold for minimum num of rides per shift
 threshold <- round(mean(shifts_clean$total_trips) - sd(shifts_clean$total_trips))
 
-is_equal_to <- function(this, that){
+
+# find top n pickup neighborhoods
+top <- 20
+popular_pickup_neighborhoods <- taxi_clean_shifts %>%
+  group_by(pickup_neighborhood) %>% 
+  summarize(numtrips = n()) %>% 
+  top_n(top, numtrips)
+
+# findtop n  dropoff neighborhoods
+popular_dropoff_neighborhoods <- taxi_clean_shifts %>%
+  group_by(dropoff_neighborhood) %>% 
+  summarize(numtrips = n()) %>% 
+  top_n(top, numtrips)
+
+# returns 1 if this == that, otherwise 0
+is_equal_to <- function(this, that)
+{
   ifelse(this == that, 1, 0)
 }
 
+# returns 1 if neighborhood is in top n neighborhoods, otherwise 0
+is_in_popular_pickup_neighborhoods <- function(neighborhood)
+{
+  ifelse(neighborhood %in% popular_pickup_neighborhoods$pickup_neighborhood, 
+         1, 0)
+}
+
+is_in_popular_dropoff_neighborhoods <- function(neighborhood)
+{
+  ifelse(neighborhood %in% popular_dropoff_neighborhoods$pickup_neighborhood, 
+         1, 0)
+}
+
+is_to_airport <- function(dropoff_neighborhood, rate_code)
+{
+  airports <- c("John F. Kennedy International Airport", "LaGuardia Airport")
+  airport_codes <- c(2, 3)
+  if (dropoff_neighborhood %in% airports || rate_code %in% airport_codes)
+    1
+  else
+    0
+}
+
+# vectorize above functions
 is_equal_to = Vectorize(is_equal_to)
+is_in_popular_pickup_neighborhoods = Vectorize(is_in_popular_pickup_neighborhoods)
+is_in_popular_dropoff_neighborhoods = Vectorize(is_in_popular_dropoff_neighborhoods)
+is_to_airport = Vectorize(is_to_airport)
 
 shifts_design_matrix = taxi_clean_shifts %>% 
   group_by(hack_license, shift_num) %>%
-  #arrange(pickup_datetime) %>%
   summarize(
     start = as.POSIXct(min(pickup_datetime), tz="EDT"),
     end = as.POSIXct(max(dropoff_datetime), tz= "EDT"),
@@ -40,6 +83,11 @@ shifts_design_matrix = taxi_clean_shifts %>%
     pickups_in_bklyn_pct = sum(is_equal_to(pickup_boroughCode, 3))/num_trips,
     pickups_in_queens_pct = sum(is_equal_to(pickup_boroughCode, 4))/num_trips,
     pickups_in_si_pct = sum(is_equal_to(pickup_boroughCode, 5))/num_trips,
+    popular_pickup_neighborhood_pct = 
+      sum(is_in_popular_pickup_neighborhoods(pickup_neighborhood))/num_trips,
+    popular_dropoff_neighborhood_pct = 
+      sum(is_in_popular_dropoff_neighborhoods(pickup_neighborhood))/num_trips,
+    airport_pct = sum(is_to_airport(dropoff_neighborhood, rate_code))/num_trips,
     efficiency = total_fare/length
   ) %>%
   filter(num_trips >= threshold & 
@@ -47,3 +95,5 @@ shifts_design_matrix = taxi_clean_shifts %>%
            efficiency <= 75 &
            start >= as.POSIXct("2013-07-07 06:00:00", tz = "EDT") & 
            end <= as.POSIXct("2013-07-13 18:00:00", tz = "EDT")) 
+
+save(shifts_design_matrix, "shifts_design_matrix.Rdata")
