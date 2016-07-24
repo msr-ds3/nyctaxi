@@ -3,23 +3,24 @@
 
 ###Features (to test)
 
-  * OCCUPANCY_PCT: time with passenger/shift length
-    * sum(trip_time)/difftime(endshift, startshift)
-  * NUM_TRIPS: total trips in a shift
-    * n()
-  * SHIFT_LENGTH: start to end duration of shift 
-    * difftime(endshift, startshift)
-  * AVG_TRIP_DISTANCE: average of all trip distances within shift
-  * AVG_TRIP_DURATION: average of all trip durations within shift
-  * SD_TRIP_DISTANCE: stdv of all trip distances within shift
-  * SD_TRIP_DURATION: stdv of all trip durations within shift
-  * SHIFT_TYPE: dayshift = ?  OR  nightshift =  ?
-    * 
-  * BOROUGH(?):
-      * PICKUP_IN_`{borough_name}`_PCT: number of pickups at borough/total trips
-      * DROPOFF_IN_`{borough_name}`_PCT: number of dropoffs at borough/total trips
-  * AVG_SPEED: Total distance/Total time
-  * RATE_CODE_PCT: percent of trips in a shift for each rate code (1-6)
-  * AIRPORT_PCT: percent of trips in a shift that are to ?Newark?/JFK/Laguardia
-  * DAY_OF_WEEK: day of the week the shift is in
-  * POPULAR_NEIGHBOURHOOD_PCT: percentage of trips in top (10?) neighborhoods
+Feature | Description | Computation
+:--- | --- | ---
+`occupancy_pct` | time with passenger/shift length | `sum(trip_time)/difftime(endshift, startshift)`
+`num_trips` | total trips in a shift | `n()`
+`length` | start to end duration of shift | `difftime(endshift, startshift)`
+`avg_trip_distance` |  average of all trip distances within shift | `mean(trip_distance)`
+`avg_trip_duration` |  average of all trip durations within shift | `mean(trip_time_in_secs)/3600`
+`sd_trip_distance` | stdv of all trip distances within shift | `sd(trip_distance)`
+`sd_trip_duration` | stdv of all trip durations within shift | `sd(trip_time_in_secs)/3600`
+`shift_type` | dayshift = ? OR nightshift = ? | n()
+`pickup_in_{borough_name}_pct` | number of pickups at borough/total trips | `length( pickup_neighborhood[pickup_nieghborhood == "{borough_name}"])/num_trips`
+`dropoff_in_{borough_name}_pct` | number of dropoffs at borough/total trips | `length( dropoff_neighborhood[dropoff_nieghborhood == "{borough_name}"])/num_trips`
+`avg_speed` |Total distance/Total trip duration | `sum(trip_distance)/(sum(trip_time_in_secs)/3600)`
+`rate_code_{#}_pct` |  percent of trips in a shift for each rate code (1-6) |  `length( rate_code[rate_code == "{#}"])/num_trips`
+`airport_pct` | percent of trips in a shift that are to ?Newark?/JFK/Laguardia | `???`
+`day_of_week` | day of the week the shift starts in | `wday(min(pickup_datetime))`
+`popular_pickup_nieghborhood_pct` | percentage of pickups in top (10?) neighborhoods | `???`
+`popular_dropoff_nieghborhood_pct` | percentage of dropoffs in top (10?) neighborhoods | `???`
+
+
+
