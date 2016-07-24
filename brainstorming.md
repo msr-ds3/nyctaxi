@@ -51,6 +51,8 @@ Notes from today's brainstorming meeting, in no particular order.
   * [Effect of Taxi Information System on Efficiency and Quality of Taxi Services](http://trrjournalonline.trb.org/doi/abs/10.3141/1903-11?journalCode=trr) (under paywall)
   * [Measuring the Efficiency  of the Urban Taxi Service System:](http://www2.cs.uic.edu/~urbcomp2013/urbcomp2014/papers/Zhang_Efficiency_taxi.pdf)
   * [Predicting Taxi Pickups in NYC](http://www.vivekchoksi.com/papers/taxi_pickups.pdf)
+  * [YC Taxi Data Prediction](http://sdaulton.github.io/TaxiPrediction/)
+  * [Predicting Taxi Tip-Rates in NYC](http://cseweb.ucsd.edu/~jmcauley/cse190/reports/sp15/050.pdf)
 
 ## Data questions
   * Do we have an id for the medallion or for individual drivers?
