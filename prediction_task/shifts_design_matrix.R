@@ -86,6 +86,11 @@ shifts_design_matrix = taxi_clean_shifts %>%
     pickups_in_bklyn_pct = sum(is_equal_to(pickup_boroughCode, 3))/num_trips,
     pickups_in_queens_pct = sum(is_equal_to(pickup_boroughCode, 4))/num_trips,
     pickups_in_si_pct = sum(is_equal_to(pickup_boroughCode, 5))/num_trips,
+    dropoffs_in_man_pct = sum(is_equal_to(dropoff_boroughCode, 1))/num_trips,
+    dropoffs_in_bronx_pct = sum(is_equal_to(dropoff_boroughCode, 2))/num_trips,
+    dropoffs_in_bklyn_pct = sum(is_equal_to(dropoff_boroughCode, 3))/num_trips,
+    dropoffs_in_queens_pct = sum(is_equal_to(dropoff_boroughCode, 4))/num_trips,
+    dropoffs_in_si_pct = sum(is_equal_to(dropoff_boroughCode, 5))/num_trips,
     popular_pickup_neighborhood_pct = 
       sum(is_in_popular_pickup_neighborhoods(pickup_neighborhood))/num_trips,
     popular_dropoff_neighborhood_pct = 
