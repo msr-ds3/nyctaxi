@@ -34,8 +34,10 @@
  * future work: Features to be included in the design matrix
 
 ## Other work
-###De-anonymization
+### De-anonymization
 * [Java code](https://github.com/msr-ds3/nyctaxi/tree/master/deanonymization) that can de-anonymize medallions and hack licenses.
+### Apps and games
 * A shiny app to visualize NYC taxi flow as a heatmap can be found [here](https://github.com/msr-ds3/nyctaxi/tree/master/heatmap_app)
+* Play the "predict the driver's efficiency" guessing game using [this](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/driver_efficiency_guessing_game.R) script.
  
 
