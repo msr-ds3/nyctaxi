@@ -8,17 +8,28 @@ threshold <- round(mean(shifts_clean$total_trips) - sd(shifts_clean$total_trips)
 
 
 # find top n pickup neighborhoods
-top <- 20
+n <- 20
 popular_pickup_neighborhoods <- taxi_clean_shifts %>%
   group_by(pickup_neighborhood) %>% 
   summarize(numtrips = n()) %>% 
-  top_n(top, numtrips)
+  top_n(n, numtrips)
 
 # findtop n  dropoff neighborhoods
 popular_dropoff_neighborhoods <- taxi_clean_shifts %>%
   group_by(dropoff_neighborhood) %>% 
   summarize(numtrips = n()) %>% 
-  top_n(top, numtrips)
+  top_n(n, numtrips)
+
+popular_pickup_neighborhoods <- taxi_clean_shifts %>%
+  group_by(pickup_neighborhood) %>% 
+  summarize(numtrips = n()) %>% 
+  top_n(n, numtrips)
+
+# findtop n  dropoff neighborhoods
+popular_dropoff_neighborhoods <- taxi_clean_shifts %>%
+  group_by(dropoff_neighborhood) %>% 
+  summarize(numtrips = n()) %>% 
+  top_n(n, numtrips)
 
 # returns 1 if this == that, otherwise 0
 is_equal_to <- function(this, that)
@@ -35,7 +46,7 @@ is_in_popular_pickup_neighborhoods <- function(neighborhood)
 
 is_in_popular_dropoff_neighborhoods <- function(neighborhood)
 {
-  ifelse(neighborhood %in% popular_dropoff_neighborhoods$pickup_neighborhood, 
+  ifelse(neighborhood %in% popular_dropoff_neighborhoods$dropoff_neighborhood, 
          1, 0)
 }
 
@@ -76,7 +87,10 @@ shifts_design_matrix = taxi_clean_shifts %>%
     rate_code_5_pct = sum(is_equal_to(rate_code, 5))/num_trips,
     rate_code_6_pct = sum(is_equal_to(rate_code, 6))/num_trips,
     avg_speed = total_trip_distance/total_trip_time,
-    start_day = wday(start, label = T),
+    start_day = wday(as.POSIXct(start,
+                                tz = "EDT", 
+                                origin = origin),
+                     label = T),
     occupancy_pct = total_trip_time/length,
     pickups_in_man_pct = sum(is_equal_to(pickup_boroughCode, 1))/num_trips,
     pickups_in_bronx_pct = sum(is_equal_to(pickup_boroughCode, 2))/num_trips,
@@ -86,7 +100,7 @@ shifts_design_matrix = taxi_clean_shifts %>%
     popular_pickup_neighborhood_pct = 
       sum(is_in_popular_pickup_neighborhoods(pickup_neighborhood))/num_trips,
     popular_dropoff_neighborhood_pct = 
-      sum(is_in_popular_dropoff_neighborhoods(pickup_neighborhood))/num_trips,
+      sum(is_in_popular_dropoff_neighborhoods(dropoff_neighborhood))/num_trips,
     airport_pct = sum(is_to_airport(dropoff_neighborhood, rate_code))/num_trips,
     efficiency = total_fare/length
   ) %>%
