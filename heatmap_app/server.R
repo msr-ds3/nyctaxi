@@ -1,5 +1,10 @@
 library(shiny)
-library(ggplot2)
+library(dplyr)
+library(httr)
+library(rgdal)
+library(leaflet)
+library(tigris)
+library(RColorBrewer)
 load("../exploratory_analysis/one_week_taxi.Rdata")
 
 shinyServer(function(input, output) {
@@ -12,6 +17,12 @@ shinyServer(function(input, output) {
                         min(taxi_clean$pickup_datetime), 
                         unit="days")))
     
+    get_nyc_neighborhoods <- function(){
+      r <- GET('http://data.beta.nyc//dataset/0ff93d2d-90ba-457c-9f7e-39e47bf2ac5f/resource/35dd04fb-81b3-479b-a074-a27a37888ce7/download/d085e2f8d0b54d4590b1e7d1f35594c1pediacitiesnycneighborhoods.geojson')
+      return(readOGR(content(r,'text'), 'OGRGeoJSON', verbose = F))
+    }
+    
+    nyc_neighborhoods <- get_nyc_neighborhoods()
     data <- taxi_clean
     if(input$neighborhood != "Entire NYC")
     {
@@ -52,12 +63,12 @@ shinyServer(function(input, output) {
                   color="darkblue") %>% 
       addProviderTiles("CartoDB.Positron") %>%
       setView(-73.85, 40.71, zoom = 10) %>% 
-      add_legend(pal = pal, 
-                   legend_title = "number of trips", 
+      addLegend(pal = pal, 
+                   title = "number of trips", 
                    values = map_data$num_trips,
                    opacity = 0.4, 
-                   transform = log_transform, 
-                   legend_position = "bottomright")
+                   labFormat = labelFormat(transform = log_transform), 
+                   position = "bottomright")
   })
   
 })

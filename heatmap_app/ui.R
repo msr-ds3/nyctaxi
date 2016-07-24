@@ -1,6 +1,6 @@
 library(shiny)
 library(leaflet)
-
+load("../exploratory_analysis/one_week_taxi.Rdata")
 # get list of neighborhoods to display in ui
 neighborhoods <- levels(taxi_clean$pickup_neighborhood)
 
