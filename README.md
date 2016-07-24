@@ -1,6 +1,3 @@
----
-output: html_document
----
 # nyctaxi
 ## Prerequisites
 * Download the 2013 taxi data using [this](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/download_original_taxidata_2013.sh) shell script.
