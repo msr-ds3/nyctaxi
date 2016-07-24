@@ -15,7 +15,8 @@ shinyUI(fluidPage(
   
   helpText(HTML("<p>Every day, thousands of taxicabs travel throughout NYC. Ever wondered
            where all these taxis come from? Or where they are headed?
-           Wonder no more. Choose the stop type and hour of day to visualize
+           Wonder no more. Choose the stop type and hour of day (or range of hours)
+           to visualize
            the flow of taxis in NYC as a heatmap.</p>
            <p>You can view dropoffs (or pickups) coming from (or going to) the 
            entire city, or you can choose to view only the dropoffs (or pickups)
@@ -39,7 +40,8 @@ shinyUI(fluidPage(
                    "Hour of day",
                    min = 0,
                    max = 23,
-                   value = 12)
+                   value = range(9:12), 
+                   step = 1)
     ),
     
     # Show the generated map

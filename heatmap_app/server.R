@@ -43,7 +43,7 @@ shinyServer(function(input, output) {
     }   
         
         data <- data %>%
-          filter(hour == input$hour) %>%
+          filter(hour >= input$hour[1] & hour <= input$hour[2]) %>%
         group_by(neighborhood) %>% 
         summarize(num_trips = log10(n()/range))
       
@@ -52,7 +52,7 @@ shinyServer(function(input, output) {
     
     
     pal <- colorBin(palette = rev(brewer.pal(11, "Spectral")),
-                    domain = -1:4, na.color = "#808080")
+                    domain = -1:5, na.color = "#808080")
     
     
     leaflet(map_data) %>%
