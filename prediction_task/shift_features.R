@@ -46,7 +46,9 @@ high_low_efficiency <- Vectorize(high_low_efficiency)
 shifts_design_matrix_weather <- shifts_design_matrix_weather %>%  
 mutate(efficiency_category= high_low_efficiency(efficiency))
 
+#Adding day and night shift period
 
+<<<<<<< HEAD
 ########################################
 # plot shifts_design_matrix_weather data
 ########################################
@@ -337,3 +339,14 @@ ggsave("../figures/popular_dropoff_neighborhood_pct_vs_efficiency.png")
 
 
 
+=======
+shift_period = function(time)
+{
+  if(hour(time) >= 5 && hour(time) < 17)
+    1 # for day shift
+  else
+    0 #for night shift
+}
+shift_period = Vectorize(shift_period)
+shifts_design_matrix <- shifts_design_matrix %>% mutate(shift_type = shift_period(start))
+>>>>>>> 656eab967b73c5241544456e331d58e6237844fb

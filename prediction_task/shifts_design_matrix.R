@@ -103,6 +103,13 @@ shifts_design_matrix = taxi_clean_shifts %>%
            length <= 24 &
            #efficiency <= 75 &
            start >= as.POSIXct("2013-07-07 06:00:00", tz = "EDT") & 
-           end <= as.POSIXct("2013-07-13 18:00:00", tz = "EDT")) 
+           end <= as.POSIXct("2013-07-13 18:00:00", tz = "EDT"))
 
-save(shifts_design_matrix, "shifts_design_matrix.Rdata")
+#Adding a ymd column in the shifts design matrix data frame
+shifts_design_matrix <- shifts_design_matrix %>% mutate(ymd = as.Date(start))
+
+#Joining the weather data to shift design matrix
+shifts_design_matrix<- left_join(shifts_design_matrix, weather, by ="ymd")
+
+
+save(shifts_design_matrix, file= "shifts_design_matrix.Rdata")
