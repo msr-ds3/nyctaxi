@@ -21,6 +21,15 @@ Feature | Description | Computation
 `day_of_week` | day of the week the shift starts in | `wday(min(pickup_datetime))`
 `popular_pickup_nieghborhood_pct` | percentage of pickups in top (10?) neighborhoods | `???`
 `popular_dropoff_nieghborhood_pct` | percentage of dropoffs in top (10?) neighborhoods | `???`
+`unpopular_pickup_neighborhood_pct` | percentage of dropoffs in least popular neighborhoods | `???`
+`unpopular_dropoff_neighborhood_pct` | percentage of dropoffs in least popular neighborhoods | `???`
+`tmin` | minimum temperature of the day shift started on | `tmin`
+`tmax` | maximum temperature of the day shift started on | `tmax`
+`prcp` | total precipitation on the day shift started on | `prcp`
+`tavg` | average temperature over the day shift started on | `tmin+tmax/2`
+
+
+
 
 
 
