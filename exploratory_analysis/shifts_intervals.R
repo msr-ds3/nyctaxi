@@ -47,6 +47,68 @@ taxi_clean_shifts <- taxi_clean_shifts %>%
 taxi_clean_shifts <- taxi_clean_shifts %>% 
   mutate(shift_num = cumsum(is_start_shift))
 
+############################################
+#replace NA's in borough, neighborhood info
+############################################
+
+out_of_bounds = "Outside NYC"
+out_of_bounds_code = 0
+
+# Cleaning pickup borough
+taxi_clean_shifts$pickup_borough = 
+  as.character(taxi_clean_shifts$pickup_borough)
+taxi_clean_shifts$pickup_borough = 
+  replace(taxi_clean_shifts$pickup_borough, 
+          is.na(taxi_clean_shifts$pickup_borough), out_of_bounds)
+taxi_clean_shifts$pickup_borough =
+  as.factor(taxi_clean_shifts$pickup_borough)
+
+# Cleaning pickup borough codes
+taxi_clean_shifts$pickup_boroughCode = 
+  as.numeric(taxi_clean_shifts$pickup_boroughCode)
+taxi_clean_shifts$pickup_boroughCode = 
+  replace(taxi_clean_shifts$pickup_boroughCode, 
+          is.na(taxi_clean_shifts$pickup_boroughCode), out_of_bounds_code)
+taxi_clean_shifts$pickup_boroughCode =
+  as.factor(taxi_clean_shifts$pickup_boroughCode)
+
+# Cleaning dropoff borough
+taxi_clean_shifts$dropoff_borough = 
+  as.character(taxi_clean_shifts$dropoff_borough)
+taxi_clean_shifts$dropoff_borough = 
+  replace(taxi_clean_shifts$dropoff_borough, 
+          is.na(taxi_clean_shifts$dropoff_borough), out_of_bounds)
+taxi_clean_shifts$dropoff_borough =
+  as.factor(taxi_clean_shifts$dropoff_borough)
+
+
+# Cleaning dropoff borough codes
+taxi_clean_shifts$dropoff_boroughCode = 
+  as.numeric(taxi_clean_shifts$dropoff_boroughCode)
+taxi_clean_shifts$dropoff_boroughCode = 
+  replace(taxi_clean_shifts$dropoff_boroughCode, 
+          is.na(taxi_clean_shifts$dropoff_boroughCode), out_of_bounds_code)
+taxi_clean_shifts$dropoff_boroughCode = as.factor(taxi_clean_shifts$dropoff_boroughCode)
+
+# Cleaning up dropoff and pickup neighborhoods 
+taxi_clean_shifts$pickup_neighborhood = 
+  as.character(taxi_clean_shifts$pickup_neighborhood)
+taxi_clean_shifts$pickup_neighborhood = 
+  replace(taxi_clean_shifts$pickup_neighborhood, 
+          is.na(taxi_clean_shifts$pickup_neighborhood), out_of_bounds)
+taxi_clean_shifts$pickup_neighborhood =
+  as.factor(taxi_clean_shifts$pickup_neighborhood)
+
+taxi_clean_shifts$dropoff_neighborhood = 
+  as.character(taxi_clean_shifts$dropoff_neighborhood)
+taxi_clean_shifts$dropoff_neighborhood = 
+  replace(taxi_clean_shifts$dropoff_neighborhood, 
+          is.na(taxi_clean_shifts$dropoff_neighborhood), out_of_bounds)
+taxi_clean_shifts$dropoff_neighborhood =
+  as.factor(taxi_clean_shifts$dropoff_neighborhood)
+
+
+
 ###############################
 #Added fare and shift length
 ###############################
