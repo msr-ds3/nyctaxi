@@ -333,3 +333,14 @@ ggplot(shifts_design_matrix_weather, aes(popular_dropoff_neighborhood_pct, effic
   geom_smooth()
 ggsave("../figures/popular_dropoff_neighborhood_pct_vs_efficiency.png")
 
+#######################################################
+#######Added a graph for efficiency over the shift type
+#######################################################
+efficiency_vs_shift_type <- ggplot(shifts_design_matrix, 
+                                   aes(x = efficiency, 
+                                       color = as.factor(shift_type))) + 
+  geom_density() + xlim(0,100)
+
+ggsave('../figures/efficiency_vs_shift_type.png', 
+       plot = efficiency_vs_shift_type)
+
