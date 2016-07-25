@@ -333,6 +333,3 @@ ggplot(shifts_design_matrix_weather, aes(popular_dropoff_neighborhood_pct, effic
   geom_smooth()
 ggsave("../figures/popular_dropoff_neighborhood_pct_vs_efficiency.png")
 
-
-
-
