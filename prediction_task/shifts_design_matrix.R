@@ -3,6 +3,7 @@ load("../exploratory_analysis/shifts.Rdata")
 library(lubridate)
 library(dplyr)
 
+
 # set threshold for minimum num of rides per shift
 threshold <- round(mean(shifts_clean$total_trips) - sd(shifts_clean$total_trips))
 
