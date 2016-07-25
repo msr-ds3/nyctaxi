@@ -159,7 +159,9 @@ shifts_design_matrix = taxi_clean_shifts %>%
 shifts_design_matrix <- shifts_design_matrix %>% mutate(ymd = as.Date(start))
 
 #Joining the weather data to shift design matrix
+source("load_weather.R")
 shifts_design_matrix<- left_join(shifts_design_matrix, weather, by ="ymd")
 
+# NEED to add shift_type (day/night)
 
 save(shifts_design_matrix, file= "shifts_design_matrix.Rdata")
