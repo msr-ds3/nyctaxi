@@ -23,9 +23,10 @@ Feature | Description | Computation
 `popular_dropoff_nieghborhood_pct` | percentage of dropoffs in top (10?) neighborhoods | `???`
 `unpopular_pickup_neighborhood_pct` | percentage of dropoffs in least popular neighborhoods | `???`
 `unpopular_dropoff_neighborhood_pct` | percentage of dropoffs in least popular neighborhoods | `???`
-`tmin` | minimum temperature of the day shift started on | ``
-`tmax` | maximum temperature of the day shift started on | ``
-`prcp` | total precipitation on the day shift started on | ``
+`tmin` | minimum temperature of the day shift started on | `tmin`
+`tmax` | maximum temperature of the day shift started on | `tmax`
+`prcp` | total precipitation on the day shift started on | `prcp`
+`tavg` | average temperature over the day shift started on | `tmin+tmax/2`
 
 
 
