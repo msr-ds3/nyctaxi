@@ -170,7 +170,7 @@ shifts_design_matrix = taxi_clean_shifts %>%
            length <= thresholdMax &
            start >= as.POSIXct("2013-07-01 06:00:00", tz = "EDT") & 
            end <= as.POSIXct("2013-07-31 18:00:00", tz = "EDT") & 
-           efficiency < 100)
+           efficiency < 100 )
 
 #Adding a ymd column in the shifts design matrix data frame
 shifts_design_matrix <- shifts_design_matrix %>% mutate(ymd = as.Date(start))
