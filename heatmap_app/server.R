@@ -5,10 +5,10 @@ library(rgdal)
 library(leaflet)
 library(tigris)
 library(RColorBrewer)
-load("../exploratory_analysis/one_week_taxi.Rdata")
+load("one_month_taxi.Rdata")
 
-log_transform <- function(x) { round(10^(x)) }
-
+log_transform <- function(x) { if (x < 1) { 10^(x) } else { as.integer(10^(x))}}
+log_transform <- Vectorize(log_transform)
 range <- round(as.numeric(difftime(max(taxi_clean$pickup_datetime),
                                    min(taxi_clean$pickup_datetime), 
                                    unit="days")))
@@ -23,7 +23,7 @@ nyc_neighborhoods <- get_nyc_neighborhoods()
 data <- taxi_clean
 
 pal <- colorBin(palette = rev(brewer.pal(11, "Spectral")),
-                domain = -1:5, na.color = "#808080")
+                domain = -2:5, na.color = "#808080")
 
 shinyServer(function(input, output) {
   
