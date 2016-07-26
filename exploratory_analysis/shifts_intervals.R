@@ -1,15 +1,13 @@
-load("one_week_taxi.Rdata")
-library(ggplot2)
-library(scales)
+load("one_month_taxi.Rdata")
+
 library(tidyr)
 library(dplyr)
 
-theme_set(theme_minimal())
 
 ###########################################
 #examine shifts, active hours, and downtime
 ###########################################
-shifts <- taxi_clean %>% group_by(hack_license) %>% 
+taxi_clean_shifts <- taxi_clean %>% group_by(hack_license) %>% 
   arrange(pickup_datetime) %>% 
   mutate(downtime = as.numeric(difftime(lead(pickup_datetime), 
                              dropoff_datetime, 
@@ -20,8 +18,8 @@ shifts <- taxi_clean %>% group_by(hack_license) %>%
 ##################################
 
 
-taxi_clean_shifts <- shifts %>% filter(!is.na(downtime))
-is_end_shift_function = function(df, num)
+taxi_clean_shifts <- taxi_clean_shifts %>% filter(!is.na(downtime))
+is_end_shift_function = function(num)
 {
   if ( num >= 6)
   {
@@ -34,8 +32,8 @@ is_end_shift_function = function(df, num)
 }
 
 is_end_shift_function = Vectorize(is_end_shift_function)
-taxi_clean_shifts$is_end_shift = is_end_shift_function(taxi_clean_shifts, 
-                                                  taxi_clean_shifts$downtime)
+taxi_clean_shifts <- taxi_clean_shifts %>% 
+  mutate(is_end_shift = is_end_shift_function(downtime))
 
 ############################################
 #Creating another col for the is_start_shift
