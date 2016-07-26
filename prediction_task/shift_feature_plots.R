@@ -1,30 +1,22 @@
 load("../Rdata/shifts_design_matrix.Rdata")
-source("load_weather.R")
+
 
 library(ggplot2)
 library(scales)
 library(tidyr)
 library(dplyr)
-library(plyr)
+library(lubridate)
 # White backgrounds on our plots
-theme_set(theme_minimal())
+theme_set(theme_bw())
 
-##########################################
-## Add ymd col
-##########################################
-shifts_design_matrix <- shifts_design_matrix %>% mutate(ymd= as.Date(start))
 
-########################################
-## Join the two data frames:
-########################################
-shifts_design_matrix_weather <- left_join(shifts_design_matrix, weather, by="ymd")
 
 ########################################
 # function to define high and low earning
 ########################################
 
-mean_efficiency <- mean(shifts_design_matrix_weather$efficiency)
-sd_efficiency <- sd(shifts_design_matrix_weather$efficiency)
+mean_efficiency <- mean(shifts_design_matrix$efficiency)
+sd_efficiency <- sd(shifts_design_matrix$efficiency)
 high_earning <- mean_efficiency + sd_efficiency
 low_earning <- mean_efficiency - sd_efficiency
 
@@ -42,15 +34,15 @@ high_low_efficiency <- function(efficiency){
 high_low_efficiency <- Vectorize(high_low_efficiency)
 
 
-shifts_design_matrix_weather <- shifts_design_matrix_weather %>%  
+shifts_design_matrix <- shifts_design_matrix %>%  
 mutate(efficiency_category= high_low_efficiency(efficiency))
 
 
 ########################################
-# plot shifts_design_matrix_weather data
+# plot shifts_design_matrix data
 ########################################
 
-df_classification <- shifts_design_matrix_weather %>% 
+df_classification <- shifts_design_matrix %>% 
            filter(efficiency_category == "high" | efficiency_category == "low")
 ##########################################
 ########Occupancy pct:
@@ -60,7 +52,7 @@ ggplot(df_classification, aes(occupancy_pct, color= efficiency_category)) +
                 geom_density() + xlab("time with passenger/shift length")
 ggsave("../figures/occupancy_pct_density.png")
 ## Regression:
-ggplot(shifts_design_matrix_weather, aes(occupancy_pct, efficiency)) +
+ggplot(shifts_design_matrix, aes(occupancy_pct, efficiency)) +
   geom_point(alpha=0.1) + xlab("time with passenger/shift length") + 
  ylim(0,100) + xlim(0,1) + 
   geom_smooth()
@@ -75,7 +67,7 @@ ggplot(df_classification, aes(length, color= efficiency_category)) +
   geom_density() + xlab("shift length")
 ggsave("../figures/shift_length_density.png")
 ## Regression:
-ggplot(shifts_design_matrix_weather, aes(length, efficiency)) +
+ggplot(shifts_design_matrix, aes(length, efficiency)) +
   geom_point(alpha=0.3) + xlab("shift length") + 
   ylim(0,100) + 
   geom_smooth()
@@ -90,7 +82,7 @@ ggplot(df_classification, aes(num_trips, color= efficiency_category) ) +
 ggsave("../figures/num_trips_density.png")
 
 ## Regression:
-ggplot(shifts_design_matrix_weather, aes(num_trips, efficiency)) +
+ggplot(shifts_design_matrix, aes(num_trips, efficiency)) +
   geom_point(alpha=0.3) + xlab("number of trips") + 
  ylim(0,100) + 
   geom_smooth()
@@ -105,7 +97,7 @@ ggplot(df_classification, aes(total_fare, color= efficiency_category) ) +
 ggsave("../figures/total_fare_density.png")
 
 ## Regression:
-ggplot(shifts_design_matrix_weather, aes(total_fare, efficiency)) +
+ggplot(shifts_design_matrix, aes(total_fare, efficiency)) +
   geom_point(alpha=0.3) + xlab("total fare") + 
   ylim(0,100) + 
   geom_smooth()
@@ -120,7 +112,7 @@ ggplot(df_classification, aes(total_trip_distance, color= efficiency_category) )
 ggsave("../figures/total_trip_distance_density.png")
 
 ## Regression:
-ggplot(shifts_design_matrix_weather, aes(total_trip_distance, efficiency)) +
+ggplot(shifts_design_matrix, aes(total_trip_distance, efficiency)) +
   geom_point(alpha=0.3) + xlab("total trip distance") + 
   ylim(0,100) + 
   geom_smooth()
@@ -136,7 +128,7 @@ ggplot(df_classification, aes(avg_trip_distance, color= efficiency_category) ) +
 ggsave("../figures/avg_trip_distance_density.png")
 
 ## Regression:
-ggplot(shifts_design_matrix_weather, aes(avg_trip_distance, efficiency)) +
+ggplot(shifts_design_matrix, aes(avg_trip_distance, efficiency)) +
   geom_point(alpha=0.1) + xlab("Average trip distance") + 
   ylim(0,100) + 
   geom_smooth()
@@ -151,7 +143,7 @@ ggplot(df_classification, aes(sd_trip_distance, color= efficiency_category) ) +
 ggsave("../figures/sd_trip_distance_density.png")
 
 ## Regression:
-ggplot(shifts_design_matrix_weather, aes(sd_trip_distance, efficiency)) +
+ggplot(shifts_design_matrix, aes(sd_trip_distance, efficiency)) +
   geom_point(alpha=0.1) + xlab("Standard deviation trip distance") + 
   ylim(0,100) + 
   geom_smooth()
@@ -166,7 +158,7 @@ ggplot(df_classification, aes(total_trip_time, color= efficiency_category) ) +
 ggsave("../figures/total_trip_time_density.png")
 
 ## Regression:
-ggplot(shifts_design_matrix_weather, aes(total_trip_time, efficiency)) +
+ggplot(shifts_design_matrix, aes(total_trip_time, efficiency)) +
   geom_point(alpha=0.1) + xlab("Total trip time") + 
   ylim(0,100) + 
   geom_smooth()
@@ -181,7 +173,7 @@ ggplot(df_classification, aes(avg_trip_time, color= efficiency_category) ) +
 ggsave("../figures/avg_trip_time_density.png")
 
 ## Regression:
-ggplot(shifts_design_matrix_weather, aes(avg_trip_time, efficiency)) +
+ggplot(shifts_design_matrix, aes(avg_trip_time, efficiency)) +
   geom_point(alpha=0.1) + xlab("Average trip time") + 
   ylim(0,100) + 
   geom_smooth()
@@ -196,7 +188,7 @@ ggplot(df_classification, aes(sd_trip_time, color= efficiency_category) ) +
 ggsave("../figures/sd_trip_time_density.png")
 
 ## Regression:
-ggplot(shifts_design_matrix_weather, aes(sd_trip_time, efficiency)) +
+ggplot(shifts_design_matrix, aes(sd_trip_time, efficiency)) +
   geom_point(alpha=0.1) + xlab("Standard deviation trip time") + 
   ylim(0,100) + 
   geom_smooth()
@@ -212,7 +204,7 @@ ggplot(df_classification, aes(avg_speed, color= efficiency_category) ) +
 ggsave("../figures/speed_density.png")
 
 ## Regression:
-ggplot(shifts_design_matrix_weather, aes(avg_speed, efficiency)) +
+ggplot(shifts_design_matrix, aes(avg_speed, efficiency)) +
   geom_point(alpha=0.1) + xlab("Total distance/Total trip duration") +
   ylim(0,100) + 
   geom_smooth()
@@ -228,7 +220,7 @@ ggplot(df_classification, aes(prcp, color= efficiency_category) ) +
 ggsave("../figures/prcp_density.png")
 
 ## Regression:
-ggplot(shifts_design_matrix_weather, aes(prcp, efficiency)) +
+ggplot(shifts_design_matrix, aes(prcp, efficiency)) +
   geom_point(alpha=0.1) + xlab("Precipitation") +
   ylim(0,100) + 
   geom_smooth()
@@ -244,7 +236,7 @@ ggplot(df_classification, aes(tmin, color= efficiency_category) ) +
 ggsave("../figures/tmin_density.png")
 
 ## Regression:
-ggplot(shifts_design_matrix_weather, aes(tmin, efficiency)) +
+ggplot(shifts_design_matrix, aes(tmin, efficiency)) +
   geom_point(alpha=0.1) + xlab("minimum temperature") +
   ylim(0,100) + 
   geom_smooth()
@@ -259,7 +251,7 @@ ggplot(df_classification, aes(tmax, color= efficiency_category) ) +
 ggsave("../figures/tmax_density.png")
 
 ## Regression:
-ggplot(shifts_design_matrix_weather, aes(tmax, efficiency)) +
+ggplot(shifts_design_matrix, aes(tmax, efficiency)) +
   geom_point(alpha=0.1) + xlab("maximum temperature") +
   ylim(0,100) + 
   geom_smooth()
@@ -271,7 +263,7 @@ ggsave("../figures/tmax_vs_efficiency.png")
 
 ###Add average temperature column:
 df_classification <- df_classification %>% mutate(avg_temp = (tmax + tmin) /2)
-shifts_design_matrix_weather <- shifts_design_matrix_weather %>%
+shifts_design_matrix <- shifts_design_matrix %>%
                                            mutate(avg_temp = (tmax + tmin) /2)
 ## Classification:
 ggplot(df_classification, aes(avg_temp , color= efficiency_category) ) +
@@ -279,7 +271,7 @@ ggplot(df_classification, aes(avg_temp , color= efficiency_category) ) +
 ggsave("../figures/avg_temp_density.png")
 
 ## Regression:
-ggplot(shifts_design_matrix_weather, aes(avg_temp, efficiency)) +
+ggplot(shifts_design_matrix, aes(avg_temp, efficiency)) +
   geom_point(alpha=0.1) + xlab("average temperature") +
   ylim(0,100) + 
   geom_smooth()
@@ -297,7 +289,7 @@ ggplot(df_classification, aes(airport_pct , color= efficiency_category) ) +
 ggsave("../figures/airport_pct_density.png")
 
 ## Regression:
-ggplot(shifts_design_matrix_weather, aes(airport_pct, efficiency)) +
+ggplot(shifts_design_matrix, aes(airport_pct, efficiency)) +
   geom_point(alpha=0.1) + xlab("Airport percentage") +
   ylim(0,100) + 
   geom_smooth()
@@ -312,7 +304,7 @@ ggplot(df_classification, aes(popular_pickup_neighborhood_pct , color= efficienc
 ggsave("../figures/popular_pickup_neighborhood_pct_density.png")
 
 ## Regression:
-ggplot(shifts_design_matrix_weather, aes(popular_pickup_neighborhood_pct, efficiency)) +
+ggplot(shifts_design_matrix, aes(popular_pickup_neighborhood_pct, efficiency)) +
   geom_point(alpha=0.1) + xlab("Popular pickup neighborhood percentage") +
   ylim(0,100) + 
   geom_smooth()
@@ -327,7 +319,7 @@ ggplot(df_classification, aes(popular_dropoff_neighborhood_pct , color= efficien
 ggsave("../figures/popular_dropoff_neighborhood_pct_density.png")
 
 ## Regression:
-ggplot(shifts_design_matrix_weather, aes(popular_dropoff_neighborhood_pct, efficiency)) +
+ggplot(shifts_design_matrix, aes(popular_dropoff_neighborhood_pct, efficiency)) +
   geom_point(alpha=0.1) + xlab("Popular dropoff neighborhood percentage") +
   ylim(0,100) + 
   geom_smooth()
@@ -343,4 +335,52 @@ efficiency_vs_shift_type <- ggplot(shifts_design_matrix,
 
 ggsave('../figures/efficiency_vs_shift_type.png', 
        plot = efficiency_vs_shift_type)
+
+
+#################
+### avg efficiency, by day, hour, and ymd_h
+# group by day and hour and compute avg efficiency 
+shifts_design_matrix %>% 
+  mutate(ymd_h = ymd_h(paste(date(start), hour(start), sep=" "))) %>% 
+  group_by(ymd_h) %>% 
+  summarize(avg_eff = mean(efficiency)) %>%
+  ggplot() + 
+  geom_point(aes(ymd_h, avg_eff)) + 
+  geom_smooth(aes(ymd_h, avg_eff)) +
+  xlab("date and hour of day") +
+  ylab("average efficiency")
+ggsave("../figures/avg_shift_eff_by_day_and_hour.png")
+
+shifts_design_matrix %>% 
+  group_by(ymd) %>% 
+  summarize(avg_eff = mean(efficiency)) %>%
+  ggplot() + 
+  geom_point(aes(ymd, avg_eff)) + 
+  geom_smooth(aes(ymd, avg_eff)) +
+  xlab("date") +
+  ylab("average efficiency")
+ggsave("../figures/avg_shift_eff_by_date.png")
+
+shifts_design_matrix %>% 
+  group_by(hour = hour(start)) %>% 
+  summarize(avg_eff = mean(efficiency)) %>%
+  ggplot() + 
+  geom_point(aes(hour, avg_eff)) + 
+  geom_smooth(aes(hour, avg_eff)) +
+  xlab("hour of day") +
+  ylab("average efficiency") +
+  geom_hline(yintercept = mean(shifts_design_matrix$efficiency))
+ggsave("../figures/avg_shift_eff_by_hour_ofday.png")
+
+
+shifts_design_matrix %>% 
+  group_by(day_of_week = wday(start)) %>% 
+  summarize(avg_eff = mean(efficiency)) %>%
+  ggplot() + 
+  geom_point(aes(hour, avg_eff)) + 
+  geom_smooth(aes(hour, avg_eff)) +
+  xlab("hour of day") +
+  ylab("average efficiency") +
+  geom_hline(yintercept = mean(shifts_design_matrix$efficiency))
+ggsave("../figures/avg_shift_eff_by_hour_ofday.png")
 
