@@ -3,15 +3,16 @@ library(lubridate)
 library(dplyr)
 library(ggplot2)
 library(glmnet)
+library(lubridate)
 
 ################################################
 #Fitlered out efficiency values greater than 75
 ################################################
 shifts_design_matrix <- shifts_design_matrix %>% filter(efficiency < 75)
 
-##################
-#Added is_week_end
-##################
+##################################
+#Added is_week_end and start_hour
+#################################
 is_weekend = function(vec)
 {
   col = vector(mode= "numeric", length = length(vec))
@@ -26,6 +27,8 @@ is_weekend = function(vec)
 }
 is_weekend = Vectorize(is_weekend)
 shifts_design_matrix$is_week_end = is_weekend(shifts_design_matrix$ymd)
+
+shifts_design_matrix <- shifts_design_matrix %>% mutate(start_hour = hour(start))
 ##############################################
 #Splitting the data into train and test frames
 ##############################################
@@ -90,9 +93,15 @@ model8 <- lm(efficiency ~ ymd + airport_pct, TTtrain)
 TTtest$predicted_model8 <- predict(model8, TTtest)
 coef(model8)
 summary(model8)
-
+##############
 #Using glmnet
-
+##############
+Model<- as.formula(efficiency ~ hack_license + is_week_end + start_hour)
+x = sparse.model.matrix(Model, TTtrain)
+y = TTtrain$efficiency
+glm.model = glmnet(x,y, alpha = 0)
+cvfit<- cv.glmnet(x,y)
+plot(cvfit)
 
 ######################
 #Plotting the results
