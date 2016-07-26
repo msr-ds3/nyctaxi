@@ -21,8 +21,7 @@ shinyUI(fluidPage(
            <p>You can view dropoffs (or pickups) coming from (or going to) the 
            entire city, or you can choose to view only the dropoffs (or pickups)
            that are coming from (or going to) a specific neighborhood.</p>
-           <p>The number of trips are averaged over 7 days in the week of July 7-
-           July 13, 2013.</p>")),
+           <p>The number of trips are averaged over the month of July 2013.</p>")),
   # Sidebar with a dropdown for neighborhoods, a dropdown for stop types, and a
   # slider input for hour of day 
   sidebarLayout(
