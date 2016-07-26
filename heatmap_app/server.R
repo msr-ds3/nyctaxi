@@ -5,7 +5,7 @@ library(rgdal)
 library(leaflet)
 library(tigris)
 library(RColorBrewer)
-load("one_month_taxi.Rdata")
+load("../Rdata/one_month_taxi.Rdata")
 
 log_transform <- function(x) { if (x < 1) { 10^(x) } else { as.integer(10^(x))}}
 log_transform <- Vectorize(log_transform)

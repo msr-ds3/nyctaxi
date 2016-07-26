@@ -1,0 +1,4 @@
+This folder should contain all Rdata files [PLEASE MOVE ALL RDATA FILES TO THIS DIRECTORY!]
+
+CAVEAT:
+Your .gitignore should contain ".Rdata" so that large Rdata files are not pushed.

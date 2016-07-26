@@ -2,7 +2,7 @@ library(ggplot2)
 library(dplyr)
 library(tidyr)
 
-load("shifts.Rdata")
+load("../Rdata/shifts.Rdata")
 
 driver_efficiency_no_threshold = shifts_clean %>%  
   group_by(hack_license) %>%

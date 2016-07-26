@@ -1,4 +1,4 @@
-load("shifts_design_matrix.Rdata")
+load("../Rdata/shifts_design_matrix.Rdata")
 source("load_weather.R")
 
 library(ggplot2)

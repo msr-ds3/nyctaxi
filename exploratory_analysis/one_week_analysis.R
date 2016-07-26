@@ -10,7 +10,7 @@ library(broom)
 ####################################################################
 # load base data frame 'taxi_clean' which contains neighborhood info
 ####################################################################
-load("one_week_taxi.Rdata")
+load("../Rdata/one_week_taxi.Rdata")
 
 # display stats by day of week, pickup_hour, pickup neighborhood, and dropoff neighborhood
 trip_based_stats <- taxi_clean %>% group_by(day_of_the_week, pickup_hour, pickup_neighborhood, dropoff_neighborhood) %>% 

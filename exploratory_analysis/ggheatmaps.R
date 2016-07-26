@@ -1,4 +1,4 @@
-load("shifts.Rdata")
+load("../Rdata/shifts.Rdata")
 library(ggmap)
 library(httr)
 library(rgdal)

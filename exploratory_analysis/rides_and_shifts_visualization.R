@@ -1,5 +1,5 @@
-load("one_week_taxi.Rdata")
-load("shifts.Rdata")
+load("../Rdata/one_week_taxi.Rdata")
+load("../Rdata/shifts.Rdata")
 library(ggplot2)
 library(scales)
 library(tidyr)

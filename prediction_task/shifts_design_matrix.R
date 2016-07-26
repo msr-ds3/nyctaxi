@@ -1,4 +1,4 @@
-load("../exploratory_analysis/shifts.Rdata")
+load("../Rdata/shifts.Rdata")
 #creating model for shift efficiency
 library(lubridate)
 library(dplyr)
@@ -178,4 +178,4 @@ source("load_weather.R")
 shifts_design_matrix<- left_join(shifts_design_matrix, weather, by ="ymd")
 
 
-save(shifts_design_matrix, file= "shifts_design_matrix.Rdata")
+save(shifts_design_matrix, file= "../Rdata/shifts_design_matrix.Rdata")

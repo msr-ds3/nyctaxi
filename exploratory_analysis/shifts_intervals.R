@@ -1,4 +1,4 @@
-load("one_month_taxi.Rdata")
+load("../Rdata/one_month_taxi.Rdata")
 
 library(tidyr)
 library(dplyr)
@@ -124,7 +124,7 @@ shifts_clean <- taxi_clean_shifts %>% group_by(hack_license, shift_num) %>%
                                             start_shift, 
                                             units = "hours")))
 
-save(shifts_clean, taxi_clean_shifts, file = 'shifts.Rdata')
+save(shifts_clean, taxi_clean_shifts, file = "../Rdata/shifts.Rdata")
 
 
 

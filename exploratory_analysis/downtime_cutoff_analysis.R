@@ -1,4 +1,4 @@
-load("one_week_taxi.Rdata")
+load("../Rdata/one_week_taxi.Rdata")
 library(ggplot2)
 library(scales)
 library(tidyr)

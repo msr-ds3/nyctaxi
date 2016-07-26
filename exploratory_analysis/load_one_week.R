@@ -70,7 +70,7 @@ taxi_clean <- rename(taxi_clean, dropoff_neighborhood = neighborhood,dropoff_bor
 
 rm(spdf, nyc_df, min_lng, min_lat, max_lng, max_lat)
 
-save(taxi_clean, file = 'one_week_taxi.Rdata')
+save(taxi_clean, file = "../Rdata/one_week_taxi.Rdata")
 
 
 
