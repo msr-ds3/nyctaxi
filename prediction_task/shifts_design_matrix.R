@@ -114,7 +114,8 @@ taxi_clean_shifts = mutate(taxi_clean_shifts,
                            is_bronx_dropoff = ifelse(dropoff_boroughCode == 2, 1, 0),
                            is_bklyn_dropoff = ifelse(dropoff_boroughCode == 3, 1, 0),
                            is_queens_dropoff = ifelse(dropoff_boroughCode == 4, 1, 0),
-                           is_si_dropoff = ifelse(dropoff_boroughCode == 5, 1, 0)
+                           is_si_dropoff = ifelse(dropoff_boroughCode == 5, 1, 0),
+                           is_to_airport = is_to_airport(dropoff_neighborhood, rate_code)
                           )
 
 shifts_design_matrix = taxi_clean_shifts %>% 
@@ -161,9 +162,9 @@ shifts_design_matrix = taxi_clean_shifts %>%
       sum(is_unpopular_pickup_neighborhood)/num_trips,
     unpopular_dropoff_neighborhood_pct = 
       sum(is_unpopular_dropoff_neighborhood)/num_trips,
-    airport_pct = sum(is_to_airport(dropoff_neighborhood, rate_code))/num_trips,
+    airport_pct = sum(is_to_airport)/num_trips,
     efficiency = total_fare/length,
-    shift_type = shift_period(start)
+    shift_type = shift_period(as.POSIXct(start, tz="EDT", origin=origin))
   ) %>%
   filter(length >= thresholdMin & 
            length <= thresholdMax &
