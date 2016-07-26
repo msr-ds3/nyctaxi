@@ -27,7 +27,7 @@ Notes from today's brainstorming meeting, in no particular order.
   * [Original data request](http://chriswhong.com/open-data/foil_nyc_taxi/)
   * A series of [interesting analyses, with GitHub code](http://toddwschneider.com/posts/analyzing-1-1-billion-nyc-taxi-and-uber-trips-with-a-vengeance/) 
   * Some tips on [working with the data in R](http://hafen.github.io/taxi)
-  * ["Hunting or waiting? Discovering passenger-finding strategies from a large-scale real-world taxi dataset"]("Hunting or waiting? Discovering passenger-finding strategies from a large-scale real-world taxi dataset.")
+  * ["Hunting or waiting? Discovering passenger-finding strategies from a large-scale real-world taxi dataset"](https://www.researchgate.net/publication/224237229_Hunting_or_waiting_Discovering_passenger-finding_strategies_from_a_large-scale_real-world_taxi_dataset)
   * [Problems w/ anonymization](https://tech.vijayp.ca/of-taxis-and-rainbows-f6bc289679a1)
   * [When to quit / driver elasticities](http://www.decisionsciencenews.com/2014/11/19/nyc-cab-drivers-quit-early-rains/)
   	* [Link to paper] (https://github.com/msr-ds3/nyctaxi/blob/master/NBER_WORKING_PAPER_SERIES.pdf)  
