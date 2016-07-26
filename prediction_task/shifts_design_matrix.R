@@ -65,11 +65,25 @@ is_to_airport <- function(dropoff_neighborhood, rate_code)
     0
 }
 
+
+shift_period = function(time)
+{
+  night_shift = 0
+  day_shift = 1
+    
+  if(hour(time) >= 5 && hour(time) < 17)
+      day_shift   
+  else
+      night_shift 
+}
+
+
 # vectorize above functions
 is_equal_to = Vectorize(is_equal_to)
 is_in_popular_pickup_neighborhoods = Vectorize(is_in_popular_pickup_neighborhoods)
 is_in_popular_dropoff_neighborhoods = Vectorize(is_in_popular_dropoff_neighborhoods)
 is_to_airport = Vectorize(is_to_airport)
+shift_period = Vectorize(shift_period)
 
 # Add "counter" columns to allow us to sum up easily without grouping
 taxi_clean_shifts = mutate(taxi_clean_shifts, 
@@ -148,7 +162,8 @@ shifts_design_matrix = taxi_clean_shifts %>%
     unpopular_dropoff_neighborhood_pct = 
       sum(is_unpopular_dropoff_neighborhood)/num_trips,
     airport_pct = sum(is_to_airport(dropoff_neighborhood, rate_code))/num_trips,
-    efficiency = total_fare/length
+    efficiency = total_fare/length,
+    shift_type = shift_period(start)
   ) %>%
   filter(length >= thresholdMin & 
            length <= thresholdMax &
@@ -162,6 +177,5 @@ shifts_design_matrix <- shifts_design_matrix %>% mutate(ymd = as.Date(start))
 source("load_weather.R")
 shifts_design_matrix<- left_join(shifts_design_matrix, weather, by ="ymd")
 
-# NEED to add shift_type (day/night)
 
 save(shifts_design_matrix, file= "shifts_design_matrix.Rdata")
