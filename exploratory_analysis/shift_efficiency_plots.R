@@ -5,7 +5,8 @@ library(dplyr)
 library(tidyr)
 
 source("shift_efficiency_data.R")
-#SHIFT EFFICIENCY
+source('map_visualization_functions.R')
+
 
 #plot of shift efficiency
 ggplot(shift_efficiency_no_threshold) + 
@@ -19,8 +20,8 @@ ggplot(shift_efficiency) +
   geom_density(aes(x=shift_efficiency)) + 
   xlim(0,100) +
   geom_vline(xintercept = mean(shift_efficiency$shift_efficiency))
+ggsave("../figures/shift_efficiency_distribution.png")
 
-source('map_visualization_functions.R')
 
 #View random low earner
 low_earning_shifts <- shift_efficiency %>% filter(efficiency_category == "LOW")
