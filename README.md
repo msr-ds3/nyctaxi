@@ -9,8 +9,8 @@
 
 ##Descriptives
 * Cool figures, plots, and maps (output of some of the scripts below) are in [this](https://github.com/msr-ds3/nyctaxi/tree/master/figures) dir
-* [This](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/map_visualization_functions.R) script creates a function (``visualize_trips``) that can plot the route of a random taxicab driver over a day or a week.
-    * Usage: ``visualize_trips(df, hacklicense, day = NULL)``. `df` is the dataframe (usually `taxi_clean` but sometimes a subset of that. `hacklicense` is the `hack_license` of the driver (usually randomly chosen from `df`). `day` is optional - it takes a day in the format of `"Sun"`, `"Mon"`, etc; when ommitted, results will be shown for the entire week, faceted by ``day_of_the_week``
+* [This](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/map_visualization_functions.R) script creates a function (``visualize_trips_by_shift``) that can plot the route of a random taxicab driver over the course of a shift or a day of the week (``visualize_trips_by_day``).
+    * Usage: ``visualize_trips_by_shift(df, hacklicense, shift = NULL)``. `df` is the dataframe (usually `taxi_clean` but sometimes a subset of that. `hacklicense` is the `hack_license` of the driver (usually randomly chosen from `df`). `shift` is optional - it takes a shift number; when ommitted, all shifts will be shown as a faceted plot. ``visualize_trips_by_day(df, hacklicense, day = NULL)`` works in a similar manner except that it can take in a particular day in the format "Mon", "Tue", etc. 
 
 ### Trip-based
 * Stats for one week of taxi rides by day of week, hour of day, pickup location, and dropoff location are computed by [this R script](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/one_week_analysis.R).
@@ -43,6 +43,6 @@
 ### Apps and games
 * A shiny app to visualize NYC taxi flow as a heatmap can be found [here](https://github.com/msr-ds3/nyctaxi/tree/master/heatmap_app)
 * [A shiny app](https://github.com/msr-ds3/nyctaxi/tree/master/avg_trip_time_app) (inspired by Todd Schneider's post) to visualize average trip times from neigborhood to neighborhood.
-* Play the "predict the driver's efficiency" guessing game using [this](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/driver_efficiency_guessing_game.R) script.
+* Play the "predict the driver's efficiency" guessing game using [this](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/efficiency_guessing_game.R) script.
  
 

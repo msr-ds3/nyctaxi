@@ -66,6 +66,15 @@ ggsave("../figures/distribution_efficiency_drivers_random.png")
 
 
 ###################################
-# INVESTIGATING BINARY EFFICIENCIES
+# INVESTIGATING 0's and 1's
 
-df = driver_efficiency_real %>% filter(eff_percent == 1 | eff_percent ==0)
+extreme_drivers = driver_efficiency_real %>% filter(eff_percent == 1 | eff_percent ==0)
+# join to see all shifts where eff = 0 | 1
+extreme_drivers_full_stats = left_join(df,shifts_design_matrix) 
+ggplot(extreme_drivers_full_stats, aes(x=ymd)) + geom_histogram() + 
+  facet_wrap(~ efficiency_category)
+
+ggplot(extreme_drivers_full_stats, aes(x=shift_type)) +
+  geom_histogram() +
+  facet_wrap(~ efficiency_category)
+
