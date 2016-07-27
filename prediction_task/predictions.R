@@ -4,31 +4,6 @@ library(dplyr)
 library(ggplot2)
 library(glmnet)
 library(lubridate)
-
-################################################
-#Fitlered out efficiency values greater than 75
-################################################
-shifts_design_matrix <- shifts_design_matrix %>% filter(efficiency < 75)
-
-##################################
-#Added is_week_end and start_hour
-#################################
-is_weekend = function(vec)
-{
-  col = vector(mode= "numeric", length = length(vec))
-  if (wday(vec) ==1 | wday(vec)==7)
-  {
-    TRUE
-  }
-  else
-  {
-    FALSE
-  }
-}
-is_weekend = Vectorize(is_weekend)
-shifts_design_matrix$is_week_end = is_weekend(shifts_design_matrix$ymd)
-
-shifts_design_matrix <- shifts_design_matrix %>% mutate(start_hour = hour(start))
 ##############################################
 #Splitting the data into train and test frames
 ##############################################
