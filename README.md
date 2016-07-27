@@ -35,14 +35,21 @@
  
 ### Predicting driver efficiency
  * future work: Features to be included in the design matrix
+ 
+## Analyzing flow
+ * Analysis on carpooling possibilities, [here](https://github.com/msr-ds3/nyctaxi/blob/master/flow/carpool_analysis.R)
+ * [Plots on carpooling analysis](https://github.com/msr-ds3/nyctaxi/blob/master/flow/carpool_plots.R).
+ 
+### Shiny apps
+ * A shiny app to visualize NYC taxi flow as a heatmap can be found [here](https://github.com/msr-ds3/nyctaxi/tree/master/heatmap_app)
+ * [A shiny app](https://github.com/msr-ds3/nyctaxi/tree/master/avg_trip_time_app) (inspired by Todd Schneider's post) to visualize average trip times from neigborhood to neighborhood.
+
 
 ## Other work
 ### De-anonymization
 * [Java code](https://github.com/msr-ds3/nyctaxi/tree/master/deanonymization) that can de-anonymize medallions and hack licenses.
 
-### Apps and games
-* A shiny app to visualize NYC taxi flow as a heatmap can be found [here](https://github.com/msr-ds3/nyctaxi/tree/master/heatmap_app)
-* [A shiny app](https://github.com/msr-ds3/nyctaxi/tree/master/avg_trip_time_app) (inspired by Todd Schneider's post) to visualize average trip times from neigborhood to neighborhood.
+### Games
 * Play the "predict the driver's efficiency" guessing game using [this](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/efficiency_guessing_game.R) script.
  
 
