@@ -68,8 +68,8 @@ is_to_airport <- function(dropoff_neighborhood, rate_code)
 
 shift_period = function(time)
 {
-  night_shift = 0
-  day_shift = 1
+  night_shift = "night"
+  day_shift = "day"
     
   if(hour(time) >= 5 && hour(time) < 17)
       day_shift   
@@ -169,7 +169,12 @@ shifts_design_matrix = taxi_clean_shifts %>%
   filter(length >= thresholdMin & 
            length <= thresholdMax &
            start >= as.POSIXct("2013-07-01 06:00:00", tz = "EDT") & 
+<<<<<<< HEAD
+           end <= as.POSIXct("2013-07-31 18:00:00", tz = "EDT") & 
+           efficiency < 100 )
+=======
            end <= as.POSIXct("2013-07-31 18:00:00", tz = "EDT"))
+>>>>>>> f5ad031ebc3ec1fc0c483911d316dcf392ba30ae
 
 #Adding a ymd column in the shifts design matrix data frame
 shifts_design_matrix <- shifts_design_matrix %>% mutate(ymd = as.Date(start))

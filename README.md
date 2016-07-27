@@ -30,7 +30,8 @@
 ### Predicting shift efficiency
  * Features to be included in the design matrix for the shifts prediction task are listed in [this](https://github.com/msr-ds3/nyctaxi/blob/master/prediction_task/features.md) markdown file.
  * The design matrix can be created and saved as an Rdata file using the script [here](https://github.com/msr-ds3/nyctaxi/blob/master/prediction_task/shifts_design_matrix.R)
- * Descriptive plots for both regression and classification for each individual feature [here](https://github.com/msr-ds3/nyctaxi/blob/master/prediction_task/shift_features.R)
+ * Descriptive plots for both regression and classification for each individual feature [here](https://github.com/msr-ds3/nyctaxi/blob/master/prediction_task/shift_feature_plots.R)
+ * Created some models and efficiency prediction [here](https://github.com/msr-ds3/nyctaxi/blob/master/prediction_task/predictions.R)
  
 ### Predicting driver efficiency
  * future work: Features to be included in the design matrix
@@ -41,6 +42,7 @@
 
 ### Apps and games
 * A shiny app to visualize NYC taxi flow as a heatmap can be found [here](https://github.com/msr-ds3/nyctaxi/tree/master/heatmap_app)
+* [A shiny app](https://github.com/msr-ds3/nyctaxi/tree/master/avg_trip_time_app) (inspired by Todd Schneider's post) to visualize average trip times from neigborhood to neighborhood.
 * Play the "predict the driver's efficiency" guessing game using [this](https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/driver_efficiency_guessing_game.R) script.
  
 
