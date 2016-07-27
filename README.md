@@ -37,7 +37,7 @@
  * future work: Features to be included in the design matrix
  
 ## Analyzing flow
- * Analysis on carpooling possibilities, ]here](https://github.com/msr-ds3/nyctaxi/blob/master/flow/carpool_analysis.R)
+ * Analysis on carpooling possibilities, [here](https://github.com/msr-ds3/nyctaxi/blob/master/flow/carpool_analysis.R)
  * [Plots on carpooling analysis](https://github.com/msr-ds3/nyctaxi/blob/master/flow/carpool_plots.R).
  
 ### Shiny apps
