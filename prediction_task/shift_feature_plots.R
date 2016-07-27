@@ -340,16 +340,20 @@ ggsave('../figures/efficiency_vs_shift_type.png',
 #################
 ### avg efficiency, by day, hour, and ymd_h
 # group by day and hour and compute avg efficiency 
+
 shifts_design_matrix %>% 
   mutate(ymd_h = ymd_h(paste(date(start), hour(start), sep=" "))) %>% 
   group_by(ymd_h) %>% 
-  summarize(avg_eff = mean(efficiency)) %>%
-  ggplot() + 
-  geom_point(aes(ymd_h, avg_eff)) + 
-  geom_smooth(aes(ymd_h, avg_eff)) +
-  xlab("date and hour of day") +
-  ylab("average efficiency")
-ggsave("../figures/avg_shift_eff_by_day_and_hour.png")
+  summarize(avg_eff = mean(efficiency)) %>% 
+  mutate(h = hour(ymd_h)) %>%
+ggplot(aes(x = ymd_h, y= avg_eff))+
+  geom_text(aes(label=h), check_overlap = T) +
+  geom_line()+
+  geom_smooth() +
+  scale_x_datetime(date_breaks = "24 hours", date_labels = "%a") + 
+  xlab("hour of the month") +
+  ylab("average efficiency") 
+ggsave("../figures/avg_shift_eff_by_hour_of_month.png")
 
 shifts_design_matrix %>% 
   group_by(ymd) %>% 
@@ -363,24 +367,37 @@ ggsave("../figures/avg_shift_eff_by_date.png")
 
 shifts_design_matrix %>% 
   group_by(hour = hour(start)) %>% 
-  summarize(avg_eff = mean(efficiency)) %>%
+  summarize(avg_eff = mean(efficiency), num_shifts = n()) %>%
   ggplot() + 
-  geom_point(aes(hour, avg_eff)) + 
+  geom_point(aes(hour, avg_eff, size=num_shifts)) + 
   geom_smooth(aes(hour, avg_eff)) +
   xlab("hour of day") +
   ylab("average efficiency") +
   geom_hline(yintercept = mean(shifts_design_matrix$efficiency))
-ggsave("../figures/avg_shift_eff_by_hour_ofday.png")
+ggsave("../figures/avg_shift_eff_by_hour_of_day.png")
+
+tmp <- shifts_design_matrix %>% 
+  mutate(day_type = ifelse(wday(start) %in% c(7, 1), "weekend", "weekday")) %>%
+  group_by(hour = hour(start), day_type) %>% 
+  summarize(avg_eff = mean(efficiency), num_shifts = n())
+  ggplot(tmp, aes(hour, avg_eff, color=day_type)) + 
+  geom_point(aes(size=num_shifts/sum(tmp$num_shifts))) + 
+    geom_line() +
+  #geom_smooth() +
+  xlab("hour of day") +
+  ylab("average efficiency") +
+  geom_hline(yintercept = mean(shifts_design_matrix$efficiency))
+ggsave("../figures/avg_shift_eff_by_hour_of_day.png")
 
 
 shifts_design_matrix %>% 
-  group_by(day_of_week = wday(start)) %>% 
+  group_by(wday = wday(start)) %>% 
   summarize(avg_eff = mean(efficiency)) %>%
   ggplot() + 
-  geom_point(aes(hour, avg_eff)) + 
-  geom_smooth(aes(hour, avg_eff)) +
-  xlab("hour of day") +
+  geom_point(aes(wday, avg_eff)) + 
+  geom_smooth(aes(wday, avg_eff)) +
+  xlab("day of the week") +
   ylab("average efficiency") +
   geom_hline(yintercept = mean(shifts_design_matrix$efficiency))
-ggsave("../figures/avg_shift_eff_by_hour_ofday.png")
+ggsave("../figures/avg_shift_eff_by_day_of_week.png")
 
