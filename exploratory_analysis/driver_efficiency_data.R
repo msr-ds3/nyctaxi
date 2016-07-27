@@ -31,6 +31,7 @@ driver_efficiency = driver_efficiency_no_threshold %>%
 # LOW/HIGH EARNERS
 avg = mean(driver_efficiency$efficiency)
 sdv = sd(driver_efficiency$efficiency)
+med = median(driver_efficiency$efficiency)
 
 driver_efficiency = driver_efficiency %>%
   mutate(efficiency_category = 
@@ -48,5 +49,8 @@ low_earning_drivers = driver_efficiency %>%
 
 high_earning_drivers = driver_efficiency %>% 
   filter(efficiency_category == "HIGH")
+
+driver_efficiency = driver_efficiency %>% 
+  mutate(efficiency_binary = ifelse(efficiency <=med, 0, 1))
 
 

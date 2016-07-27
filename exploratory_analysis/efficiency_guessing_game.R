@@ -1,65 +1,62 @@
+###########################################
+### INSTRUCTIONS: Run question, answer, and
+### then answer explanation for each part 
+
 library(ggplot2)
 library(dplyr)
 
 source("driver_efficiency_data.R")
 source("shift_efficiency_data.R")
+source("map_visualization_functions.R")
 
-#################################
-########### PART 1 ##############
-#################################
+######################################
+## PART 1 - Guess Driver efficiency ##
+######################################
 
-#show a random driver's shifts to user and let him/her guess efficiency
-random_driver = sample(driver_efficiency$hack_license, 1)
+# QUESTION #
+random_row = sample(1:nrow(driver_efficiency),1)
+random_driver = driver_efficiency[random_row, ]$hack_license[1]
 visualize_trips_by_shift(taxi_clean_shifts, random_driver)
+# END OF QUESTION #
 
-# ANSWER - run this to display answer #
-low = low_earning_drivers %>% filter(hack_license == random_driver) %>% nrow() #low
-high = high_earning_drivers %>% filter(hack_license == random_driver) %>% nrow() #high
-if(low == 1) {
-  print("Driver is a low-earner")
-} else if(high ==1) {
-  print("Driver is a high-earner")
-} else {
-  print("Driver is close to the average earner")
-}
+# ANSWER  #
+answer = as.character(driver_efficiency[random_row, ]$efficiency_category)
+print(paste("Driver is a ", answer, " driver"))
 # END OF ANSWER #    
 
-# Answer "explanation" - view driver's stats 
-driver_efficiency %>% filter(hack_license == random_driver) %>% View()
+# ANSWER EXPLANATION (view driver's stats) # 
+driver_efficiency %>% 
+  filter(hack_license == random_driver) %>% 
+  View()
+# END OF ANSWER EXPLANATION #
 
-#view stats for each shift
-shifts_clean %>% filter(hack_license == random_driver) %>% 
-  mutate(efficiency = fare/shift_length) %>% View()
+# DETAILED EXPLANATION (view stats for all of driver's shifts) #
+shifts_clean %>% 
+  filter(hack_license == random_driver) %>% 
+  mutate(efficiency = fare/shift_length) %>% 
+  View()
+# END OF DETAILED EXPLANATION #
 
 
 
-#################################
-########### PART 2 ##############
-#################################
+######################################
+## PART 2 - Guess Shifts efficiency ##
+######################################
 
-# View random shift, and guess whether it is efficient or not
+# QUESTION #
 random_row = sample(1:nrow(shift_efficiency), 1)
 random_driver = shift_efficiency[random_row, ]$hack_license
 random_driver_shift = shift_efficiency[random_row, ]$shift_num
-
 visualize_trips_by_shift(taxi_clean_shifts,random_driver, random_driver_shift)
+# END OF QUESTION #
 
-# ANSWER - run this to display answer #
-low = shift_efficiency %>% 
-  filter(hack_license == random_driver & efficiency_category == "LOW") %>%
-  nrow() 
-high =  shift_efficiency %>% 
-  filter(hack_license == random_driver & efficiency_category == "HIGH") %>%
-  nrow() 
 
-if(low == 1) {
-  print("Driver is a low-earner")
-} else if(high ==1) {
-  print("Driver is a high-earner")
-} else {
-  print("Driver is close to the average earner")
-}
+# ANSWER #
+answer = as.character(shift_efficiency[random_row, ]$efficiency_category)
+print(paste("Driver is a ", answer, " driver"))
 # END OF ANSWER #    
 
-# answer explanation - view shift's statistics
-shift_efficiency[random_row, ] %>% View()
+# ANSWER EXPLANATION #
+shift_efficiency[random_row, ] %>% 
+  View()
+# END OF ANSWER EXPLANATION #
