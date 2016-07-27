@@ -169,12 +169,10 @@ shifts_design_matrix = taxi_clean_shifts %>%
   filter(length >= thresholdMin & 
            length <= thresholdMax &
            start >= as.POSIXct("2013-07-01 06:00:00", tz = "EDT") & 
-<<<<<<< HEAD
            end <= as.POSIXct("2013-07-31 18:00:00", tz = "EDT") & 
            efficiency < 100 )
-=======
-           end <= as.POSIXct("2013-07-31 18:00:00", tz = "EDT"))
->>>>>>> f5ad031ebc3ec1fc0c483911d316dcf392ba30ae
+           end <= as.POSIXct("2013-07-31 18:00:00", tz = "EDT")
+
 
 #Adding a ymd column in the shifts design matrix data frame
 shifts_design_matrix <- shifts_design_matrix %>% mutate(ymd = as.Date(start))
@@ -183,5 +181,25 @@ shifts_design_matrix <- shifts_design_matrix %>% mutate(ymd = as.Date(start))
 source("load_weather.R")
 shifts_design_matrix<- left_join(shifts_design_matrix, weather, by ="ymd")
 
+
+##################################
+#Added is_week_end and start_hour
+#################################
+is_weekend = function(vec)
+{
+  col = vector(mode= "numeric", length = length(vec))
+  if (wday(vec) ==1 | wday(vec)==7)
+  {
+    TRUE
+  }
+  else
+  {
+    FALSE
+  }
+}
+is_weekend = Vectorize(is_weekend)
+shifts_design_matrix$is_week_end = is_weekend(shifts_design_matrix$ymd)
+
+shifts_design_matrix <- shifts_design_matrix %>% mutate(start_hour = hour(start))
 
 save(shifts_design_matrix, file= "../Rdata/shifts_design_matrix.Rdata")
