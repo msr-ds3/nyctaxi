@@ -45,7 +45,7 @@ Model1 <-
                is_week_end*start_hour) 
 X = sparse.model.matrix(Model1, TTtrain)
 Y = TTtrain$efficiency_category
-glm.model_1 <- glmnet(X, Y, family = "binomial")
+glm.model_1 <- glmnet(X, Y, family = "binomial", lambda = 0)
 plot(glm.model_1)
 coef(glm.model_1) %>% head()
 
@@ -53,8 +53,8 @@ plot_data <-glm.model_1 %>%
   tidy() %>% 
   extract(term, c("hack_license","rest"), "(hack_license)(.*)") %>% 
   filter(hack_license == "hack_license") 
-ggplot(plot_data, aes(x = estimate)) + geom_histogram(binwidth = 1) + 
-  ylim(0, 2500000)
+ggplot(plot_data, aes(x = estimate)) + geom_histogram(binwidth = 0.1)  
+ 
 ggsave("../figures/coef_distribution_of_hack_licenses.png")
 
 TTtest$predicted <- predict(glm.model_1, TTtest)
