@@ -36,7 +36,7 @@ driver_efficiency_real =
   group_by(hack_license) %>%
   summarize(
     eff_percent = mean(efficiency_category),
-    total_shifts = max(shift_num)) %>% 
+    total_shifts = n()) %>% 
   filter(total_shifts >= min_num_of_shifts)
 
 ggplot(driver_efficiency_real) + 
