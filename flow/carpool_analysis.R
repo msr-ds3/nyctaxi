@@ -47,8 +47,15 @@ rounded_pickup_dropoff_time_df <- taxi_clean %>%
            rounded_dropoff_lat, 
            rounded_dropoff_lng,
            rounded_pickup_datetime) %>%
-  summarize(count = n()) %>% 
-  filter(count > 1)
+  summarize(count = n(),
+            total_num_passenger = sum(passenger_count),
+            passengers_per_ride = total_num_passenger / count,
+            total_distance = sum(trip_distance),
+            total_trip_time = sum(trip_time_in_secs/3600),
+            avg_speed = total_distance/ total_trip_time,
+            total_fare = sum(fare_amount),
+            fare_per_ride = total_fare / count
+          ) %>% filter(count > 1)
 
 overlapping_rides <- rounded_pickup_dropoff_time_df %>%
   mutate(hour = hour(rounded_pickup_datetime), 
