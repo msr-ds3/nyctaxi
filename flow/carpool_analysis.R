@@ -32,12 +32,25 @@ group_by(pickup_neighborhood, dropoff_neighborhood, rounded_pickup_datetime) %>%
 ## rounded lat/lng to neighborhood within 5 minutes
 rounded_pickup_time_df <- taxi_clean %>% 
   filter(pickup_neighborhood != dropoff_neighborhood) %>%
-  group_by(rounded_pickup_lat, rounded_pickup_lng,dropoff_neighborhood,rounded_pickup_datetime) %>%
-  summarize(count = n()) %>% filter(count >1, !is.na(dropoff_neighborhood))
+  group_by(rounded_pickup_lat, 
+           rounded_pickup_lng,
+           dropoff_neighborhood,
+           rounded_pickup_datetime) %>%
+  summarize(count = n()) %>% 
+  filter(count >1, !is.na(dropoff_neighborhood))
 
-# rounded pickup lng/lat to dropoff lng/lat withing 5 minutes
+# rounded pickup lng/lat to  roubded dropoff lng/lat within 5 minutes
 rounded_pickup_dropoff_time_df <- taxi_clean %>% 
   filter(pickup_neighborhood != dropoff_neighborhood) %>%
-  group_by(rounded_pickup_lat, rounded_pickup_lng,rounded_dropoff_lat, rounded_dropoff_lng,rounded_pickup_datetime) %>%
-  summarize(count = n()) %>% filter(count > 1)
+  group_by(rounded_pickup_lat, 
+           rounded_pickup_lng,
+           rounded_dropoff_lat, 
+           rounded_dropoff_lng,
+           rounded_pickup_datetime) %>%
+  summarize(count = n()) %>% 
+  filter(count > 1)
 
+overlapping_rides <- rounded_pickup_dropoff_time_df %>%
+  mutate(hour = hour(rounded_pickup_datetime), 
+                     day = wday(rounded_pickup_datetime), 
+                     is_weekend=ifelse(day == 1 | day == 7, T, F))
