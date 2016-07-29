@@ -26,7 +26,7 @@
 ### Shift-based
 * Some plots using shift intervals [here] (https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/plots_with_shift_interval.R)
 
-## Prediciting Efficiency
+## Predicting Efficiency
 ### Predicting shift efficiency
  * Features to be included in the design matrix for the shifts prediction task are listed in [this](https://github.com/msr-ds3/nyctaxi/blob/master/prediction_task/features.md) markdown file.
  * The design matrix can be created and saved as an Rdata file using the script [here](https://github.com/msr-ds3/nyctaxi/blob/master/prediction_task/shifts_design_matrix.R)
