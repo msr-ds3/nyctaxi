@@ -51,3 +51,5 @@ p <- ggmap(map) +
 gg_animate(p, ani.width=960, ani.height=960, "cumsum_flow.gif")
 
 save(df, file = "cumsum_flow.Rdata")
+
+    
