@@ -10,11 +10,12 @@ library(ROCR)
 library(stargazer)
 source("model_prediction_functions.R")
 
-shifts_design_matrix <- shifts_design_matrix %>% mutate(t_ave = ((tmin+tmax)/2))
+
 ############################################
-#Added a new column for efficiency_category
+#Added  new columns for efficiency_category
 ############################################
 med = median(shifts_design_matrix$efficiency)
+shifts_design_matrix <- shifts_design_matrix %>% mutate(t_ave = ((tmin+tmax)/2))
 
 # 0 - LOW EFFICIENCY  |   1 - HIGH EFFICIENCY
 shifts_design_matrix = shifts_design_matrix %>% 
@@ -35,9 +36,9 @@ valid_shifts =
   left_join(valid_drivers, shifts_design_matrix)
 
 
-#################################################################################################
-#Splitting the data into train and test frames calling the function in model_prediction_functions 
-#################################################################################################
+###############################
+#Splitting the data into train 
+###############################
 train = get_training_data(valid_shifts)
 test = get_test_data(valid_shifts, train)
 
@@ -68,12 +69,14 @@ plot_roc_auc(test)
 # AUC = 0.783 for features: hack_license + as.factor(is_week_end)*as.factor(start_hour) + avg_trip_distance
 
 # separating `hack_license` label from its value and plotting distribution of coef
-plot_data <-glm_efficiency %>% 
+plot_data <- classification_model %>% 
   tidy() %>% 
   extract(term, c("hack_license","rest"), "(hack_license)(.*)") %>% 
   filter(hack_license == "hack_license") 
 
 ggplot(plot_data, aes(x = estimate)) + geom_histogram(binwidth = 0.1)
+
+
 ggsave("../figures/coef_distribution_of_model_without_hack_license.png")
 sd(plot_data$estimate)
 
@@ -97,7 +100,7 @@ test = get_test_data(random_shifts, train)
 ###############################################
 formula <- 
   as.formula(as.factor(efficiency_category) ~ 
-               as.factor(is_week_end)*as.factor(start_hour)) 
+               hack_license + as.factor(is_week_end)*as.factor(start_hour) + avg_trip_time + avg_trip_distance) 
 
 
 classification_model = train_model_classification(train, formula)
@@ -135,7 +138,7 @@ sd(plot_data$estimate)
 
 ################################################################################
 
-#Predicting efficiency
+#Predicting efficiency for non-shuffled hack_license
 
 #################################################################################################
 #Splitting the data into train and test frames calling the function in model_prediction_functions 
@@ -148,10 +151,10 @@ test = get_test_data(valid_shifts, train)
 ###############################################
 formula <- 
   as.formula(efficiency ~ 
-               hack_license + as.factor(is_week_end)*as.factor(start_hour) )
+               as.factor(is_week_end)*as.factor(start_hour) + avg_trip_time + avg_trip_dist )
 X = sparse.model.matrix(formula, train)
 Y = train$efficiency
-glm_efficiency <- glmnet(X, Y, family = "binomial", lambda = 0)
+glm_efficiency <- glmnet(X, Y, lambda = 0)
 
 
 # PREDICTION
@@ -186,7 +189,40 @@ performance(pred, 'auc')
 
 sd(plot_data$estimate)
 
-# RMSE =  for features as.factor(is_week_end)*as.factor(start_hour)
-# RMSE = for features hack_license + as.factor(is_week_end)*as.factor(start_hour)
+# RMSE = 5.60 for features as.factor(is_week_end)*as.factor(start_hour)
+# RMSE = 4.76 for features hack_license + as.factor(is_week_end)*as.factor(start_hour)
+
+
+#Predicting efficiency for shuffled hack_license
+
+#Shuffling the hack_licenses
+hack_licenses_shuffled <-sample(valid_shifts$hack_license, nrow(valid_shifts))
+random_shifts = valid_shifts
+random_shifts$hack_license = hack_licenses_shuffled
+
+#################################################################################################
+#Splitting the data into train and test frames calling the function in model_prediction_functions 
+#################################################################################################
+train = get_training_data(valid_shifts)
+test = get_test_data(valid_shifts, train)
+
+###############################################
+#Creating model to predict efficiency category#
+###############################################
+formula <- 
+  as.formula(efficiency ~ 
+               hack_license + as.factor(is_week_end)*as.factor(start_hour) + avg_trip_time + avg_trip_distance)
+X = sparse.model.matrix(formula, train)
+Y = train$efficiency
+glm_efficiency <- glmnet(X, Y, lambda = 0)
+
+
+# PREDICTION
+xtest = sparse.model.matrix(formula, test)
+test$predicted <- predict(glm_efficiency, newx = xtest, type = "response")
+
+# Assessing prediction - AUC, ROC, Accuracy
+RMSE <- sqrt(mean((test$efficiency-test$predicted)^2))
+
 
 
