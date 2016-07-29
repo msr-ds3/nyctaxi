@@ -57,7 +57,11 @@ rounded_pickup_dropoff_time_df <- taxi_clean %>%
             fare_per_ride = total_fare / count
           ) %>% filter(count > 1)
 
+### 
 overlapping_rides <- rounded_pickup_dropoff_time_df %>%
   mutate(hour = hour(rounded_pickup_datetime), 
-                     day = wday(rounded_pickup_datetime), 
-                     is_weekend=ifelse(day == 1 | day == 7, T, F))
+         day = wday(rounded_pickup_datetime), 
+         is_weekend=ifelse(day == 1 | day == 7, T, F)) %>%
+  group_by(rounded_pickup_lat, rounded_pickup_lng, is_weekend, hour) %>%
+  summarize(avg = mean(count),
+            sd = sd(count))

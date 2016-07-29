@@ -26,7 +26,7 @@
 ### Shift-based
 * Some plots using shift intervals [here] (https://github.com/msr-ds3/nyctaxi/blob/master/exploratory_analysis/plots_with_shift_interval.R)
 
-## Prediction Task
+## Predicting Efficiency
 ### Predicting shift efficiency
  * Features to be included in the design matrix for the shifts prediction task are listed in [this](https://github.com/msr-ds3/nyctaxi/blob/master/prediction_task/features.md) markdown file.
  * The design matrix can be created and saved as an Rdata file using the script [here](https://github.com/msr-ds3/nyctaxi/blob/master/prediction_task/shifts_design_matrix.R)
@@ -37,8 +37,10 @@
  * future work: Features to be included in the design matrix
  
 ## Analyzing flow
+ * [Visualizing flow over the day](https://github.com/msr-ds3/nyctaxi/blob/master/flow/flow_analysis.R).
  * Analysis on carpooling possibilities, [here](https://github.com/msr-ds3/nyctaxi/blob/master/flow/carpool_analysis.R)
  * [Plots on carpooling analysis](https://github.com/msr-ds3/nyctaxi/blob/master/flow/carpool_plots.R).
+ * [Probabilites of lat/lng destinations given a source neighborhood and a hour of day](https://github.com/msr-ds3/nyctaxi/blob/master/flow/distribution_of_destinations.R).
  
 ### Shiny apps
  * A shiny app to visualize NYC taxi flow as a heatmap can be found [here](https://github.com/msr-ds3/nyctaxi/tree/master/heatmap_app)
