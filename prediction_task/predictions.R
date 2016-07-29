@@ -9,6 +9,7 @@ library(tidyr)
 library(ROCR)
 library(stargazer)
 source("model_prediction_functions.R")
+
 shifts_design_matrix <- shifts_design_matrix %>% mutate(t_ave = ((tmin+tmax)/2))
 ############################################
 #Added a new column for efficiency_category
@@ -45,24 +46,26 @@ test = get_test_data(valid_shifts, train)
 ###############################################
 formula <- 
   as.formula(as.factor(efficiency_category) ~ 
-               as.factor(is_week_end)*as.factor(start_hour) )
-X = sparse.model.matrix(formula, train)
-Y = train$efficiency_category
-glm_efficiency <- glmnet(X, Y, family = "binomial", lambda =0)
+               hack_license + as.factor(is_week_end)*as.factor(start_hour))
 
-
-# PREDICTION
-xtest = sparse.model.matrix(formula, test)
-test$predicted <- predict(glm_efficiency, newx = xtest, type = "response")
-
-# Assessing prediction - AUC, ROC, Accuracy
-RMSE <- sqrt(mean((test$efficiency_category-test$predicted)^2))
+classification_model = train_model_classification(train, formula)
+test = test_model_classification(formula, test, classification_model)
 
 # Setting threshold of 0.5 to classify predictions
 test <- test %>% 
   mutate(efficiency_category_predicted = ifelse(predicted > 0.5, 1, 0))
 test_confusion_matrix = 
   confusionMatrix(test$efficiency_category_predicted, test$efficiency_category)
+
+################################
+#Plotting the ROC curve with AUC
+################################
+plot_roc_auc(test)
+# AUC = 0.616 for features:as.factor(is_week_end)*as.factor(start_hour) , accuracy = 56.74%, sd = NA
+# AUC = 0.778 for features:hack_license + as.factor(is_week_end)*as.factor(start_hour), accuracy = 70.67%, sd = 2.302
+# AUC = 0.784 for features:hack_license + as.factor(is_week_end)*as.factor(start_hour) + avg_trip_time + avg_trip_distance
+# AUC = 0.7849 for features:hack_license + as.factor(is_week_end)*as.factor(start_hour) + avg_trip_time
+# AUC = 0.783 for features: hack_license + as.factor(is_week_end)*as.factor(start_hour) + avg_trip_distance
 
 # separating `hack_license` label from its value and plotting distribution of coef
 plot_data <-glm_efficiency %>% 
@@ -72,21 +75,7 @@ plot_data <-glm_efficiency %>%
 
 ggplot(plot_data, aes(x = estimate)) + geom_histogram(binwidth = 0.1)
 ggsave("../figures/coef_distribution_of_model_without_hack_license.png")
-
-#######################
-#Plotting the ROC curve
-#######################
-pred <- prediction(test$predicted, test$efficiency_category)
-perf = performance(pred, measure = 'tpr', x.measure = 'fpr')
-plot(perf)
-performance(pred, 'auc') 
-
 sd(plot_data$estimate)
-# AUC = 0.616 for features:as.factor(is_week_end)*as.factor(start_hour) , accuracy = 56.74%, sd = NA
-# AUC = 0.778 for features:hack_license + as.factor(is_week_end)*as.factor(start_hour), accuracy = 70.67%, sd = 2.302
-# AUC = 0.784 for features:hack_license + as.factor(is_week_end)*as.factor(start_hour) + avg_trip_time + avg_trip_distance
-# AUC = 0.7849 for features:hack_license + as.factor(is_week_end)*as.factor(start_hour) + avg_trip_time
-# AUC = 0.783 for features: hack_license + as.factor(is_week_end)*as.factor(start_hour) + avg_trip_distance
 
 
 ####################################################
@@ -100,8 +89,8 @@ random_shifts$hack_license = hack_licenses_shuffled
 ##############################################
 #Splitting the data into train and test frames
 ##############################################
-train = get_training_data(valid_shifts)
-test = get_test_data(valid_shifts, train)
+train = get_training_data(random_shifts)
+test = get_test_data(random_shifts, train)
 
 ###############################################
 #Creating model to predict efficiency category#
@@ -109,17 +98,28 @@ test = get_test_data(valid_shifts, train)
 formula <- 
   as.formula(as.factor(efficiency_category) ~ 
                as.factor(is_week_end)*as.factor(start_hour)) 
-X = sparse.model.matrix(formula, train)
-Y = train$efficiency_category
-glm_efficiency <- glmnet(X, Y, family = "binomial", lambda = 0)
 
 
-# Prediction
-xtest = sparse.model.matrix(formula, test)
-test$predicted <- predict(glm_efficiency, newx = xtest, type = "response")
+classification_model = train_model_classification(train, formula)
+test = test_model_classification(formula, test, classification_model)
 
-# Assessing prediction - AUC, ROC, Accuracy
-RMSE <- sqrt(mean((test$efficiency_category-test$predicted)^2))
+# Setting threshold of 0.5 to classify predictions
+test <- test %>% 
+  mutate(efficiency_category_predicted = ifelse(predicted > 0.5, 1, 0))
+test_confusion_matrix = 
+  confusionMatrix(test$efficiency_category_predicted, test$efficiency_category)
+
+# Setting threshold of 0.5 to classify predictions
+test <- test %>% 
+  mutate(efficiency_category_predicted = ifelse(predicted > 0.5, 1, 0))
+
+################################
+#Plotting the ROC curve with AUC
+################################
+plot_roc_auc(test)
+
+# AUC = 0.566, for features hack_license + as.(is_week_end)*as.factor(start_hour) , accurarcy = 54.55%, 0.523
+# AUC = 0.609 for features as.(is_week_end)*as.factor(start_hour), accuracy = 54.55%
 
 # separating `hack_license` label from its value and plotting distribution of coef
 plot_data <-glm_efficiency %>% tidy() %>% 
@@ -128,22 +128,7 @@ plot_data <-glm_efficiency %>% tidy() %>%
 ggplot(plot_data, aes(x = estimate)) + geom_histogram(binwidth = 0.1)
 sd(plot_data$estimate)
 ggsave("../figures/coef_distribution_of_hack_licenses_shuffled.png")
-
-# Setting threshold of 0.5 to classify predictions
-test <- test %>% 
-  mutate(efficiency_category_predicted = ifelse(predicted > 0.5, 1, 0))
-
-#######################
-#Plotting the ROC curve
-#######################
-pred <- prediction(test$predicted, test$efficiency_category)
-perf = performance(pred, measure = 'tpr', x.measure = 'fpr')
-plot(perf)
-performance(pred, 'auc') 
 sd(plot_data$estimate)
-
-# AUC = 0.566, for features hack_license + as.(is_week_end)*as.factor(start_hour) , accurarcy = 54.55%, 0.523
-# AUC = 0.609 for features as.(is_week_end)*as.factor(start_hour), accuracy = 54.55%
 ######################
 #End of shuffled data
 ######################
