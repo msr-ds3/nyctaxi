@@ -5,10 +5,14 @@ library(tidyr)
 library(dplyr)
 library(RColorBrewer)
 
-nyc_map <- get_map(location = c(lon = -73.968227, lat = 40.777127), 
+map_file_path = "nyc_map.geoJSON"
+ifelse(file.exists(map_file_path), load(map_file_path),
+
+       nyc_map <- get_map(location = c(lon = -73.968227, lat = 40.777127), 
                                 maptype = "terrain", 
                                 zoom = 12, 
                                 color="bw")
+      )
 
 generate_map <- function(df)
 {
