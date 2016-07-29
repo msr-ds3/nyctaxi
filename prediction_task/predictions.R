@@ -68,7 +68,7 @@ test = anti_join(valid_shifts, train)
 #Creating model to predict efficiency category#
 ###############################################
 formula <- 
-  as.formula(as.factor(efficiency_category) ~  hack_license + as.factor(is_week_end)*as.factor(start_hour) + tmin + prcp)
+  as.formula(as.factor(efficiency_category) ~  hack_license + as.factor(is_week_end)*as.factor(start_hour))
 X = sparse.model.matrix(formula, train) 
 Y = train$efficiency_category
 glm_efficiency <- glmnet(X, Y, family = "binomial", lambda =0)
@@ -95,7 +95,7 @@ plot_data <-glm_efficiency %>%
   filter(hack_license == "hack_license") 
 
 ggplot(plot_data, aes(x = estimate)) + geom_histogram(binwidth = 0.1)
-#ggsave("../figures/coef_distribution_of_hack_licenses.png")
+ggsave("../figures/distribution_of_coef_hack_license_+_as.factor(is_week_end)*as.factor(start_hour).png")
 
 #######################
 #Plotting the ROC curve
@@ -105,15 +105,8 @@ perf = performance(pred, measure = 'tpr', x.measure = 'fpr')
 plot(perf)
 performance(pred, 'auc') 
 sd(plot_data$estimate)
-# Area = 0.7767 for features: hack_license, is_week_end*start_hour
-# Area = 0.7743 for features: hack_license, is_week_end*start_hour, tmin, tmax, prcp
-# Area = 0.773 for features: hack_license, is_week_end*start_hour, t_ave, prcp
-# Area = 0.77327 for features: hack_license, is_week_end*start_hour, t_ave*prcp
-# Area = 0.769 for features: hack_license, is_week_end*start_hour*t_ave*prcp
-# Area = 0.7747 for features : hack_license + is_week_end*start_hour + tmin + prcp + shift_type
-# Area = 0.777, for features: hack_license + is_week_end*start_hour + prcp + airport_pct + shift_type
-# Area = 0.78, for features: hack_license + is_week_end*start_hour + airport_pct + pickups_in_man_pct + shift_type
-# Area = 0.5768 for features is_week_end*start_hour + t_ave + prcp
+# Area = 0.5768 for features is_week_end*start_hour + t_ave + prcpis_week_end*start_hour, t_ave, prcp 
+# Area = 0.778 for features hack_license + as.factor(is_week_end)*as.factor(start_hour)
 
 ####################################################
 #Repeat modeling/predicting for shuffled data frame#
