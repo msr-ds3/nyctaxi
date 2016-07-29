@@ -41,3 +41,17 @@ plot_roc_auc = function(test)
   plot(perf, main = paste ("ROC CURVE\nAUC: ", performance(pred, 'auc')@y.values))
 }
 
+plot_calibration = function(test)
+{
+  calibration = test %>% 
+  mutate(predicted_bin = round(predicted/0.1)*0.1) %>%
+  group_by(predicted_bin) %>%
+  summarize(actual_freq = mean(efficiency_category))
+  
+  ggplot(calibration, aes(x=predicted_bin, y=actual_freq)) + 
+    geom_point() + 
+    geom_abline(slope =1, intercept =0) +
+    ylim(0,1)
+  
+}
+
