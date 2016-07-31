@@ -20,7 +20,7 @@ get_nyc_neighborhoods <- function(){
 }
 nyc_neighborhoods <- get_nyc_neighborhoods()
 
-map <- get_map(c(-73.87, 40.70), zoom = 11, color="bw",maptype = "satellite")
+map <- get_map(c(-73.87, 40.70), zoom = 11, color="bw")
 
 # settime  rounding factor to 5 minutes
 time_rounding_factor <- 5*60
@@ -30,7 +30,7 @@ pickup_rounding_factor <- .002
 dropoff_rounding_factor <- 2
 
 ## 
-max_passengers_per_car = 4
+max_psgrs_per_car = 4
 
 ##
 parse_datetime <- function(s, format="%Y-%m-%d") {
@@ -50,45 +50,65 @@ taxi_clean <- taxi_clean %>%
 
 # compute savings cabs, fares, driving miles
 
-rounded_pickup_dropoff_time_df <- taxi_clean %>% 
+overlapping_rides <- taxi_clean %>% 
   filter(pickup_neighborhood != dropoff_neighborhood) %>%
   group_by(rounded_pickup_datetime,
            rounded_pickup_lat, 
            rounded_pickup_lng,
-           rounded_dropoff_lat, 
-           rounded_dropoff_lng) 
-rounded_pickup_dropoff_time_df <- rounded_pickup_dropoff_time_df %>%
-  summarize(
-            num_trips = n(),
-            total_num_passenger = sum(passenger_count),
+           rounded_dropoff_lat,
+           rounded_dropoff_lng) %>%
+  summarize(num_trips = n(),
+            total_psgrs = sum(passenger_count),
             total_distance = sum(trip_distance),
             total_trip_time = sum(trip_time_in_secs/3600),
             total_fare = sum(fare_amount)) %>% 
   ungroup() %>%
   filter(num_trips > 1) %>% 
-   mutate (
-           avg_num_passenger = total_num_passenger / num_trips,
+   mutate (avg_psgrs = total_psgrs / num_trips,
            avg_speed = total_distance/ total_trip_time,
            avg_distance = total_distance / num_trips,
            avg_fare = total_fare / num_trips,
-           avg_fare_per_passenger = total_fare / total_num_passenger,
-           min_cabs =  ceiling(total_num_passenger / max_passengers_per_car),
+           fare_per_psgr = total_fare / total_psgrs,
+           min_cabs =  ceiling(total_psgrs / max_psgrs_per_car),
            min_fare = avg_fare * min_cabs,
-           min_fare_per_passenger = min_fare / total_num_passenger,
-           saving_cabs = num_trips - min_cabs,
-           saving_fare = total_fare - min_fare,
-           saving_fare_per_passenger= avg_fare_per_passenger - min_fare_per_passenger) %>%
+           min_fare_per_psgr = min_fare / total_psgrs,
+           cabs_savings = num_trips - min_cabs,
+           fare_savings = total_fare - min_fare,
+           fare_savings_per_psgr = fare_per_psgr - min_fare_per_psgr) %>%
   filter(min_cabs > 0)
 
+##########
+# total savings:
+##########
+sum(overlapping_rides$fare_savings)
+sum(overlapping_rides$fare_savings_per_psgr)
+sum(overlapping_rides$cabs_savings)
 
-save(df, file = "savings.Rdata")
+# grouping by dropoff lat/lng rounded to 2 decimal points
+#
+# without filtering rides with pickup and dropoff in same neighborhood:
+#   total fare savings: 7382446/167044464 = 0.0441945
+#   total cabs savings: 798502/13598831 = 0.05871843
+# after filtering out rides with pickup and dropoff in same neighborhood
+#   total fare savings: 5879232/167044464 = 0.03519561
+#   total cabs savings: 574133/13598831 = 0.04221929
+
+# grouping only by dropoff neighborhood
+#
+# without filtering rides with pickup and dropoff in same neighborhood:
+#   total fare savings: 14462941/167044464 = 0.08658138
+#   total cabs savings: 1535521/13598831 = 0.1129157
+# after filtering out rides with pickup and dropoff in same neighborhood
+#   total fare savings: 11415197/167044464 = 0.06833628
+#   total cabs savings: 1070968/13598831 = 0.07875442
+
 
 ##################
 ###hotspots
 #################
 
 
-carpooling_hotspots_overall <- rounded_pickup_dropoff_time_df %>%
+carpooling_hotspots_overall <- overlapping_rides %>%
   group_by(rounded_pickup_lat, 
            rounded_pickup_lng,
            rounded_dropoff_lat,
@@ -97,7 +117,7 @@ carpooling_hotspots_overall <- rounded_pickup_dropoff_time_df %>%
 
 
 #######################################
-carpooling_hotspots_by_hour <- rounded_pickup_dropoff_time_df %>%
+carpooling_hotspots_by_hour <- overlapping_rides %>%
     group_by(ymd= parse_datetime(rounded_pickup_datetime),
              hour = hour(rounded_pickup_datetime),
              rounded_pickup_lat, 
