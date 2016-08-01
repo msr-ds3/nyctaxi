@@ -11,6 +11,52 @@ library(stargazer)
 library(caret)
 source("model_prediction_functions.R")
 
+# PRE-DEFINING OUR FORMULAS FOR CLASSIFICATION AND REGRESSION #
+formula1_class = as.formula(efficiency_category ~
+                        hack_license)
+formula2_class = as.formula(efficiency_category ~
+                        as.factor(start_hour)*as.factor(is_week_end))
+formula3_class = as.formula(efficiency_category ~ 
+                        hack_license + 
+                        as.factor(start_hour)*as.factor(is_week_end))
+formula4_class = as.formula(efficiency_category ~ 
+                        hack_license + 
+                        as.factor(start_hour)*as.factor(is_week_end) + 
+                        avg_trip_time + 
+                        avg_trip_distance)
+formula5_class = as.formula(efficiency_category ~
+                        hack_license + 
+                        as.factor(start_hour)*as.factor(is_week_end) + 
+                        prcp)
+formula6_class = as.formula(efficiency_category ~ 
+                              hack_license + 
+                              as.factor(start_hour)*as.factor(is_week_end) + 
+                              avg_trip_time + 
+                              avg_trip_distance + 
+                              prcp)
+
+formula1_reg = as.formula(efficiency ~
+                            hack_license)
+formula2_reg = as.formula(efficiency ~
+                            as.factor(start_hour)*as.factor(is_week_end))
+formula3_reg = as.formula(efficiency ~ 
+                            hack_license + 
+                            as.factor(start_hour)*as.factor(is_week_end))
+formula4_reg = as.formula(efficiency ~ 
+                            hack_license + 
+                            as.factor(start_hour)*as.factor(is_week_end) + 
+                            avg_trip_time + 
+                            avg_trip_distance)
+formula5_reg = as.formula(efficiency ~
+                            hack_license + 
+                            as.factor(start_hour)*as.factor(is_week_end) + 
+                            prcp)
+formula6_reg = as.formula(efficiency ~ 
+                            hack_license + 
+                            as.factor(start_hour)*as.factor(is_week_end) + 
+                            avg_trip_time + 
+                            avg_trip_distance + 
+                            prcp)
 
 ############################################
 #Added  new columns for efficiency_category#
@@ -43,12 +89,9 @@ valid_shifts =
 
 train = get_training_data(valid_shifts)
 test = get_test_data(valid_shifts, train)
-formula <- 
-  as.formula(as.factor(efficiency_category) ~ 
-               hack_license + as.factor(is_week_end)*as.factor(start_hour))
 
-classification_model = train_model_classification(train, formula)
-test = test_model_classification(formula, test, classification_model)
+classification_model = train_model_classification(train, formula3_class)
+test = test_model_classification(formula3_class, test, classification_model)
 
 # Classifying predictions with threshold of 0.5
 test <- test %>% 
@@ -92,12 +135,9 @@ random_shifts$hack_license = hack_licenses_shuffled
 # train/test and model
 train = get_training_data(random_shifts)
 test = get_test_data(random_shifts, train)
-formula <- 
-  as.formula(as.factor(efficiency_category) ~ 
-               hack_license + as.factor(is_week_end)*as.factor(start_hour) + avg_trip_time + avg_trip_distance) 
 
-classification_model = train_model_classification(train, formula)
-test = test_model_classification(formula, test, classification_model)
+classification_model = train_model_classification(train, formula3_class)
+test = test_model_classification(formula3_class, test, classification_model)
 
 # Classifying predictions with threshold of 0.5
 test <- test %>% 
@@ -128,20 +168,17 @@ ggsave("../figures/coef_distribution_of_hack_licenses_shuffled.png")
 ######### REGRESSION ##########
 ###############################
 
+
 train = get_training_data(valid_shifts)
 test = get_test_data(valid_shifts, train)
 
-formula <- as.formula(efficiency ~ 
-                        hack_license + 
-                        as.factor(is_week_end)*as.factor(start_hour)+ 
-                        avg_trip_time + 
-                        avg_trip_distance)
-X = sparse.model.matrix(formula, train)
+
+X = sparse.model.matrix(formula3_reg, train)
 Y = train$efficiency
 regression_model <- glmnet(X, Y, lambda = 0)
 
 # PREDICTION
-xtest = sparse.model.matrix(formula, test)
+xtest = sparse.model.matrix(formula3_reg, test)
 test$predicted <- predict(regression_model, newx = xtest, type = "response")
 
 # Assessing prediction - RMSE
@@ -174,18 +211,14 @@ random_shifts$hack_license = hack_licenses_shuffled
 
 train = get_training_data(random_shifts)
 test = get_test_data(random_shifts, train)
-formula <- as.formula(efficiency ~ 
-                        hack_license + 
-                        as.factor(is_week_end)*as.factor(start_hour)+ 
-                        avg_trip_time + 
-                        avg_trip_distance)
-X = sparse.model.matrix(formula, train)
+
+X = sparse.model.matrix(formula3_reg, train)
 Y = train$efficiency
 regression_model <- glmnet(X, Y, lambda = 0)
 
 
 # PREDICTION
-xtest = sparse.model.matrix(formula, test)
+xtest = sparse.model.matrix(formula3_reg, test)
 test$predicted <- predict(regression_model, newx = xtest, type = "response")
 
 # Assessing prediction - RMSE
