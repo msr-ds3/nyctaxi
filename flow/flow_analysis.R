@@ -16,40 +16,78 @@ get_nyc_neighborhoods <- function(){
 nyc_neighborhoods <- get_nyc_neighborhoods()
 
 map <- get_map(c(-73.87, 40.70), zoom = 11, color="bw",maptype = "satellite")
+ taxi_clean <- taxi_clean %>% mutate
 
-df <- taxi_clean %>% 
+
+flow <- taxi_clean %>% 
   filter(pickup_neighborhood != dropoff_neighborhood) %>% 
-  group_by(pickup_neighborhood, dropoff_neighborhood, pickup_hour) %>%
+  mutate(is_weekend=ifelse(day_of_the_week == "Sun"| day_of_the_week == "Sat", T, F)) %>%
+  group_by(ymd_pickup,
+           pickup_neighborhood, 
+           dropoff_neighborhood,
+           pickup_hour,
+           is_weekend) %>%
   summarize(total_passengers = sum(passenger_count),
-            total_rides = n()) %>% 
-  gather(key="type", value="neighborhood", pickup_neighborhood, dropoff_neighborhood) %>%
+            total_rides = n()) 
+
+flow <- flow %>% gather(key="type", value="neighborhood", pickup_neighborhood, dropoff_neighborhood) %>%
   mutate(local_score_rides = ifelse(type=="pickup_neighborhood", -total_rides, total_rides),
-    local_score_passengers = ifelse(type == "pickup_neighborhood", -total_passengers, total_passengers)) %>% 
-  group_by(neighborhood, pickup_hour) %>%
-  summarize(passenger_score = sum(local_score_passengers),
-            rides_score = sum(local_score_rides)) %>%
-  arrange(pickup_hour) %>%
-  mutate(cumsum_passenger = cumsum(passenger_score),
-    cumsum_rides = cumsum(rides_score),
-    adj_passenger_score = log10(abs(cumsum_passenger)+1) * sign(cumsum_passenger),
-    adj_rides_score = log10(abs(cumsum_rides) + 1) * sign(cumsum_rides))
+    local_score_passengers = ifelse(type == "pickup_neighborhood", -total_passengers, total_passengers))
+
+
+flow <- flow %>% group_by(ymd_pickup,neighborhood, pickup_hour, is_weekend) %>%
+  summarize(daily_score_rides = sum(local_score_rides),
+            daily_score_passengers = sum(local_score_passengers))
+  
+flow <- flow %>%  group_by(neighborhood, pickup_hour, is_weekend) %>%
+  summarize(mean_passenger_score = mean(daily_score_passengers),
+            mean_rides_score = mean(daily_score_rides),
+            median_passenger_score = median(daily_score_passengers),
+            median_rides_score = median(daily_score_rides))
+    
+  flow <- flow %>%arrange(is_weekend, pickup_hour) %>%
+  mutate(
+    mean_cumsum_passenger = cumsum(mean_passenger_score),
+    mean_cumsum_rides = cumsum(mean_rides_score),
+    median_cumsum_passenger = cumsum(median_passenger_score),
+    median_cumsum_rides = cumsum(median_rides_score),
+    
+    adj_mean_passenger_score = log10(abs(mean_cumsum_passenger)+1) * sign(mean_cumsum_passenger),
+    adj_mean_rides_score = log10(abs(mean_cumsum_rides) + 1) * sign(mean_cumsum_rides),
+    adj_median_passenger_score = log10(abs(median_cumsum_passenger)+1) * sign(median_cumsum_passenger),
+    adj_median_rides_score = log10(abs(median_cumsum_rides) + 1) * sign(median_cumsum_rides))
 
 map_data <- tidy(nyc_neighborhoods, region="neighborhood") %>% 
-  left_join(., df, by=c(id="neighborhood"))
+  left_join(., flow, by=c(id="neighborhood"))
+map_data_weekend <- map_data %>% filter(is_weekend == T)
+map_data_weekdays <- map_data %>% filter(is_weekend == T)
 
-p <- ggmap(map) + 
-  geom_polygon(data=map_data, 
-               aes(x=long, y=lat, group=group, fill=adj_passenger_score, frame=pickup_hour), 
+weekend_map <- ggmap(map) + 
+  geom_polygon(data=map_data_weekend, 
+               aes(x=long, y=lat, group=group, fill=adj_median_passenger_score, frame=pickup_hour), 
                color="black", 
                size = 0.25, 
                alpha=0.5) + 
   scale_fill_distiller(palette = "RdGy",
                        na.value = "#808080",
                        labels = comma) + 
-  theme_nothing(legend = T)
+  theme_nothing(legend = T) 
 
-gg_animate(p, ani.width=960, ani.height=960, "cumsum_flow.gif")
+gg_animate(weekend_map, ani.width=960, ani.height=960, "../figures/weekend_cumsum_flow.gif")
 
+
+weekdays_map <- ggmap(map) + 
+  geom_polygon(data=map_data_weekdays, 
+               aes(x=long, y=lat, group=group, fill=adj_median_passenger_score, frame=pickup_hour), 
+               color="black", 
+               size = 0.25, 
+               alpha=0.5) + 
+  scale_fill_distiller(palette = "RdGy",
+                       na.value = "#808080",
+                       labels = comma) + 
+  theme_nothing(legend = T) 
+
+gg_animate(weekdays_map, ani.width=960, ani.height=960, "../figures/weekdays_cumsum_flow.gif")
 save(df, file = "cumsum_flow.Rdata")
 
     
