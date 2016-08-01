@@ -87,11 +87,13 @@ valid_shifts =
 ######### CLASSIFICATION ###########
 ####################################
 
+formula_class = formula2_class
+
 train = get_training_data(valid_shifts)
 test = get_test_data(valid_shifts, train)
 
-classification_model = train_model_classification(train, formula3_class)
-test = test_model_classification(formula3_class, test, classification_model)
+classification_model = train_model_classification(train, formula_class)
+test = test_model_classification(formula_class, test, classification_model)
 
 # Classifying predictions with threshold of 0.5
 test <- test %>% 
@@ -113,14 +115,12 @@ calibration_plot
 # AUC = 0.783 for features: hack_license + as.factor(is_week_end)*as.factor(start_hour) + avg_trip_distance
 
 # separating `hack_license` label from its value to plot distribution of coef
-plot_data <- classification_model %>% 
-  tidy() %>% 
-  extract(term, c("hack_license","rest"), "(hack_license)(.*)") %>% 
-  filter(hack_license == "hack_license") 
+hack_licenses_coef <- extract_hack_licenses_coef(classification_model)
+  
 
-ggplot(plot_data, aes(x = estimate)) + geom_histogram(binwidth = 0.1)
+ggplot(hack_licenses_coef, aes(x = estimate)) + geom_histogram(binwidth = 0.1)
 ggsave("../figures/distribution_of_hl_wkend_str_hr.png")
-sd(plot_data$estimate)
+sd(hack_licenses_coef$estimate)
 
 
 #####################################################
@@ -136,8 +136,8 @@ random_shifts$hack_license = hack_licenses_shuffled
 train = get_training_data(random_shifts)
 test = get_test_data(random_shifts, train)
 
-classification_model = train_model_classification(train, formula3_class)
-test = test_model_classification(formula3_class, test, classification_model)
+classification_model = train_model_classification(train, formula_class)
+test = test_model_classification(formula_class, test, classification_model)
 
 # Classifying predictions with threshold of 0.5
 test <- test %>% 
@@ -156,11 +156,9 @@ calibration_plot
 # AUC = 0.609 for features as.(is_week_end)*as.factor(start_hour), accuracy = 54.55%
 
 # separating `hack_license` label from its value to plot distribution of coef
-plot_data <- classification_model %>% tidy() %>% 
-  extract(term, c("hack_license","rest"), "(hack_license)(.*)") %>% 
-  filter(hack_license == "hack_license") 
-ggplot(plot_data, aes(x = estimate)) + geom_histogram(binwidth = 0.1)
-sd(plot_data$estimate)
+hack_licenses_coef <- extract_hack_licenses_coef(classification_model)
+ggplot(hack_licenses_coef, aes(x = estimate)) + geom_histogram(binwidth = 0.1)
+sd(hack_licenses_coef$estimate)
 ggsave("../figures/coef_distribution_of_hack_licenses_shuffled.png")
 
 
@@ -168,32 +166,32 @@ ggsave("../figures/coef_distribution_of_hack_licenses_shuffled.png")
 ######### REGRESSION ##########
 ###############################
 
+formula_reg = formula5_reg
 
 train = get_training_data(valid_shifts)
 test = get_test_data(valid_shifts, train)
 
 
-X = sparse.model.matrix(formula3_reg, train)
+X = sparse.model.matrix(formula_reg, train)
 Y = train$efficiency
 regression_model <- glmnet(X, Y, lambda = 0)
+save(regression_model, file = "../Rdata/regression_model.Rdata")
 
 # PREDICTION
-xtest = sparse.model.matrix(formula3_reg, test)
+xtest = sparse.model.matrix(formula_reg, test)
 test$predicted <- predict(regression_model, newx = xtest, type = "response")
 
 # Assessing prediction - RMSE
 RMSE <- sqrt(mean((test$efficiency-test$predicted)^2))
 
 # separating `hack_license` label from its value and plotting distribution of coef
-plot_data <-regression_model %>% 
-  tidy() %>% 
-  extract(term, c("hack_license","rest"), "(hack_license)(.*)") %>% 
-  filter(hack_license == "hack_license") 
+hack_licenses_coef <- extract_hack_licenses_coef(regression_model) 
+  
 
-ggplot(plot_data, aes(x = estimate)) + geom_histogram(binwidth = 0.1)
+ggplot(hack_licenses_coef, aes(x = estimate)) + geom_histogram(binwidth = 0.1)
 #ggsave("../figures/coef_distribution_of_model_without_hack_license.png")
 
-sd(plot_data$estimate)
+sd(hack_licenses_coef$estimate)
 
 # RMSE = 5.60 for features as.factor(is_week_end)*as.factor(start_hour)
 # RMSE = 4.76 for features hack_license + as.factor(is_week_end)*as.factor(start_hour)
@@ -212,13 +210,13 @@ random_shifts$hack_license = hack_licenses_shuffled
 train = get_training_data(random_shifts)
 test = get_test_data(random_shifts, train)
 
-X = sparse.model.matrix(formula3_reg, train)
+X = sparse.model.matrix(formula_reg, train)
 Y = train$efficiency
 regression_model <- glmnet(X, Y, lambda = 0)
 
 
 # PREDICTION
-xtest = sparse.model.matrix(formula3_reg, test)
+xtest = sparse.model.matrix(formula_reg, test)
 test$predicted <- predict(regression_model, newx = xtest, type = "response")
 
 # Assessing prediction - RMSE
@@ -226,14 +224,11 @@ RMSE <- sqrt(mean((test$efficiency-test$predicted)^2))
 
 
 # separating `hack_license` label from its value and plotting distribution of coef
-plot_data <-regression_model %>% 
-  tidy() %>% 
-  extract(term, c("hack_license","rest"), "(hack_license)(.*)") %>% 
-  filter(hack_license == "hack_license") 
-ggplot(plot_data, aes(x = estimate)) + geom_histogram(binwidth = 0.1)
+hack_licenses_coef <- extract_hack_licenses_coef(regression_model)
+ggplot(hack_licenses_coef, aes(x = estimate)) + geom_histogram(binwidth = 0.1)
 #ggsave("../figures/coef_distribution_of_model_without_hack_license.png")
 
-sd(plot_data$estimate)
+sd(hack_licenses_coef$estimate)
 
 
 

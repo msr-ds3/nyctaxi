@@ -55,3 +55,13 @@ plot_calibration = function(test)
   
 }
 
+extract_hack_licenses_coef = function(model)
+{
+  hl_coef <- model %>% tidy() %>% 
+    extract(term, c("hack_license","rest"), "(hack_license)(.*)") %>% 
+    filter(hack_license == "hack_license") 
+  
+  hl_coef
+  
+}
+
