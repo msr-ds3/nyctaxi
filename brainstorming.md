@@ -53,6 +53,7 @@ Notes from today's brainstorming meeting, in no particular order.
   * [Predicting Taxi Pickups in NYC](http://www.vivekchoksi.com/papers/taxi_pickups.pdf)
   * [YC Taxi Data Prediction](http://sdaulton.github.io/TaxiPrediction/)
   * [Predicting Taxi Tip-Rates in NYC](http://cseweb.ucsd.edu/~jmcauley/cse190/reports/sp15/050.pdf)
+  * [Deep yellow](http://deep-yellow.herokuapp.com) and corresponding [notes](http://nyctaxistrategy.blogspot.com) / [github repo](https://github.com/samuelklee/taxi-strategy)
 
 ## Data questions
   * Do we have an id for the medallion or for individual drivers?
