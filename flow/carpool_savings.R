@@ -137,7 +137,7 @@ leaflet(data = top_20_hotspots) %>%
              popup = ~as.character(index),
              weight = 1,
              fillColor = ~pal(index)) %>%
-  addProviderTiles("CartoDB.Positron")
+  addProviderTiles("Thunderforest.Transport")
   
 
 
