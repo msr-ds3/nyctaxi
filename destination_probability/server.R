@@ -12,7 +12,8 @@ shinyServer(function(input, output) {
   # render basic map
     output$map <- renderLeaflet({
       leaflet() %>%
-        addProviderTiles("CartoDB.Positron") %>%
+        addProviderTiles("CartoDB.DarkMatter") %>%
+        #addProviderTiles("Stamen.TonerLabels") %>%
         setView(-73.85, 40.71, zoom = 11) 
     })
     
@@ -37,7 +38,6 @@ shinyServer(function(input, output) {
       data <- filter_data()  %>%
         rename_("x" = col_name) %>%
         top_n(input$n, wt=x)
-      print(range(data$x))
       pal <- set_pal(range = range(data$x))
       
       leafletProxy("map", data = data) %>%
@@ -46,11 +46,11 @@ shinyServer(function(input, output) {
         addCircles(lng = ~dropoff_lng,
                    lat=~dropoff_lat,
                    radius = 425,
-                   color = "black",
+                   color = "white",
                    weight = 2,
+                   opacity =8,
                    popup = ~as.character(x),
-                   fillOpacity = .5,
+                   fillOpacity = .6,
                    fillColor = ~pal(x)) 
-        
     })
 })
