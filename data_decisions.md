@@ -12,3 +12,12 @@ and most significantly tips (which are not recorded for cash payments!)
 3. One cab driver used 175 different taxis in one week. Unsurprisingly, this cab driver breaks all sorts of records in terms of the amount of hours worked, the amount of money earned. This cab driver had records for metered trips that took place simultaneously, suggesting that there was more than one person using the hack license. 
 4. Unclear meter reportings - we had a number of trips that started and ended in the same exact location but had a significant fare charged. These might be explained by the cab driver failing to turn his meter on and off at the appropriate time.  
 
+
+#Main Data Frames
+1. `shifts_design_matrix` - shifts for month of July w/ shift_type, popularity of rate codes and pickup/dropoff boroughs, and weather info (shifts_design_matrix.Rdata)
+2. `taxi_cleans_shifts` - trips for month of July with corresponding shift numbers (one_month_taxi.Rdata)
+
+#Other Data Frames
+1. `shifts_clean` - `taxi_clean_shifts` grouped and summarized into shifts
+
+
