@@ -1,0 +1,28 @@
+Intro (Start very high level)
+- Start with examples relating to audience (waiting in airport line, being late for work taking a cab, or just seeing yellow cabs
+everywhere etc)
+- 
+
+
+- What data we had access to ; some anomalies 
+- Touch upon issues we had dealing 
+
+
+
+
+Topic 1: Carpooling/Hotspots? 
+
+
+
+
+Topic 2: Driver Efficiency? 
+- 
+- Explain efficiency - why our definition makes sense
+- Mini guessing game of whether driver is efficient or not?
+- Display stats/plots about extremes  
+
+
+
+
+Topic 3/Closing:
+
