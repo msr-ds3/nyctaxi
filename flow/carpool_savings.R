@@ -45,10 +45,22 @@ taxi_clean <- taxi_clean %>%
            as.POSIXct(round(
              as.numeric(pickup_datetime)/time_rounding_factor)*time_rounding_factor, 
              origin = origin , tz= "UTC"), 
-         rounded_pickup_lat = round(pickup_latitude/pickup_rounding_factor)*pickup_rounding_factor,
-         rounded_pickup_lng = round(pickup_longitude/pickup_rounding_factor)*pickup_rounding_factor,
-         rounded_dropoff_lat = round(dropoff_latitude, dropoff_rounding_factor),
-         rounded_dropoff_lng = round(dropoff_longitude, dropoff_rounding_factor))
+rounded_pickup_lat = ifelse(pickup_neighborhood == "John F.Kennedy International Airport" |
+rate_code == 2 , 40.641, ifelse(pickup_neighborhood =="LaGuardia Airport", 40.773,
+ round(pickup_latitude/pickup_rounding_factor)*pickup_rounding_factor)),
+
+
+rounded_pickup_lng = ifelse(pickup_neighborhood == "John F.Kennedy International Airport" |
+rate_code == 2 ,-73.777, ifelse(pickup_neighborhood =="LaGuardia Airport",-73.872,
+round(pickup_longitude/pickup_rounding_factor)*pickup_rounding_factor)),
+
+rounded_dropoff_lat = ifelse(dropoff_neighborhood == "John F.Kennedy International Airport" |
+          rate_code == 2 , 40.64, ifelse(dropoff_neighborhood =="LaGuardia Airport",40.77,
+          round(dropoff_latitude, dropoff_rounding_factor))),
+rounded_dropoff_lng = ifelse(dropoff_neighborhood == "John F.Kennedy International Airport" |
+  rate_code == 2 ,-73.78, ifelse(dropoff_neighborhood =="LaGuardia Airport", -73.87,
+                                 round(dropoff_longitude, dropoff_rounding_factor))))
+
 
 # compute savings cabs, fares, driving miles
 
@@ -136,12 +148,8 @@ leaflet(data = top_20_hotspots) %>%
              ~rounded_pickup_lat, 
              popup = ~as.character(index),
              weight = 1,
-             fillColor = ~pal(index)) %>%
-  addProviderTiles("Thunderforest.Transport")
-  
-
-
-
+             fillColor = ~pal(index), fillOpacity = .8) %>%
+  addProviderTiles("OpenStreetMap.BlackAndWhite") 
 
 #######################################
 carpooling_hotspots_by_hour <- overlapping_rides %>%
