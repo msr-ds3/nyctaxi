@@ -41,11 +41,12 @@
  * Analysis on carpooling possibilities, [here](https://github.com/msr-ds3/nyctaxi/blob/master/flow/carpool_analysis.R)
  * [Plots on carpooling analysis](https://github.com/msr-ds3/nyctaxi/blob/master/flow/carpool_plots.R).
  * [Probabilites of lat/lng destinations given a source neighborhood and a hour of day](https://github.com/msr-ds3/nyctaxi/blob/master/flow/distribution_of_destinations.R).
+ * Diving into carpool savings in more depth, at this [link](https://github.com/msr-ds3/nyctaxi/blob/master/flow/carpool_savings.R).
  
 ### Shiny apps
  * A shiny app to visualize NYC taxi flow as a heatmap can be found [here](https://github.com/msr-ds3/nyctaxi/tree/master/heatmap_app)
  * [A shiny app](https://github.com/msr-ds3/nyctaxi/tree/master/avg_trip_time_app) (inspired by Todd Schneider's post) to visualize average trip times from neigborhood to neighborhood.
-
+ * [An app](https://github.com/msr-ds3/nyctaxi/tree/master/destination_probability) to see popular neighborhood destinations, and unusual neighborhoods.
 
 ## Other work
 ### De-anonymization
