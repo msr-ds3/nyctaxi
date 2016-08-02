@@ -6,9 +6,9 @@ library(tidyr)
 library(dplyr)
 
 theme_set(theme_minimal())
-######################################################################
-## see pickups and dropoffs for hundred random taixs throughout the week
-#####################################################################
+#########################################################################
+## see pickups and dropoffs for hundred random taxis throughout the week
+#########################################################################
 
 #get n random drivers
 n_random_drivers <- function(x = taxi_clean_shifts, n = 100)
@@ -58,7 +58,7 @@ plot_ <- function(rides, shifts, n = 100)
 
 ###############
 # main function
-##############
+###############
 visualize_rides_and_shifts <- function(x = taxi_clean_shifts, n=100)
 {
   random_drivers <- n_random_drivers(x = x, n = n)
