@@ -40,7 +40,7 @@ filter_by_day = function(df, day)
 filter_by_shift = function(df, shift)
 {
   df %>% 
-    filter(shift_num == shift)
+    filter(shift_num %in% shift)
 }
 
 reshape_location_data = function(df)
