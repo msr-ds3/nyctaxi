@@ -3,10 +3,12 @@ library(dplyr)
 ## load n the daya
 load("../Rdata/one_month_taxi.Rdata")
 taxi_clean <- taxi_clean %>% 
-  mutate(
-  dropoff_lat = round(dropoff_latitude, 2), 
-  dropoff_lng = round(dropoff_longitude, 2),
-  is_weekend=ifelse(day_of_the_week == "Sun"| day_of_the_week == "Sat", T, F))
+  mutate(dropoff_lat = round(dropoff_latitude, 2), 
+         dropoff_lng = round(dropoff_longitude, 2),
+         is_weekend=ifelse(day_of_the_week == "Sun"|
+                             day_of_the_week == "Sat",
+                           T,
+                           F))
  
 probs_dst_overall <- taxi_clean %>% 
   group_by(dropoff_lat, dropoff_lng, pickup_hour, is_weekend) %>% 
@@ -18,19 +20,25 @@ probs_dst_overall <- taxi_clean %>%
 
 # round drop lat/lng to 2 decimal places, and fi
 probs_dst_given_src_and_time <- taxi_clean %>%
-           
-  group_by(pickup_neighborhood, pickup_hour, dropoff_lat, dropoff_lng, is_weekend) %>% 
+  group_by(pickup_neighborhood,
+           pickup_hour,
+           dropoff_lat,
+           dropoff_lng,
+           is_weekend) %>% 
   summarize(n = n()) %>% 
-  filter(!is.na(pickup_neighborhood)) %>%# filtering out trips that go out of the city
+  filter(!is.na(pickup_neighborhood)) %>% # filtering out trips that go out of the city
   group_by(pickup_neighborhood, pickup_hour, is_weekend) %>%
   mutate(total = sum(n), probability = n/total) 
 
 probability <- left_join (probs_dst_given_src_and_time, probs_dst_overall, 
-                    by = c("pickup_hour", "dropoff_lat", "dropoff_lng", "is_weekend"))
+                    by = c("pickup_hour",
+                           "dropoff_lat",
+                           "dropoff_lng",
+                           "is_weekend"))
 
 probability <- probability %>% 
   mutate(a = probability/ overall_probability,
-         b = ((probability/ (1-probability)) - (overall_probability/ (1-overall_probability))),
+         b = ((probability/(1-probability)) - (overall_probability/ (1-overall_probability))),
          c = log(probability/ (1-probability)) - log(overall_probability/ (1-overall_probability)))
 
 
