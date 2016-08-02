@@ -143,10 +143,8 @@ top_20_hotspots <- carpooling_hotspots_overall %>%
 
 pal = set_pal(1:20) 
 leaflet(data = top_20_hotspots) %>%
-  
   setView(-74.00, 40.71, zoom = 12) %>%
-  addCircles(~rounded_pickup_lng ,
-             radius = 100,
+  addCircleMarkers(~rounded_pickup_lng ,
              ~rounded_pickup_lat, 
              popup = ~as.character(index),
              weight = 1,
