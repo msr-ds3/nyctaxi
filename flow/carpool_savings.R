@@ -6,6 +6,8 @@ library(ggplot2)
 library(ggmap)
 library(scales)
 library(tidyr)
+library(leaflet)
+library(RColorBrewer)
 ########
 ## look at the num pickup in the same neighborhood at the same time
 #####
@@ -104,9 +106,13 @@ sum(overlapping_rides$cabs_savings)
 
 
 ##################
-###hotspots
+### 20 top hotspots
 #################
-
+# returns a continous color palette within a range to use for use in leaflet maps
+set_pal <- function(range, na_color="#808080", pal = brewer.pal(11, "Spectral"))
+{
+  colorNumeric(palette = pal, domain = range, na.color = na_color)
+}
 
 carpooling_hotspots_overall <- overlapping_rides %>%
   group_by(rounded_pickup_lat, 
@@ -114,6 +120,27 @@ carpooling_hotspots_overall <- overlapping_rides %>%
            rounded_dropoff_lat,
            rounded_dropoff_lng) %>% 
   summarize(freq = n(), pct = freq/(31*24*12)) 
+
+top_20_hotspots <- carpooling_hotspots_overall %>%
+  group_by(rounded_pickup_lat,
+           rounded_pickup_lng)   %>% 
+  summarize(top_pct = max(pct)) %>%  ungroup() %>% 
+  top_n(n= 20, wt= top_pct) %>% 
+  arrange(-top_pct) %>%
+  mutate(index = row_number())
+
+pal = set_pal(1:20) 
+leaflet(data = top_20_hotspots) %>%
+  setView(-74.00, 40.71, zoom = 12) %>%
+  addCircleMarkers(~rounded_pickup_lng ,
+             ~rounded_pickup_lat, 
+             popup = ~as.character(index),
+             weight = 1,
+             fillColor = ~pal(index)) %>%
+  addProviderTiles("Thunderforest.Transport")
+  
+
+
 
 
 #######################################
@@ -134,8 +161,9 @@ carpooling_hotspots_by_hour <- overlapping_rides %>%
 ##Plot
 ggmap(map) +
   geom_point(data = carpooling_hotspots_by_hour, 
-             aes(rounded_pickup_lng, rounded_pickup_lat, color= pct), size= 2) +
-  scale_color_distiller(palette = "Spectral") + facet_wrap(hour)
+  aes(rounded_pickup_lng, rounded_pickup_lat, color= pct, alpha = pct, size= pct)) +
+  scale_color_distiller(palette = "Spectral" , trans= "log10") + facet_wrap(~hour)
+ggsave("../figures/carpooling_hotspots_by_hour.png")
 
 ################
 ## filter pct>= 80 %
@@ -147,6 +175,13 @@ hotspots <- carpooling_hotspots_by_hour %>%
            rounded_dropoff_lat,
            rounded_dropoff_lng) %>%
   summarize(num_of_hours = n())
+
+
+hotspots_by_hour <- carpooling_hotspots_by_hour %>% 
+  group_by(rounded_pickup_lat, 
+           rounded_pickup_lng) %>%
+  summarize(num_of_hours = n())
+
 
 ############################
 ##Plots

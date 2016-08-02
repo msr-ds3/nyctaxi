@@ -2,6 +2,7 @@ load("../Rdata/shifts.Rdata")
 #creating model for shift efficiency
 library(lubridate)
 library(dplyr)
+library(tidyr)
 
 
 # set threshold for minimum length of shift
@@ -118,7 +119,7 @@ taxi_clean_shifts = mutate(taxi_clean_shifts,
                            is_to_airport = is_to_airport(dropoff_neighborhood, rate_code)
                           )
 
-shifts_design_matrix = taxi_clean_shifts %>% 
+shifts_design_matrix = taxi_clean_shifts %>% ungroup() %>%
   group_by(hack_license, shift_num) %>%
   summarize(
     start = as.POSIXct(min(pickup_datetime), tz="EDT"),
@@ -166,12 +167,12 @@ shifts_design_matrix = taxi_clean_shifts %>%
     efficiency = total_fare/length,
     shift_type = shift_period(as.POSIXct(start, tz="EDT", origin=origin))
   ) %>%
-  filter(length >= thresholdMin & 
+  filter(length >= thresholdMin , 
            length <= thresholdMax &
            start >= as.POSIXct("2013-07-01 06:00:00", tz = "EDT") & 
            end <= as.POSIXct("2013-07-31 18:00:00", tz = "EDT") & 
            efficiency < 100 )
-           end <= as.POSIXct("2013-07-31 18:00:00", tz = "EDT")
+
 
 
 #Adding a ymd column in the shifts design matrix data frame
@@ -181,7 +182,37 @@ shifts_design_matrix <- shifts_design_matrix %>% mutate(ymd = as.Date(start))
 source("load_weather.R")
 shifts_design_matrix<- left_join(shifts_design_matrix, weather, by ="ymd")
 
+## add neighborhood pct as feature
+pickup_neighborhood_features <- taxi_clean_shifts%>%
+  ungroup() %>%
+  group_by(hack_license, shift_num, pickup_neighborhood) %>%
+  summarize(count = n()) %>%
+  group_by(hack_license, shift_num) %>%
+  mutate(total = sum(count), pct_in_pickup_nbhd = count/total) %>%
+  spread(key = pickup_neighborhood,
+         value = pct_in_pickup_nbhd,
+         fill = 0,
+         sep = "_") %>%
+  select(-total, -count)
 
+dropoff_neighborhood_features <- taxi_clean_shifts%>%
+  ungroup() %>%
+  group_by(hack_license, shift_num, dropoff_neighborhood) %>%
+  summarize(count = n()) %>%
+  group_by(hack_license, shift_num) %>%
+  mutate(total = sum(count), pct_in_dropoff_nbhd = count/total) %>%
+  spread(key = dropoff_neighborhood,
+         value = pct_in_dropoff_nbhd,
+         fill = 0,
+         sep = "_") %>%
+  select(-total, -count)
+neighborhood_features <- inner_join(pickup_neighborhood_features, 
+                                    dropoff_neighborhood_features,
+                                    by=c("hack_license", "shift_num"))
+names(neighborhood_features) <- sub(" ", "_", names(neighborhood_features))
+shifts_design_matrix <- left_join(shifts_design_matrix,
+                                  neighborhood_features,
+                                  by=c("hack_license", "shift_num"))
 ##################################
 #Added is_week_end and start_hour
 #################################
