@@ -189,11 +189,11 @@ pickup_neighborhood_features <- taxi_clean_shifts%>%
   summarize(count = n()) %>%
   group_by(hack_license, shift_num) %>%
   mutate(total = sum(count), pct_in_pickup_nbhd = count/total) %>%
+  select(-total, -count) %>%
   spread(key = pickup_neighborhood,
          value = pct_in_pickup_nbhd,
          fill = 0,
-         sep = "_") %>%
-  select(-total, -count)
+         sep = "_")
 
 dropoff_neighborhood_features <- taxi_clean_shifts%>%
   ungroup() %>%
@@ -201,16 +201,16 @@ dropoff_neighborhood_features <- taxi_clean_shifts%>%
   summarize(count = n()) %>%
   group_by(hack_license, shift_num) %>%
   mutate(total = sum(count), pct_in_dropoff_nbhd = count/total) %>%
+  select(-total, -count) %>%
   spread(key = dropoff_neighborhood,
          value = pct_in_dropoff_nbhd,
          fill = 0,
-         sep = "_") %>%
-  select(-total, -count)
+         sep = "_")
 neighborhood_features <- inner_join(pickup_neighborhood_features, 
                                     dropoff_neighborhood_features,
                                     by=c("hack_license", "shift_num"))
 names(neighborhood_features) <- sub(" ", "_", names(neighborhood_features))
-shifts_design_matrix <- left_join(shifts_design_matrix,
+shifts_design_matrix_nbhd <- left_join(shifts_design_matrix,
                                   neighborhood_features,
                                   by=c("hack_license", "shift_num"))
 ##################################
