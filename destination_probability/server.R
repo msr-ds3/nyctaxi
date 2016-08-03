@@ -11,16 +11,17 @@ shinyServer(function(input, output) {
   
   # render basic map
     output$map <- renderLeaflet({
-      leaflet() %>%
-        addProviderTiles("CartoDB.DarkMatter") %>%
-        #addProviderTiles("Stamen.TonerLabels") %>%
+        leaflet() %>%
+        #addTiles() %>%
+        #addProviderTiles("CartoDB.DarkMatter") %>%
+        addProviderTiles("OpenStreetMap.BlackAndWhite") %>%
         setView(-73.85, 40.71, zoom = 11) 
     })
     
     # reactive to filter data on demand by hour and pickup neighborhood
     filter_data <- reactive({
-      data <- probability %>%
-        filter(pickup_hour == input$hour, 
+      data <- probability_without_hour %>%
+        filter(#pickup_hour == input$hour, 
                pickup_neighborhood == input$neighborhood,
                is_weekend == (input$is_weekend == "Weekend"))
         return(data)
@@ -43,6 +44,7 @@ shinyServer(function(input, output) {
       leafletProxy("map", data = data) %>%
         clearMarkers() %>% 
         clearShapes() %>%
+        clearControls() %>%
         addCircles(lng = ~dropoff_lng,
                    lat=~dropoff_lat,
                    radius = 425,
