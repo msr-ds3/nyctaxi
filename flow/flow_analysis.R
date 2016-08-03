@@ -75,12 +75,19 @@ flow <- flow %>%  group_by(neighborhood, pickup_hour, is_weekend) %>%
          adj_median_cumsum_rides_score = 
            log10(abs(median_cumsum_rides) + 1) * sign(median_cumsum_rides))
 
-flow <- flow %>% mutate(frame_data = ifelse(pickup_hour == 0, paste(12, "AM"),
+nbhd_hours_wknd <- data.frame(neighborhood = unique(flow$neighborhood), pickup_hour=rep(0:23, length(unique(flow$neighborhood))), is_weekend = TRUE)
+nbhd_hours_wkds <- data.frame(neighborhood = unique(flow$neighborhood), pickup_hour=rep(0:23, length(unique(flow$neighborhood))), is_weekend = FALSE)
+nbhd_hours <- rbind(nbhd_hours_wkds, nbhd_hours_wknd)
+
+flow_clean <- left_join(nbhd_hours, flow, by=c("neighborhood", "pickup_hour", "is_weekend")) %>%
+  mutate_each(funs(replace(., which(is.na(.)), 0)))
+
+flow_clean <- flow_clean %>% mutate(frame_data = ifelse(pickup_hour == 0, paste(12, "AM"),
                                             ifelse(pickup_hour == 12, paste(12, "PM"),
                                                    ifelse(pickup_hour < 12,
                                                           paste(pickup_hour, "AM"),
                                                           paste(pickup_hour%%12, "PM")))))  
-flow$frame_data <- factor(flow$frame_data, levels = c("12 AM","1 AM","2 AM",
+flow_clean$frame_data <- factor(flow_clean$frame_data, levels = c("12 AM","1 AM","2 AM",
                                                       "3 AM","4 AM","5 AM",
                                                       "6 AM","7 AM","8 AM",
                                                       "9 AM","10 AM","11 AM",
@@ -88,8 +95,11 @@ flow$frame_data <- factor(flow$frame_data, levels = c("12 AM","1 AM","2 AM",
                                                       "3 PM","4 PM","5 PM",
                                                       "6 PM","7 PM","8 PM",
                                                       "9 PM","10 PM","11 PM"))
+
+
+
 map_data <- tidy(nyc_neighborhoods, region="neighborhood") %>% 
-  left_join(., flow, by=c(id="neighborhood"))
+  left_join(., flow_clean, by=c(id="neighborhood"))
 map_data_weekend <- map_data %>% filter(is_weekend == T)
 map_data_weekdays <- map_data %>% filter(is_weekend == F)
 
@@ -103,12 +113,12 @@ weekend_map <- ggmap(map) +
                color="black", 
                size = 0.25, 
                alpha=0.5) + 
-  scale_fill_distiller(palette = "RdGy",
+  scale_fill_distiller(palette = "Spectral",
                        na.value = "#808080",
                        labels = comma) + 
   theme_nothing(legend = T) 
 
-gg_animate(weekend_map, ani.width=960, ani.height=960, "../figures/weekend_cumsum_flow.gif")
+gg_animate(weekend_map, ani.width=960, ani.height=960, interval = .5, "../figures/weekend_cumsum_flow.gif")
 
 
 weekdays_map <- ggmap(map) + 
@@ -120,8 +130,8 @@ weekdays_map <- ggmap(map) +
                    frame=frame_data), 
                color="black", 
                size = 0.25, 
-               alpha=0.5) +  
-  scale_fill_distiller(palette = "RdGy",
+               alpha=0.8) +  
+  scale_fill_distiller(palette = "RdBu",
                        na.value = "#808080", guide = F)+
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
@@ -129,11 +139,11 @@ weekdays_map <- ggmap(map) +
         axis.ticks.y=element_blank(),
         axis.text.y = element_blank(),
         axis.title.y = element_blank(),
-        plot.title = element_text(size = 40, family = "bold")) +
+        plot.title = element_text(size = 40, face = "bold")) +
   ggtitle("Time: ")
   
 gg_animate(weekdays_map, ani.width=960, ani.height=960, interval = .5)
-gg_animate(weekdays_map, ani.width=960, ani.height=960, "../figures/weekdays_cumsum_flow.gif")
+gg_animate(weekdays_map, ani.width=960, ani.height=960, interval = .5, "../figures/weekdays_cumsum_flow.gif")
 save(flow, file = "flow.Rdata")
 
     
