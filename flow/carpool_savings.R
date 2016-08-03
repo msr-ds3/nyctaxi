@@ -137,7 +137,7 @@ top_20_hotspots <- carpooling_hotspots_overall %>%
   group_by(rounded_pickup_lat,
            rounded_pickup_lng)   %>% 
   summarize(top_pct = max(pct)) %>%  ungroup() %>% 
-  top_n(n= 20, wt= top_pct) %>% 
+  top_n(n= 25, wt= top_pct) %>% 
   arrange(-top_pct) %>%
   mutate(index = row_number())
 
