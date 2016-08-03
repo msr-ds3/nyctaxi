@@ -1,6 +1,6 @@
 library(shiny)
 library(leaflet)
-#source("../flow/distribution_of_destinations.R")
+source("../flow/distribution_of_destinations.R")
 
 # we limit our app to only look at places that had >= 25 rides/hour
 # we include only the neighborhoods for which we have information 
@@ -37,7 +37,7 @@ shinyUI(fluidPage(
                    min = 0,
                    max = 23,
                    value = 9,
-                   step = 1),
+                   step = 1,animate = T),
        sliderInput("n",
                    "Choose top n:",
                    min = 1,

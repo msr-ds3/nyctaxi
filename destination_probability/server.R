@@ -6,6 +6,7 @@ set_pal <- function(range, na_color="#808080", pal = brewer.pal(11, "Spectral"))
 {
   colorNumeric(palette = rev(pal), domain = range, na.color = na_color)
 }
+probability <- probability %>% filter(n > 100)
 
 shinyServer(function(input, output) {
   
@@ -20,8 +21,8 @@ shinyServer(function(input, output) {
     
     # reactive to filter data on demand by hour and pickup neighborhood
     filter_data <- reactive({
-      data <- probability_without_hour %>%
-        filter(#pickup_hour == input$hour, 
+      data <- probability %>%
+        filter(pickup_hour == input$hour, 
                pickup_neighborhood == input$neighborhood,
                is_weekend == (input$is_weekend == "Weekend"))
         return(data)
