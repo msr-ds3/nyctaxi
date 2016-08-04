@@ -1,17 +1,25 @@
 INTRO:
 
 A. Overview of taxi system (w/ gif in slide)
-- Grab audience w/ prompt
+- Grab audience w/ question of who's used nyc taxis
+- taxi system is super important in NYC! (people get to work, to/from airport, or just travel far with it)
+- Go outside and look at cabs rn, we see yellow cabs going in all directions. Any guesses on the number of cabs in NYC? (12 m?)
+- Taxi System is huge. Understanding this big system can help us understand our city
+
+- The data that we worked with allowed us to do exactly that (B)
+
+OR 
+
+- In order to do that, we came up with some research questions (D)
 
 B. 2013 Data Set 
 #SLIDE: screenshots of the data frame
-- The data we acquired contains all trips made my yellow cabs in 2013 (over 100 million rides!)
+- The data we acquired contains all trips made by yellow cabs in 2013 (over 100 million rides!)
 - For each ride, we have information such as the time, cost, trip distance, the coordinates (lat/long) of the pickup/dropoff, 
-an anonymized license of the taxi, as well as an anomymized license of the driver
+(an anonymized license of the taxi), as well as an anomymized license of the driver
 - We had the choice of working with taxi data from 2015, but 2013 was the most recent taxi data that contained anonymized driver 
-licenses for each trip. Having these licenses allowed us to see all trips made my a particular driver, and helped us analyze driver
-patterns (as we will talk about soon)
-
+licenses for each trip. Having these licenses allowed us to go from seeing all trips that took place to all trips made by each
+driver. (we will talk about this soon)
 
 * For our research, we focused on the single month of July in 2013. We believe that July represents an average month in terms of flow
 of yellow cabs in NYC (it contains a holiday - July 4th and regular days)
@@ -26,11 +34,11 @@ C. Cleaning Up & Weirdness (Understanding our data more)
 - 
 
 
-
+#POSSIBLY MAKE THIS B AND MOVE EVERYTHING ELSE DOWN
 D. Research Questions (centered around analyzing efficiency for improvement)
-1. Can we get understand traffic flow in the city?
-2. Can we understand driver behavior and analyze how efficient they are?
-3. Can we improve the taxi transportation system in NYC?
+1. Can we understand traffic flow in the city? (spoiler alert - YES WE CAN)
+2. Can we understand the behavior of drivers and analyze how efficient they are?
+*3. Can we improve the taxi transportation system in NYC, in terms of system/driver efficiency? (bonus question)
 #SLIDE: questions
 
 
