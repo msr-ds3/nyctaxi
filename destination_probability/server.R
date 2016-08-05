@@ -1,12 +1,14 @@
 library(shiny)
 library(leaflet)
 library(RColorBrewer)
+library(dplyr)
+load("probability.Rdata")
 
 set_pal <- function(range, na_color="#808080", pal = brewer.pal(11, "Spectral"))
 {
   colorNumeric(palette = rev(pal), domain = range, na.color = na_color)
 }
-probability <- probability %>% filter(n > 100)
+
 
 shinyServer(function(input, output) {
   
@@ -52,7 +54,7 @@ shinyServer(function(input, output) {
                    color = "white",
                    weight = 2,
                    opacity =8,
-                   popup = ~as.character(x),
+                   popup = ~sprintf("%g", x*100),
                    fillOpacity = .6,
                    fillColor = ~pal(x)) 
     })

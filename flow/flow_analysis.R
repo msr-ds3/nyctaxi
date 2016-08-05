@@ -17,7 +17,6 @@ nyc_neighborhoods <- get_nyc_neighborhoods()
 
 map <- get_map(c(-73.87, 40.70), zoom = 11, color="bw",maptype = "satellite")
 
-
 flow <- taxi_clean %>% 
   filter(pickup_neighborhood != dropoff_neighborhood) %>% 
   mutate(is_weekend=ifelse(day_of_the_week == "Sun"| day_of_the_week == "Sat",
@@ -119,7 +118,12 @@ weekend_map <- ggmap(map) +
   theme_nothing(legend = T) 
 
 gg_animate(weekend_map, ani.width=960, ani.height=960, interval = .5, "../figures/weekend_cumsum_flow.gif")
-
+exp10_trans <- function (base = 10) 
+{
+  trans_new(paste0("power-", format(base)), function(x) base^x, 
+            function(x) log10(x))
+}
+exp10_trans <- Vectorize(exp10_trans)
 
 weekdays_map <- ggmap(map) + 
   geom_polygon(data=map_data_weekdays, 
@@ -127,23 +131,33 @@ weekdays_map <- ggmap(map) +
                    y=lat,
                    group=group,
                    fill=adj_median_passenger_score, 
-                   frame=frame_data), 
+                  frame=frame_data), 
                color="black", 
                size = 0.25, 
                alpha=0.8) +  
   scale_fill_distiller(palette = "RdBu",
-                       na.value = "#808080", guide = F)+
+                       na.value = "#808080", guide = "colorbar", name="Score",
+                       breaks=c(-3,-1,1,3), labels=c(-1250,-10,10,1250))+
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
         axis.ticks.y=element_blank(),
         axis.text.y = element_blank(),
         axis.title.y = element_blank(),
-        plot.title = element_text(size = 40, face = "bold")) +
+        plot.title = element_text(size = 40, face = "bold"),
+        legend.position = c(0.5, 0.1), 
+        legend.background = element_rect(color = "black",
+                                         fill =alpha('white', 0.8),
+                                         size = 1,
+                                         linetype = "solid"),
+        legend.direction = "horizontal",
+        legend.text = element_text(size = 18),
+        legend.key.size = unit(2, "cm")) +
   ggtitle("Time: ")
   
-gg_animate(weekdays_map, ani.width=960, ani.height=960, interval = .5)
-gg_animate(weekdays_map, ani.width=960, ani.height=960, interval = .5, "../figures/weekdays_cumsum_flow.gif")
+  
+gg_animate(weekdays_map, ani.width=960, ani.height=960, interval = .75)
+gg_animate(weekdays_map, ani.width=800, ani.height=800, interval = .75, "../figures/weekdays_cumsum_flow.gif")
 save(flow, file = "flow.Rdata")
 
     

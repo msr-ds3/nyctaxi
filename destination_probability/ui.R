@@ -1,7 +1,7 @@
 library(shiny)
 library(leaflet)
-source("../flow/distribution_of_destinations.R")
-
+library(dplyr)
+load("probability.Rdata")
 # we limit our app to only look at places that had >= 25 rides/hour
 # we include only the neighborhoods for which we have information 
 # for all 24 hours both during the week and during weekends
