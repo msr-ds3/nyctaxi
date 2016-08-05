@@ -1,0 +1,113 @@
+Driving Story:
+Possibilites: 
+	1.	Using data and fairly simple methods 
+		we can find weak spots and improve components of a system by a lot
+	2.	Small changes in behavior of individuals can have a significant impact on the
+		efficiency of the system (ex. driver's decision, people asking driver to go to far flung places, 
+		unusal destination, etc)
+	3.	Looking at taxi system gives us a sense of the city as a whole, and change around us.
+	4.	Open/Big data gives us a new way to look at familiar things, and helps us find out
+		previously unknown truths about them
+	5.	Data science is really cool, and while it isn't an exact science it helps us get about
+		pretty good idea of how stuff works
+	6.	People make intuitive assumption, but data science gives us the tools
+		to answer some of the questions we have analytically and in a way which forces us to think
+		more critically about it
+	7.	By examining the data we can find surprising ways to improve the efficiency of the system
+	8.	Data-driven decisions can save people money, improve driver's efficiency, help the environment 
+
+
+Intro (Start very high level)
+A. Grab the audience's attention 
+- How many of you have taken a cab in nyc?? 
+- And how many of you have NEVER taken a cab in nyc?
+
+- If we go outside right now, we'll see taxis going in all
+ directions, but CAN WE
+get an overview of all taxis at one time?
+
+B. Describe the overall taxi system & its importance
+# add animation of taxis moving through city
+- Taxi system integral/iconic part of city, can take pulse/heartbeat of city by looking at taxi system
+- Taxi system is intricate but at the same time simple, lots of variables for each trip, but we can make
+general statements by looking at the data from high-level
+
+C. Talk about the data we acquired, and discuss cleaning 
+- Our data: every trip that happened in July 2013 (fare, tips, (de)anonymized driver license, (de)anonymized
+medallion license, pickup/dropoff coordinates, ... )
+- 13.5 million trips in our data for July
+- Before we could begin analyzing our data, we had to understand our data better and spend a lot of time
+cleaning it up
+- For example, when we tried to look at where trips in NYC occur, we took our coordinates and plotted them on a 
+map
+- Strangely, we saw rides that took place in Virginia, Texas, and even Antarctica. Some coordinates were not valid coordinates (show pic)
+
+- Let's start by looking at where taxis in NYC go...
+
+Topic 1: Flow 
+- Explain method of mapping coordinate to neighborhood
+- Explain idea of net flow (how that helps us understand where people take taxis to/from) [heatmap of flow]
+- compare weekend/weekday flow
+(adding a timline of some popular areas)
+- popular destinations - neighborhoods (point out notable places) [heatmap]
+? unusual destinations - more fine-grained places
+
+
+
+Topic 2: Driver Efficiency
+- Analyzing driver behavior and identifying good and bad drivers (whether we can even classify drivers as such)
+ OR IS THE AMOUNT A DRIVER MAKES DUE TO CHANCE?
+- Identifying shifts of drivers [show just the rides of a driver's shifts]
+- Researcher Farber's work helped us confirm his result of 6 hours b/w shifts [show distribution?]
+- [show same driver's rides, with shifts]
+
+A. Shifts/efficiency and some stats
+- Explain efficiency - why our definition makes sense
+- examples of good/bad drivers (MIXED) [Abe's timeline plot]
+- Mini guessing game of whether driver is efficient or not? [one bad, one good]
+
+- Display stats/plots about extreme drivers 
+
+- [Show efficiency based on {start_hour, shift_type, is_week_end}]  
+
+
+B. Modeling - can we predict efficiency based on driver and other features?
+(Regression)
+Methodology of confirming correlation b/w DRIVER and efficiency
+Features: Start hour, weekend/weekday, rainfall, location (neighborhoods), and DRIVER 
+
+
+Model Performance
+BASE RMSE: 5.76 (w/ intercept only) 
+MODEL RMSE: 4.57
+R^2: 0.37
+
+Now that we have a handle on the efficiency of drivers, 
+we can look at efficiency of the system (and passengers)
+
+Topic 3: Carpooling 
+
+Since we know the flow of the taxi system, can we improve the system?
+more particularly, can we find times and places where 
+there's potential for carpooling so that we can save money, carbon emissons, reduce traffic?
+
+city tried in 2009 two "carpooling" stands, but failed because people in that area
+mostly tended to use taxi to go within same neighborhood
+http://www.theverge.com/2016/7/20/12236342/nyc-yellow-taxi-carpool-arro-cmt-bandwagon
+(links to other pertinent articles)
+
+base assumptions: people will be willing to wait 5 minutes, walk about a block, to find pooling partner
+who share destinations within 1 km(?)
+we found that there's actually a yuuge amount of carpooling potential.
+
+we looked at top 20 carpooling "hotspots" to find where carpooling "potentials" are most likely to happen
+#1 JFK, #2 LGA, #3-10 transportation hubs like Penn Station, Port Authority Bus Terminal, Grand Central
+Metropolitan Museum of Art, (show map/list)
+
+we found that we can improve the systm by about 3-10% depending on the parameters and what particular
+metric we were looking at
+INSERT FINDINGS HERE
+
+Closing:
+Now we're happy to be data scientists :)
+Love it!

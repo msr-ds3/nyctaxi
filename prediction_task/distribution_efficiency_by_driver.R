@@ -67,8 +67,21 @@ driver_efficiency_randomized =
 ggplot(driver_efficiency_randomized) + 
   geom_histogram(aes(x = eff_percent),bins = 101) + 
   ylim(0, 3500)
+ggplot(driver_efficiency_randomized, aes(x=eff_percent)) + 
+  geom_density()
 ggsave("../figures/distribution_efficiency_drivers_random.png")
 
+
+# Plot with efficiencies for both randomized and real data
+ggplot() +
+geom_density(data = driver_efficiency_randomized, mapping = aes(x=eff_percent, 
+                                                                fill = "red",
+                                                                alpha = 1.0
+                                                                )) + 
+  geom_density(data = driver_efficiency_real, mapping = aes(x=eff_percent,
+                                                            fill = "green",
+                                                            alpha = 1.0))
+ggsave("../figures/distribution_efficiency_drivers_random_and_real.png")
 
 ###########################
 # INVESTIGATING 0's and 1's
