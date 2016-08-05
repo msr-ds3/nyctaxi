@@ -3,8 +3,18 @@ library(dplyr)
 ## load n the daya
 load("../Rdata/one_month_taxi.Rdata")
 taxi_clean <- taxi_clean %>% 
-  mutate(dropoff_lat = round(dropoff_latitude, 2), 
-         dropoff_lng = round(dropoff_longitude, 2),
+  mutate(dropoff_lat = ifelse(dropoff_neighborhood == 
+                                "John F. Kennedy International Airport" |rate_code == 2,
+                              40.64, 
+                              ifelse(dropoff_neighborhood =="LaGuardia Airport",
+                                     40.77,
+                                     round(dropoff_latitude, 2))),
+         dropoff_lng = ifelse(dropoff_neighborhood == 
+                                "John F. Kennedy International Airport" |rate_code == 2 ,
+                              -73.78, 
+                              ifelse(dropoff_neighborhood =="LaGuardia Airport", 
+                                     -73.87,
+                                     round(dropoff_longitude, 2))),
          is_weekend=ifelse(day_of_the_week == "Sun"|
                              day_of_the_week == "Sat",
                            T,

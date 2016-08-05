@@ -1,19 +1,23 @@
 library(shiny)
 library(leaflet)
 library(RColorBrewer)
+library(dplyr)
+load("probability.Rdata")
 
 set_pal <- function(range, na_color="#808080", pal = brewer.pal(11, "Spectral"))
 {
   colorNumeric(palette = rev(pal), domain = range, na.color = na_color)
 }
 
+
 shinyServer(function(input, output) {
   
   # render basic map
     output$map <- renderLeaflet({
-      leaflet() %>%
-        addProviderTiles("CartoDB.DarkMatter") %>%
-        #addProviderTiles("Stamen.TonerLabels") %>%
+        leaflet() %>%
+        #addTiles() %>%
+        #addProviderTiles("CartoDB.DarkMatter") %>%
+        addProviderTiles("OpenStreetMap.BlackAndWhite") %>%
         setView(-73.85, 40.71, zoom = 11) 
     })
     
@@ -43,13 +47,14 @@ shinyServer(function(input, output) {
       leafletProxy("map", data = data) %>%
         clearMarkers() %>% 
         clearShapes() %>%
+        clearControls() %>%
         addCircles(lng = ~dropoff_lng,
                    lat=~dropoff_lat,
                    radius = 425,
                    color = "white",
                    weight = 2,
                    opacity =8,
-                   popup = ~as.character(x),
+                   popup = ~sprintf("%g", x*100),
                    fillOpacity = .6,
                    fillColor = ~pal(x)) 
     })

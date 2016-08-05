@@ -25,7 +25,7 @@ nyc_neighborhoods <- get_nyc_neighborhoods()
 map <- get_map(c(-73.87, 40.70), zoom = 11, color="bw")
 
 # settime  rounding factor to 5 minutes
-time_rounding_factor <- 5*60
+time_rounding_factor <- 6*60
 
 # setspace rounding factor to 2 decimal places
 pickup_rounding_factor <- .002
@@ -45,19 +45,19 @@ taxi_clean <- taxi_clean %>%
            as.POSIXct(round(
              as.numeric(pickup_datetime)/time_rounding_factor)*time_rounding_factor, 
              origin = origin , tz= "UTC"), 
-rounded_pickup_lat = ifelse(pickup_neighborhood == "John F.Kennedy International Airport" |
+rounded_pickup_lat = ifelse(pickup_neighborhood == "John F. Kennedy International Airport" |
 rate_code == 2 , 40.641, ifelse(pickup_neighborhood =="LaGuardia Airport", 40.773,
  round(pickup_latitude/pickup_rounding_factor)*pickup_rounding_factor)),
 
 
-rounded_pickup_lng = ifelse(pickup_neighborhood == "John F.Kennedy International Airport" |
+rounded_pickup_lng = ifelse(pickup_neighborhood == "John F. Kennedy International Airport" |
 rate_code == 2 ,-73.777, ifelse(pickup_neighborhood =="LaGuardia Airport",-73.872,
 round(pickup_longitude/pickup_rounding_factor)*pickup_rounding_factor)),
 
-rounded_dropoff_lat = ifelse(dropoff_neighborhood == "John F.Kennedy International Airport" |
+rounded_dropoff_lat = ifelse(dropoff_neighborhood == "John F. Kennedy International Airport" |
           rate_code == 2 , 40.64, ifelse(dropoff_neighborhood =="LaGuardia Airport",40.77,
           round(dropoff_latitude, dropoff_rounding_factor))),
-rounded_dropoff_lng = ifelse(dropoff_neighborhood == "John F.Kennedy International Airport" |
+rounded_dropoff_lng = ifelse(dropoff_neighborhood == "John F. Kennedy International Airport" |
   rate_code == 2 ,-73.78, ifelse(dropoff_neighborhood =="LaGuardia Airport", -73.87,
                                  round(dropoff_longitude, dropoff_rounding_factor))))
 
@@ -65,12 +65,13 @@ rounded_dropoff_lng = ifelse(dropoff_neighborhood == "John F.Kennedy Internation
 # compute savings cabs, fares, driving miles
 
 overlapping_rides <- taxi_clean %>% 
-  filter(pickup_neighborhood != dropoff_neighborhood) %>%
+ # filter(pickup_neighborhood != dropoff_neighborhood) %>%
   group_by(rounded_pickup_datetime,
            rounded_pickup_lat, 
            rounded_pickup_lng,
-           rounded_dropoff_lat,
-           rounded_dropoff_lng) %>%
+          dropoff_neighborhood) %>%
+           # rounded_dropoff_lat,
+           #rounded_dropoff_lng) %>%
   summarize(num_trips = n(),
             total_psgrs = sum(passenger_count),
             total_distance = sum(trip_distance),
@@ -116,7 +117,16 @@ sum(overlapping_rides$cabs_savings)
 #   total fare savings: 11415197/167044464 = 0.06833628
 #   total cabs savings: 1070968/13598831 = 0.07875442
 
+# extending to 6 minutes
 
+# grouping only by dropoff neighborhood
+#
+# without filtering rides with pickup and dropoff in same neighborhood:
+#   total fare savings: 22486619/167044464 = 0.1346146
+#   total cabs savings: 1876187/13598831 = 0.1379668
+# after filtering out rides with pickup and dropoff in same neighborhood
+#   total fare savings: 14259875/167044464 = 0.08536574
+#   total cabs savings: 827434/13598831 = 0.06084597
 ##################
 ### 20 top hotspots
 #################
