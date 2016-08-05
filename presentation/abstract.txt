@@ -1,0 +1,9 @@
+Abstract
+
+Whether they are going to work or to the airport, many New Yorkers rely on taxis to keep them moving. By understanding how these 
+taxis move around the city, and looking closely at driver patterns on the road, we can gain
+more insight into the overall robustness of NYC's taxi system. In our research, we used data from the NYC TLC to answer some
+interesting questions. First, can we identify patterns in the flow of people around the city and how they vary across neighborhoods 
+and time? Second, how does driver behavior vary, and are there patterns that successful drivers exhibit? Finally, can we use
+information about driver behavior and patterns in flow to improve the taxi transportation system?
+
