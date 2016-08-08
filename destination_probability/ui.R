@@ -12,19 +12,28 @@ neighborhoods <- probability %>%
   group_by(pickup_neighborhood) %>%
   summarize(hours = n()) %>% 
   filter(hours == 48)
-  
+
 neighborhoods <- levels(factor(neighborhoods$pickup_neighborhood))
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
-
-  # Application title
-  titlePanel("Where are people going?"),
   
+  # Application title
+  titlePanel("Where Do People Go?"),
+  helpText(HTML('<p>Every day, thousands of yellow taxis travel throughout NYC. Ever wondered
+           where all these taxis are going?
+           Wonder no more. Using <a href="http://www.nyc.gov/html/tlc/html/about/trip_record_data.shtml">publicly available data from the TLC</a>, we created a
+            tool to see the distribution of popular destinations for taxi rides.</p>
+<p>Choose the neigborhood and time of day to visualize
+           the most popular taxi destinations in NYC as a heatmap.</p>
+           <p>The data used for this visualization is from July 2013, and was 
+            created by <a href="https://ds3.research.microsoft.com/">MSR DS3</a> 2016 students. 
+                See our <a href="https://github.com/msr-ds3/nyctaxi">github</a> 
+          repo for more details.</p>')),
   # Sidebar with a slider input for number of bins 
   sidebarLayout(
     sidebarPanel(
       selectInput("neighborhood",
-                  "Choose a source neighborhood:",
+                  "Choose a neighborhood:",
                   choices = neighborhoods,
                   selected = "Upper East Side"),
       radioButtons("is_weekend",
@@ -32,29 +41,17 @@ shinyUI(fluidPage(
                    choices = c("Weekend", "Weekdays"),
                    selected = "Weekend",
                    inline = T),
-       sliderInput("hour",
-                   "Hour of day:",
-                   min = 0,
-                   max = 23,
-                   value = 9,
-                   step = 1,animate = T),
-       sliderInput("n",
-                   "Choose top n:",
-                   min = 1,
-                   max = 25,
-                   value = 5,
-                   step = 1),
-      radioButtons("type",
-                   "What data do you want to see?",
-                   c("Popular destinations",
-                     "Unusual destinations (method a)",
-                     "Unusual destinations (method b)",
-                     "Unusual destinations (method c)"))
+      sliderInput("hour",
+                  "Hour of day:",
+                  min = 0,
+                  max = 23,
+                  value = 9,
+                  step = 1,animate = T)
     ),
     
     # Show a plot of the generated distribution
     mainPanel(
-       leafletOutput("map")
+      leafletOutput("map")
     )
   )
 ))
