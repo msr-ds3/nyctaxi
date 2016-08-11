@@ -151,8 +151,8 @@ weekdays_map <- ggmap(map) +
                                          size = 1,
                                          linetype = "solid"),
         legend.direction = "horizontal",
-        legend.text = element_text(size = 18),
-        legend.key.size = unit(2, "cm")) +
+        legend.text = element_text(size = 12),
+        legend.key.size = unit(1, "cm")) +
   ggtitle("Time: ")
   
   

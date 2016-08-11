@@ -25,7 +25,7 @@ nyc_neighborhoods <- get_nyc_neighborhoods()
 map <- get_map(c(-73.87, 40.70), zoom = 11, color="bw")
 
 # settime  rounding factor to 5 minutes
-time_rounding_factor <- 6*60
+time_rounding_factor <- 5*60
 
 # setspace rounding factor to 2 decimal places
 pickup_rounding_factor <- .002
@@ -65,13 +65,12 @@ rounded_dropoff_lng = ifelse(dropoff_neighborhood == "John F. Kennedy Internatio
 # compute savings cabs, fares, driving miles
 
 overlapping_rides <- taxi_clean %>% 
- # filter(pickup_neighborhood != dropoff_neighborhood) %>%
+  filter(pickup_neighborhood != dropoff_neighborhood) %>%
   group_by(rounded_pickup_datetime,
            rounded_pickup_lat, 
            rounded_pickup_lng,
-          dropoff_neighborhood) %>%
-           # rounded_dropoff_lat,
-           #rounded_dropoff_lng) %>%
+           rounded_dropoff_lat,
+           rounded_dropoff_lng) %>%
   summarize(num_trips = n(),
             total_psgrs = sum(passenger_count),
             total_distance = sum(trip_distance),
@@ -95,9 +94,15 @@ overlapping_rides <- taxi_clean %>%
 ##########
 # total savings:
 ##########
+sum(overlapping_rides$fare_savings)/sum(taxi_clean$fare_amount)
+sum(overlapping_rides$fare_savings_per_psgr)
+sum(overlapping_rides$cabs_savings)/nrow(taxi_clean)
+
+
 sum(overlapping_rides$fare_savings)
 sum(overlapping_rides$fare_savings_per_psgr)
 sum(overlapping_rides$cabs_savings)
+
 
 # grouping by dropoff lat/lng rounded to 2 decimal points
 #
