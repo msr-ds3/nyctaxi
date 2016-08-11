@@ -341,16 +341,18 @@ ggplot(hack_licenses_coef_shuffled, aes(x = estimate)) + geom_density()
 #ggsave("../figures/coef_distribution_of_model_without_hack_license.png")
 
 sd(hack_licenses_coef$estimate)
+df1<- hack_licenses_coef_shuffled %>% mutate(shuffled = T)
+df2 <- hack_licenses_coef %>% mutate(shuffled = F)
+plot_df <- rbind(df1, df2)
+ggplot(plot_df) + 
+  geom_density(aes(x=estimate, color=shuffled)) + 
+  xlim(-15,15) +
+    scale_color_discrete(labels = c("Actual", "Shuffled")) +
+  theme(legend.title = element_blank(), 
+        legend.position = c(0.9, 0.5))+
+  xlab("driver coefficient ($/hour)")
 
-ggplot() + 
-  geom_density(data = hack_licenses_coef, 
-                        aes(x=estimate, color = "blue")) + 
-  geom_density(data = hack_licenses_coef_shuffled, 
-               aes(x=estimate, color = "red")) + 
-  xlim(-15,15) + 
-  scale_color_manual(labels = c("Actual data", "Shuffled data"), values = c("red", "blue"))
-
-
+ggsave("../figures/driver_coef_distribution.png")
 
 
 
