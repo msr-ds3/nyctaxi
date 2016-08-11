@@ -95,13 +95,10 @@ Looking at this distribution, we defined the end of a shift at the last drop off
 
 Now, we wanted to find out what effect the driver has on the efficiency of shifts. To accomplish that, we ran a linear regression, using the following model: 
 %\end{multicols}
-\begin{equation}
-\begin{split}
-\beta_{\mathrm{driver~id}} + \beta_{\mathrm{start~hour}} + \beta_{\mathrm{is~weekend}} +\\
- \beta_{\mathrm{start~hour:is~weekend}} + \gamma_p x_p +  \\
- \sum_{n=1}^N \rho_n p_n + \sum_{n=1}^N \delta_n d_n
-\end{split}
-\end{equation}
+\begin{eqnarray*}
+&& \beta_{\mathrm{driver~id}} + \beta_{\mathrm{hour}} + \beta_{\mathrm{weekend}} + \beta_{\mathrm{hour:weekend}} + \\
+  & & \gamma_p x_p + \sum_{n=1}^N \rho_n p_n + \sum_{n=1}^N \delta_n d_n
+\end{eqnarray*}
 
 Here, each $\beta$ represents the effect of its corresponding subscript, whether it be the driver’s ID, the start hour of a shift, or whether it is a weekend of the weekday. $x_p$ is precipitation in inches, and  $\gamma_p$ is its coefficient. The two summations represent the percentage of pickups ($p_n$) and drop-offs ($d_n$), respectively, in each neighborhood, with $\rho$ and $\delta$ as their cooefficients.
 
