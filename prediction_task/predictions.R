@@ -237,6 +237,8 @@ sd(hack_licenses_coef$estimate)
 rm(list = setdiff(ls(), lsf.str())) # removes all objects (not functions!)
 load("../Rdata/shifts_design_matrix_nbhd.Rdata")
 
+theme_set(theme_bw())
+
 min_num_shifts = 15
 valid_drivers =
   shifts_design_matrix_nbhd %>%
@@ -290,12 +292,63 @@ hack_licenses_coef <- extract_hack_licenses_coef(regression_model)
 
 
 ggplot(hack_licenses_coef, aes(x = estimate)) + geom_histogram(binwidth = 0.1)
+ggplot(hack_licenses_coef, aes(x = estimate)) + geom_density()
 #ggsave("../figures/coef_distribution_of_model_without_hack_license.png")
 
 sd(hack_licenses_coef$estimate)
 
 
+##################################
+# REPEAT FOR SHUFFLED DATA FRAME #
+##################################
 
+# Shuffle hack licenses
+hack_licenses_shuffled <-sample(nhbd_features_df$hack_license, 
+                                nrow(nhbd_features_df))
+random_shifts = nhbd_features_df
+random_shifts$hack_license = hack_licenses_shuffled
+
+
+train = get_training_data(random_shifts)
+test = get_test_data(random_shifts, train)
+
+formula7_reg = as.formula(efficiency ~ as.factor(is_week_end)*as.factor(start_hour) + .)
+formula_reg = formula7_reg
+
+#remove start time b/c we dont need it in our model and row_num to keep the features the same
+train = train[, -2] 
+train = train[, -519] #index subtracts by 1 since we remove a column above
+test = test[, -2]
+
+
+X = sparse.model.matrix(formula_reg, train)
+Y = train$efficiency
+regression_model = glmnet(X, Y, lambda = 0)
+#save(regression_model, file = "../Rdata/regression_model.Rdata")
+
+# PREDICTION
+xtest = sparse.model.matrix(formula_reg, test)
+test$predicted <- predict(regression_model, newx = xtest, type = "response")
+
+# Assessing prediction - RMSE
+RMSE <- sqrt(mean((test$efficiency-test$predicted)^2))
+
+# separating `hack_license` label from its value and plotting distribution of coef
+hack_licenses_coef_shuffled <- extract_hack_licenses_coef(regression_model) 
+
+
+ggplot(hack_licenses_coef_shuffled, aes(x = estimate)) + geom_density()
+#ggsave("../figures/coef_distribution_of_model_without_hack_license.png")
+
+sd(hack_licenses_coef$estimate)
+
+ggplot() + 
+  geom_density(data = hack_licenses_coef, 
+                        aes(x=estimate, color = "blue")) + 
+  geom_density(data = hack_licenses_coef_shuffled, 
+               aes(x=estimate, color = "red")) + 
+  xlim(-15,15) + 
+  scale_color_manual(labels = c("Actual data", "Shuffled data"), values = c("red", "blue"))
 
 
 
