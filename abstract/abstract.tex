@@ -2,7 +2,6 @@
 \usepackage{graphicx}
 \graphicspath{	{figures/}}
 \usepackage{cite}
-\usepackage{multicol}
 \usepackage{float}
 \usepackage[hmarginratio=1:1, top=0.5in, bottom=0.5in]{geometry}
 % uncomment below to save space
@@ -45,8 +44,6 @@
 ]
 \section{Introduction}
 New York City is home to millions of people who rely on its robust transportation system. The taxi transportation system in particular plays a critical role in keeping people moving throughout the city. With access to information about every single trip that occurred in a yellow taxi in 2013, we were able to deepen our understanding of how people move throughout the entire city. We were also able to analyze the roles of drivers in the taxi system, and found some interesting ways to improve transportation in New York City. 
-\\
-
 
 \section{Data and Methods}
 We used data that was released by the NYC TLC after an initial Freedom of Information Law (FOIL) request by Chris Whong~\cite{Whong:2014}. Although more recent data was available, we used data from 2013 because it contained an anonymized driver’s license for each trip. This information allowed us to associate trips with drivers and analyze their behavior. Due to the overwhelming size of that data, we chose to work with the month of July as a sample month for our analysis.
@@ -63,12 +60,14 @@ While this snapshot is certainly informative in its own right, it betrays the le
 \begin{figure}[h]
  
 \begin{subfigure}{0.5\textwidth}
-\includegraphics[width=0.9\linewidth]{7am} 
+\centering
+\includegraphics[width=0.75\linewidth]{7am} 
 \caption{7 AM}
 \label{fig:7am}
 \end{subfigure}
 \begin{subfigure}{0.5\textwidth}
-\includegraphics[width=0.9\linewidth]{7pm}
+\centering
+\includegraphics[width=0.75\linewidth]{7pm}
 \caption{7 PM}
 \label{fig:7pm}
 \end{subfigure}
@@ -83,7 +82,7 @@ Next, we tried to understand the role of drivers in the taxi system. In particul
 (1) How do driver earnings vary?
 (2) Is that variation due to chance?
 
-By answering these questions, we can assess whether or not drivers have significantly varying skill levels. We began by trying to determine the efficiency of a driver in a work period. We defined efficiency as the ratio of the total metered fare earned in a work period to the total work time. The total metered fare was information we obtained directly from our data by summing up the metered fare for each driver for his trips. However, the data did not contain the time each driver spent working in a shift; rather, it only had records of when each driver drove with a passenger. We tried to determine a driver's shift by looking at the downtime (time between a drop off and the next pickup) for all trips. Figure ~\ref{fig:downtime_distribution} shows the distribution of downtimes for all drivers. 
+By answering these questions, we can assess whether or not drivers have significantly varying skill levels. We began by trying to determine the efficiency of a driver in a work period. We defined efficiency as the ratio of the total metered fare earned in a work period to the total work time. The total metered fare was information we obtained directly from our data by summing up the metered fare for each driver for his trips. However, the data did not contain the time each driver spent working in a shift; rather, it only had records of when each driver drove with a passenger. Previous work approximated downtime by computing the distance between a dropoff and the next pickup~\cite{LEE:2015}. We tried to take a more systematic approach to determine a driver's shift by looking at the downtime (time between a drop off and the next pickup) for all trips. Figure ~\ref{fig:downtime_distribution} shows the distribution of downtimes for all drivers. 
 
 \begin{figure}[h]
   \centering
@@ -110,23 +109,23 @@ We also ran the same model on a dataset with shuffled driver IDs; that is, each 
 \begin{figure}[h]
   \centering
   \includegraphics[width=.9\linewidth]{efficiency}
-  \captionof{figure}{Effect of Driver ID on Efficiency \\Blue: distribution of efficiency for shuffled data; Red: distribution of efficiency for actual data. We see double the variation in the real data.}
+  \captionof{figure}{Effect of Driver ID on Efficiency}
   \label{fig:efficiency}
   
 \end{figure}
 This distribution reveals that there is a significant variation in drivers’ earnings, and that this variation is not due to chance. Thus, there is a strong correlation between the driver and the efficiency of a given shift. Anyone can be a taxi driver, but there are certain skills that distinguishes one drivers from others! 
 \section{Carpooling}
-After looking at flow and driver behavior, we wanted to find ways to improve the overall taxi system. Past work have focused on recommender systems~\cite{Zhan:2014}, which would require taxi drivers to be notified via a mobile application or a similar solution. We take a different approach and look at a policy that can be implemented at existing taxi stands, with little overhead. We noticed that there were lots of trips occurring between similar locations. As a result, we considered a scenario in which people would carpool. Our thought experiment made the following assumptions: Customers would be willing to (1) share a cab with strangers, (2) wait up to five minutes to find someone to carpool with, (3) walk up to one block, (4) share a destination within ~1 kilometer of their own destination. We also assumed that customers would carpool only for trips between two distinct neighborhoods, because customers would probably not want to wait for trips that are relatively short.
+After looking at flow and driver behavior, we wanted to find ways to improve the overall taxi system. Past work have focused on recommender systems~\cite{ZHAN:2014} or information systems~\cite{KIM:2005}, which would require taxi drivers to be notified via a mobile application or a similar solution. We take a different approach and look at a policy that can be implemented at existing taxi stands, with little overhead. We noticed that there were lots of trips occurring between similar locations. As a result, we considered a scenario in which people would carpool. Our thought experiment made the following assumptions: Customers would be willing to (1) share a cab with strangers, (2) wait up to five minutes to find someone to carpool with, (3) walk up to one block, (4) share a destination within ~1 kilometer of their own destination. We also assumed that customers would carpool only for trips between two distinct neighborhoods, because customers would probably not want to wait for trips that are relatively short.
 
 To look for carpooling potential, we looked for trips that started in a neighborhood X within 1 block from each other, and ended in a neighborhood Y within a 1 km radius. We looked at such trips in 5-minute bins. As we were hoping, a significant number of trips were taking place around the same location, at a similar time. After finding these trips and plotting their pick-up points on a map, we identified the top carpooling hotspots in NYC (figure ~\ref{fig:hotspots}). Unsurprisingly, these places are transportation services (airports and train stations) as well as cultural attractions (museums, theaters, etc.). 
 \begin{figure}[h]
   \centering
   \includegraphics[width=.9\linewidth]{top_25_hotspots}
-  \captionof{figure}{Top carpooling hotspots sized by how frequent carpooling potentials occur. \\Notable hotspots are Penn Station, Grand Central Station, Lincoln Center, Metropolitan Museum of Art, High Line, and others. }
+  \captionof{figure}{Top carpooling hotspots sized by how frequent carpooling potentials occur in Manhattan, NY.}
   \label{fig:hotspots}
 \end{figure}
 
-Next, we calculated our potential savings. For each hotspot, we calculated the minimum number of cabs by assuming that up to 4 passengers (92\% of taxis fit 4 passengers~\cite{TLC:2007	}) would fit in one cab. Since each cab essentially makes one trip, we equated the minimum cabs needed to the minimum number of trips that would be made. Thus, we subtracted the minimum number of trips from the actual number of trips that were made to see how many trips we could cut down. We then computed the possible fare that could be saved by multiplying the number of trips saved by the average fare of all trips. Our potential savings over the month of July were around 5\% of the trips and 6\% of total money spent by customers.
+Next, we calculated our potential savings. For each hotspot, we calculated the minimum number of cabs by assuming that up to 4 passengers (92\% of taxis fit 4 passengers~\cite{TLC:2007}) would fit in one cab. Since each cab essentially makes one trip, we equated the minimum cabs needed to the minimum number of trips that would be made. Thus, we subtracted the minimum number of trips from the actual number of trips that were made to see how many trips we could cut down. We then computed the possible fare that could be saved by multiplying the number of trips saved by the average fare of all trips. Our potential savings over the month of July were around 5\% of the trips and 6\% of total money spent by customers.
 
 We also found that with less restrictive assumptions, i.e. widening the waiting period to 6 minutes, and including rides taking place within the same neighborhood, we can improve the savings up to 14\% for the number of rides and fare paid. In addition to saving money, carpooling would also help the environment and reduce traffic! 
 
