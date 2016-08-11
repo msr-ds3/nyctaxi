@@ -30,14 +30,14 @@ airport_lng <-function(x, nbhd)
   x))
 }
   
-taxi <- taxi_clean %>% 
+taxi_1 <- taxi_clean %>% 
   mutate(pickup_latitude = airport_lat(pickup_latitude, pickup_neighborhood),
          pickup_longitude = airport_lng(pickup_longitude, pickup_neighborhood),
          dropoff_latitude = airport_lat(dropoff_latitude, dropoff_neighborhood),
          dropoff_longitude = airport_lng(dropoff_longitude, dropoff_neighborhood))
 
 # create a subset of relevant columns
-taxi <- taxi %>%
+taxi_2 <- taxi_1 %>%
   mutate(fare = fare_amount+surcharge) %>%
   select(pickup_datetime,
          passenger_count,
@@ -48,14 +48,13 @@ taxi <- taxi %>%
          pickup_neighborhood,
          dropoff_neighborhood,
          fare)
-rm(taxi_clean)
 
 # declare rounding factors
 pickup_rf <- .002
 dropoff_rf <- .01
 
 # round the trips
-taxi <- taxi %>% 
+taxi_3 <- taxi_2 %>% 
   mutate(rounded_datetime = round_date_to(pickup_datetime),
          pickup_lat = round_to(pickup_latitude, pickup_rf),
          pickup_lng = round_to(pickup_longitude, pickup_rf),
@@ -72,16 +71,18 @@ taxi <- taxi %>%
          fare)
 
 
-carpooling_potentials <- taxi %>% 
+taxi_4 <- taxi_3 %>% 
   filter(pickup_neighborhood != dropoff_neighborhood) %>%
   group_by(rounded_datetime, 
            pickup_lat, 
            pickup_lng, 
            dropoff_lat, 
-           dropoff_lat) %>%
+           dropoff_lng) %>%
   summarize(num_trips = n(),
             num_psgrs = sum(passenger_count),
-            total_fare = sum(fare)) %>%
+            total_fare = sum(fare)) 
+
+taxi_5 <- taxi_4 %>%
   ungroup() %>%
   filter(num_trips > 1) %>%
   mutate(avg_fare = total_fare/num_trips,
@@ -91,5 +92,5 @@ carpooling_potentials <- taxi %>%
   filter(min_trips_needed > 0)
 
 # calculate savings
-sum(carpooling_potentials$trip_savings)/nrow(taxi_clean)
-sum(carpooling_potentials$fare_savings)/(sum(taxi_clean$fare_amount)+sum(taxi_clean$surcharge))
+sum(taxi_5$trip_savings)/nrow(taxi_clean)
+sum(taxi_5$fare_savings)/(sum(taxi_clean$fare_amount)+sum(taxi_clean$surcharge))
