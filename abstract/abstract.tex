@@ -7,41 +7,33 @@
 \usepackage[hmarginratio=1:1, top=0.5in, bottom=0.5in]{geometry}
 % uncomment below to save space
 \usepackage[small,compact]{titlesec}
-\usepackage{media9}
-%\usepackage[hmarginratio=1:1,top=32mm,columnsep=20pt]{geometry} % Document margins
+
 \usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption} % Custom captions under/above floats in tables or figures
 \usepackage{titlesec} % Allows customization of titles
 \usepackage{titling} % Customizing the title section
 \usepackage{subcaption}
-\usepackage{ amsmath}
+\usepackage{amsmath}
 \usepackage{hyperref}
 \usepackage{url}
+\usepackage{flushend}
 \title{Fare Share: Flow and Efficiency in NYC's Taxi System}
-%\author{Abraham Neuwirth}
-%\affil{Touro College}
-%\author{Fatima Chebchoub}
-%\affil{NYC College of Technology}
-%\author{Jai Punjwani}
-%\affil{Adelphi University}
-%\author{Marieme Toure}
-%\affil{NYC College of Technology}
 
-\author{%
-\normalsize{\textbf{Abraham Neuwirth}}\\ % Your name
-\small Touro College \\ % Your institution
-%\normalsize \href{mailto:john@smith.com}{john@smith.com} % Your email address
-\and % Uncomment if 2 authors are required, duplicate these 4 lines if more
-\normalsize{\textbf{Fatima Chebchoub}}\\ % Second author's name
-\small NYC College of Technology\\ % Second author's institution
-%\normalsize \href{mailto:jane@smith.com}{jane@smith.com} % Second author's email address
-\and % Uncomment if 2 authors are required, duplicate these 4 lines if more
-\normalsize{\textbf{Jai Punjwani}}\\% Second author's name
-\small Adelphi University\\ % Second author's institution
-%\normalsize \href{mailto:jane@smith.com}{jane@smith.com} % Second author's email address
-\and % Uncomment if 2 authors are required, duplicate these 4 lines if more
-\normalsize{\textbf{Marieme Toure}}\\ % Second author's name
-\small NYC College of Technology\\ % Second author's institution
-%\normalsize \href{mailto:jane@smith.com}{jane@smith.com} % Second author's email address
+\author{
+\normalsize{\textbf{Abraham Neuwirth}}\\ 
+\small Touro College \\ 
+\small abraham.neuwirth@student.touro.edu
+\and 
+\normalsize{\textbf{Fatima Chebchoub}}\\ 
+\small NYC College of Technology\\ 
+\small fatima.chebchoub@mail.citytech.cuny.edu 
+\and 
+\normalsize{\textbf{Jai Punjwani}}\\
+\small Adelphi University\\
+\small jaipunjwani@mail.adelphi.edu 
+\and 
+\normalsize{\textbf{Marieme Toure}}\\ 
+\small NYC College of Technology\\ 
+\small marieme.toure@mail.citytech.cuny.edu
 }
 \date{\vspace{-5ex}}
 \begin{document}
@@ -49,12 +41,12 @@
 \begin{@twocolumnfalse}
 \maketitle
 
-
+\end{@twocolumnfalse}
+]
 \section{Introduction}
 New York City is home to millions of people who rely on its robust transportation system. The taxi transportation system in particular plays a critical role in keeping people moving throughout the city. With access to information about every single trip that occurred in a yellow taxi in 2013, we were able to deepen our understanding of how people move throughout the entire city. We were also able to analyze the roles of drivers in the taxi system, and found some interesting ways to improve transportation in New York City. 
 \\
-\end{@twocolumnfalse}
-]
+
 
 \section{Data and Methods}
 We used data that was released by the NYC TLC after an initial Freedom of Information Law (FOIL) request by Chris Whong~\cite{Whong:2014}. Although more recent data was available, we used data from 2013 because it contained an anonymized driver’s license for each trip. This information allowed us to associate trips with drivers and analyze their behavior. Due to the overwhelming size of that data, we chose to work with the month of July as a sample month for our analysis.
@@ -135,6 +127,7 @@ To look for carpooling potential, we looked for trips that started in a neighbor
   \captionof{figure}{Top carpooling hotspots. \\Notable hotspots are by Penn Station, Grand Central Station, Lincoln Center, Metropolitan Museum of Art, High Line, and others. }
   \label{fig:hotspots}
 \end{figure}
+
 Next, we calculated our potential savings. For each hotspot, we calculated the minimum number of cabs by assuming that up to 4 passengers (92\% of taxis fit 4 passengers4) would fit in one cab. Since each cab essentially makes one trip, we equated the minimum cabs needed to the minimum number of trips that would be made. Thus, we subtracted the minimum number of trips from the actual number of trips that were made to see how many trips we could cut down. We then computed the possible fare that could be saved by multiplying the number of trips saved by the average fare of all trips. Our potential savings over the month of July were around 5\% of the trips and 6\% of total money spent by customers.
 
 We also found that with less restrictive assumptions, i.e. widening the waiting period to 6 minutes, and including rides taking place within the same neighborhood, we can improve the savings up to 14\% for the number of rides and fare paid. In addition to saving money, carpooling would also help the environment and reduce traffic! 
