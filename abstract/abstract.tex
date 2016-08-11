@@ -92,7 +92,7 @@ By answering these questions, we can assess whether or not drivers have signific
   \label{fig:downtime_distribution}
 \end{figure}
 
-Looking at this distribution, we defined the end of a shift at the last drop off when there is no driver activity for at least six hours. The corrobrates previous research on shift time~\cite{Farber:2014}. The next pickup marked the beginning of the next shift. With this shift information, we were able to group each driver's rides into shifts and compute the efficiency for each shift.
+Looking at this distribution, we defined the end of a shift at the last drop off when there is no driver activity for at least six hours. This corroborates previous research on shift time~\cite{Farber:2014}. The next pickup marked the beginning of the next shift. With this shift information, we were able to group each driver's rides into shifts and compute the efficiency for each shift.
 
 Now, we wanted to find out what effect the driver has on the efficiency of shifts. To accomplish that, we ran a linear regression, using the following model: 
 %\end{multicols}
@@ -116,13 +116,13 @@ We also ran the same model on a dataset with shuffled driver IDs; that is, each 
 \end{figure}
 This distribution reveals that there is a significant variation in drivers’ earnings, and that this variation is not due to chance. Thus, there is a strong correlation between the driver and the efficiency of a given shift. Anyone can be a taxi driver, but there are certain skills that distinguishes one drivers from others! 
 \section{Carpooling}
-After looking at flow and driver behavior, we wanted to find ways to improve the overall taxi system. We noticed that there were lots of trips occurring between similar locations. As a result, we considered a scenario in which people would carpool. Our thought experiment made the following assumptions: Customers would be willing to (1) share a cab with strangers, (2) wait up to five minutes to find someone to carpool with, (3) walk up to one block, (4) share a destination within ~1 kilometer of their own destination. We also assumed that customers would carpool only for trips between two distinct neighborhoods, because customers would probably not want to wait for trips that are relatively short.
+After looking at flow and driver behavior, we wanted to find ways to improve the overall taxi system. Past work have focused on recommender systems~\cite{Zhan:2014}, which would require taxi drivers to be notified via a mobile application or a similar solution. We take a different approach and look at a policy that can be implemented at existing taxi stands, with little overhead. We noticed that there were lots of trips occurring between similar locations. As a result, we considered a scenario in which people would carpool. Our thought experiment made the following assumptions: Customers would be willing to (1) share a cab with strangers, (2) wait up to five minutes to find someone to carpool with, (3) walk up to one block, (4) share a destination within ~1 kilometer of their own destination. We also assumed that customers would carpool only for trips between two distinct neighborhoods, because customers would probably not want to wait for trips that are relatively short.
 
 To look for carpooling potential, we looked for trips that started in a neighborhood X within 1 block from each other, and ended in a neighborhood Y within a 1 km radius. We looked at such trips in 5-minute bins. As we were hoping, a significant number of trips were taking place around the same location, at a similar time. After finding these trips and plotting their pick-up points on a map, we identified the top carpooling hotspots in NYC (figure ~\ref{fig:hotspots}). Unsurprisingly, these places are transportation services (airports and train stations) as well as cultural attractions (museums, theaters, etc.). 
 \begin{figure}[h]
   \centering
   \includegraphics[width=.9\linewidth]{top_25_hotspots}
-  \captionof{figure}{Top carpooling hotspots. \\Notable hotspots are by Penn Station, Grand Central Station, Lincoln Center, Metropolitan Museum of Art, High Line, and others. }
+  \captionof{figure}{Top carpooling hotspots sized by how frequent carpooling potentials occur. \\Notable hotspots are Penn Station, Grand Central Station, Lincoln Center, Metropolitan Museum of Art, High Line, and others. }
   \label{fig:hotspots}
 \end{figure}
 

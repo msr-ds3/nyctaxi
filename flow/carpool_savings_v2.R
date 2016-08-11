@@ -1,6 +1,7 @@
 load("../Rdata/one_month_taxi.Rdata")
 library(lubridate)
 library(dplyr)
+library(ggmap)
 
 # rounds date to nearest seconds
 round_date_to <- function(x, seconds = 5*60){
@@ -94,3 +95,29 @@ taxi_5 <- taxi_4 %>%
 # calculate savings
 sum(taxi_5$trip_savings)/nrow(taxi_clean)
 sum(taxi_5$fare_savings)/(sum(taxi_clean$fare_amount)+sum(taxi_clean$surcharge))
+
+carpooling_hotspots_overall <- taxi_5 %>%
+  group_by(pickup_lat, 
+           pickup_lng,
+           dropoff_lat,
+           dropoff_lng) %>% 
+  summarize(freq = n(), pct = freq/(31*24*12)) 
+
+top_20_hotspots <- carpooling_hotspots_overall %>%
+  group_by(pickup_lat,
+           pickup_lng)   %>% 
+  summarize(top_pct = max(pct)) %>%  ungroup() %>% 
+  top_n(n= 25, wt= top_pct) %>% 
+  arrange(-top_pct) %>%
+  mutate(index = row_number())
+
+map <- get_map(c(-73.985, 40.76), zoom = 14, color="bw")
+ggmap(map) + geom_point(data = top_20_hotspots, 
+                        aes(pickup_lng, pickup_lat,size=top_pct+2), 
+                        color = "red", alpha = .4) +
+  geom_point(data = top_20_hotspots, 
+             aes(pickup_lng, pickup_lat, size=top_pct+2), 
+             colour="black", shape=21) +
+  theme_nothing()
+
+ggsave("../figures/top_25_hotspots.png")
