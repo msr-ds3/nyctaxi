@@ -81,7 +81,6 @@ While this snapshot is certainly informative in its own right, it betrays the le
 Next, we tried to understand the role of drivers in the taxi system. In particular, we wanted to answer two questions:
 
 (1) How do driver earnings vary?
-
 (2) Is that variation due to chance?
 
 By answering these questions, we can assess whether or not drivers have significantly varying skill levels. We began by trying to determine the efficiency of a driver in a work period. We defined efficiency as the ratio of the total metered fare earned in a work period to the total work time. The total metered fare was information we obtained directly from our data by summing up the metered fare for each driver for his trips. However, the data did not contain the time each driver spent working in a shift; rather, it only had records of when each driver drove with a passenger. We tried to determine a driver's shift by looking at the downtime (time between a drop off and the next pickup) for all trips. Figure ~\ref{fig:downtime_distribution} shows the distribution of downtimes for all drivers. 
@@ -105,8 +104,7 @@ Now, we wanted to find out what effect the driver has on the efficiency of shift
 \end{split}
 \end{equation}
 
-
-Here, each $\beta$ represents the effect of its corresponding subscript, whether it be the driver’s ID, the start hour of a shift, or whether it is a weekend of the weekday. $\gamma_p$ is precipitation in inches, and $x_p$ is its coefficient. The two summations represent the percentage of pickups and drop-offs, respectively, in each neighborhood, with $\rho$ and $\delta$ as thier cooefficients.
+Here, each $\beta$ represents the effect of its corresponding subscript, whether it be the driver’s ID, the start hour of a shift, or whether it is a weekend of the weekday. $x_p$ is precipitation in inches, and  $\gamma_p$ is its coefficient. The two summations represent the percentage of pickups ($p_n$) and drop-offs ($d_n$), respectively, in each neighborhood, with $\rho$ and $\delta$ as their cooefficients.
 
 We also ran the same model on a dataset with shuffled driver IDs; that is, each driver was randomly assigned shifts, which had varying efficiencies. In the randomized model, drivers' efficiencies were normally distributed, with the most extreme outliers making within $\pm$$\$$5/hour from the center. In the nonrandomized model, drivers' efficiencies varied more, with the most extreme outliers consistently making $\pm$$\$$10/hour. This information is summarized in figure ~\ref{fig:efficiency}.
 \begin{figure}[h]
@@ -128,7 +126,7 @@ To look for carpooling potential, we looked for trips that started in a neighbor
   \label{fig:hotspots}
 \end{figure}
 
-Next, we calculated our potential savings. For each hotspot, we calculated the minimum number of cabs by assuming that up to 4 passengers (92\% of taxis fit 4 passengers4) would fit in one cab. Since each cab essentially makes one trip, we equated the minimum cabs needed to the minimum number of trips that would be made. Thus, we subtracted the minimum number of trips from the actual number of trips that were made to see how many trips we could cut down. We then computed the possible fare that could be saved by multiplying the number of trips saved by the average fare of all trips. Our potential savings over the month of July were around 5\% of the trips and 6\% of total money spent by customers.
+Next, we calculated our potential savings. For each hotspot, we calculated the minimum number of cabs by assuming that up to 4 passengers (92\% of taxis fit 4 passengers~\cite{TLC:2007	}) would fit in one cab. Since each cab essentially makes one trip, we equated the minimum cabs needed to the minimum number of trips that would be made. Thus, we subtracted the minimum number of trips from the actual number of trips that were made to see how many trips we could cut down. We then computed the possible fare that could be saved by multiplying the number of trips saved by the average fare of all trips. Our potential savings over the month of July were around 5\% of the trips and 6\% of total money spent by customers.
 
 We also found that with less restrictive assumptions, i.e. widening the waiting period to 6 minutes, and including rides taking place within the same neighborhood, we can improve the savings up to 14\% for the number of rides and fare paid. In addition to saving money, carpooling would also help the environment and reduce traffic! 
 
