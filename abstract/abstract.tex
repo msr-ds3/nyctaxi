@@ -46,9 +46,24 @@
 \end{@twocolumnfalse}
 ]
 \section{Introduction}
-New York City is home to millions of people who rely on its robust transportation system. The taxi transportation system in particular plays a critical role in keeping people moving throughout the city. With access to highly detailed NYC taxi data, we were able to explore some interesting questions about the taxi system. First, we wanted to get a basic understanding of where people go. By doing so, we could have an overview of the entire city and find out information such as which areas are popular, where the most taxis are situated, and even how traffic in New York City looks like. Next, we wanted to understand the roles of drivers in the taxi system. Specifically, we wanted to look at how efficient cab drivers are, and whether or they have skills that differentiate themselves from other drivers. Finally, we wanted to look at ways to improve the entire system, whether it be in terms of money, carbon emissions, or traffic. 
+% where do people go? besides inherent interest, this could inform many problems: understanding of traffic, taxi provisioning, relationships between neighborhoods.
+% - efficiency: understand how much skill is there in driving? this could provide upper/lower bounds on how much one (a driver, a taxi management company, or the entire system) could improve if we trained drivers.
+% - carpooling (systemic efficiency): how much could we improve entire system? natural motivations: $, traffic, emissions.
 
-From our findings, we were able to get a bird's-eye view of taxis and reveal patterns in the movement of people throughout the city. Additionally, we analyzed driver efficiency and found that there is a substantial amount of skill involved in driving a taxi, with drivers consistently earning up to 30\% more than average. Finally, we found locations with many redundant trips in the city and showed that a simple carpooling strategy could shorten the number of trips and save money spent on cabs by approximately 5\%(600,000 trips, 8.5 million dollars).
+Millions of people move throughout New York City each day and yet relatively little is understood about where and when people travel, both at the individual and aggregate levels.
+Better insights around these travel patterns could play crucial roles in everything from simply understanding people's habits to improving traffic flow and optimizing taxi provisioning.
+In this paper, we address several such questions using highly detailed data for 13 million NYC taxi trips in 2013 to better understand the flow and efficiency of the taxi system and the people it services.
+
+First, we use the patterns of pickups and dropoffs across different neighborhoods to get an overview of the entire city, showing how people move between neighborhoods during a typical week.
+%and identifying popular and unusual destinations throughout the city.
+Next, we look at the role of drivers in the taxi system, specifically investigating how earnings vary across drivers and quantifying how much of this variation is due to skill versus chance.
+Somewhat surprisingly, we find that while factors such as time of day and weather have a large impact on efficiency of the taxi system, skill plays a sizeable role in determining driver efficiency with some drivers consistently earning up to 30\% more than average.
+Finally, we use the highly granular nature of this data to identify opportunities to improve the efficiency of the taxi system through a simple carpooling strategy.
+Specifically, we identify locations throughout the city with consistently redundant trips, where two or more taxis leave from the same place at the same time, traveling to the same destination.
+We show that a taxi stand policy requiring people to wait no more than five minutes to carpool with another rider at these locations could improve the system by upwards of 5\%, eliminating more than 600,000 trips and saving consumers \$8.5 million each month.
+
+In the remainder of the paper we discuss more details of the data and methods used to obtain these results.
+
 \section{Data and Methods}
 We used data that was released by the NYC TLC after an initial Freedom of Information Law (FOIL) request by Chris Whong~\cite{Whong:2014}. Although more recent data was available, we used data from 2013 because it contained an anonymized driver’s license for each trip. This information allowed us to associate trips with drivers and analyze their behavior. Due to the overwhelming size of that data, we chose to work with the month of July as a sample month for our analysis. 
 
