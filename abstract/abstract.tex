@@ -104,7 +104,7 @@ Given this high-level understanding of how people move throughout the city, next
 %By answering these questions, we can assess whether or not drivers have significantly varying skill levels.
 
 We began by computing the efficiency of a driver in a work period, defined as the ratio of the total metered fare earned in that period to the total time worked. The total metered fare earned on each trip was available directly in our data set. Unfortunately, however, the data does not contain the time each driver spent working in a shift; rather, it only logs the times that a driver was with a passenger, making it difficult to identify the length of a shift. Previous work used the distance between a dropoff and the next pickup to approximate total shift time~\cite{LEE:2015}. We took a more refined approach to identify driver shifts by looking at the downtime, or time between a drop off and the next pickup, for all trips.
-Consistent with past work on driver earnings~\cite{Farber:2014}, we found that very few drivers have downtimes of six hours, with the time between most trips either ranging from a few minutes to 12 hours.
+Consistent with past work on driver earnings~\cite{Farber:2014}, we found that very few drivers have downtimes of six hours, with the time between most trips either ranging from a few minutes to 12 hours (figure ~\ref{fig:downtime_distribution}).
 Accordingly, we defined any dropoff where there is no driver activity for at least six hours as the end of a shift, with the following pickup marking the beginning of a new shift.
 With this information we were able to group each driver's rides into shifts and compute driver efficiency for each shift as defined above.
 
@@ -117,7 +117,12 @@ With this information we were able to group each driver's rides into shifts and 
   \captionof{figure}{Downtimes for all rides. We see that there are very few drivers who have a 6-hour gap between two rides.}
   \label{fig:downtime_distribution}
 \end{figure}
-
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=1\linewidth]{shifts_id}
+  \captionof{figure}{Rides (in black) and shifts (in red) for 50 random drivers over a week's time in July.}
+  \label{fig:shifts_id}
+\end{figure}
 Doing so revealed that drivers have passengers for approximately half of their shift time and earn an average of \$30 per shift, with a reasonable amount of variation in earnings across drivers.
 That said, it is unclear what drives this variation---is it simply due to the string of pickup and dropoff locations a driver happens to be assigned, or can it be attributed to some inherent difference in skill across drivers?
 To better understand variation in efficiency, we fit a linear regression to predict shift efficiency using the following model:
