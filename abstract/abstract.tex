@@ -104,19 +104,19 @@ Given this high-level understanding of how people move throughout the city, next
 %By answering these questions, we can assess whether or not drivers have significantly varying skill levels.
 
 We began by computing the efficiency of a driver in a work period, defined as the ratio of the total metered fare earned in that period to the total time worked. The total metered fare earned on each trip was available directly in our data set. Unfortunately, however, the data does not contain the time each driver spent working in a shift; rather, it only logs the times that a driver was with a passenger, making it difficult to identify the length of a shift. Previous work used the distance between a dropoff and the next pickup to approximate total shift time~\cite{LEE:2015}. We took a more refined approach to identify driver shifts by looking at the downtime, or time between a drop off and the next pickup, for all trips.
-Consistent with past work on driver earnings~\cite{Farber:2014}, we found that very few drivers have downtimes of six hours, with the time between most trips either ranging from a few minutes to 12 hours (figure ~\ref{fig:downtime_distribution}).
+Consistent with past work on driver earnings~\cite{Farber:2014}, we found that very few drivers have downtimes of six hours, with the time between most trips either ranging from a few minutes to 12 hours. %(figure ~\ref{fig:downtime_distribution}).
 Accordingly, we defined any dropoff where there is no driver activity for at least six hours as the end of a shift, with the following pickup marking the beginning of a new shift.
 With this information we were able to group each driver's rides into shifts and compute driver efficiency for each shift as defined above.
 
 %Figure~\ref{fig:downtime_distribution} shows the distribution of downtimes for all drivers. 
 %Looking at this distribution, we defined the end of a shift as the last drop off when there is no driver activity for at least six hours, which agrees with previous research studying driver earnings~\cite{Farber:2014}. The next pickup marked the beginning of the next shift. With this shift information, we were able to group each driver's rides into shifts and compute the efficiency for each shift.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=.9\linewidth]{downtime_distribution}
-  \captionof{figure}{Downtimes for all rides. We see that there are very few drivers who have a 6-hour gap between two rides.}
-  \label{fig:downtime_distribution}
-\end{figure}
+%\begin{figure}[t]
+%  \centering
+%  \includegraphics[width=.9\linewidth]{downtime_distribution}
+%  \captionof{figure}{Downtimes for all rides. We see that there are very few drivers who have a 6-hour gap between two rides.}
+%  \label{fig:downtime_distribution}
+%\end{figure}
 \begin{figure}[t]
   \centering
   \includegraphics[width=1\linewidth]{shifts_id}
@@ -133,14 +133,13 @@ To better understand variation in efficiency, we fit a linear regression to pred
 \end{eqnarray*}
 where each $\beta$ represents the effect of its corresponding subscript---whether it be the driver's ID, the start hour of a shift, or whether it is a weekend of the weekday---$x_p$ is precipitation in inches, and $\gamma_p$ is its coefficient. The two summations represent the percentage of pickups ($p_n$) and drop-offs ($d_n$), respectively, in each neighborhood, with $\rho$ and $\delta$ as their coefficients.
 
-After running our model, we observed a significant variance in earnings, with some drivers consistently making $\pm$$\$$10/hour from the average. However, this model does not necessarily confirm the correlation between drivers and earnings, as the high variance could have been due to chance. To see what we would expect from chance, we randomized the assignment of drivers to shifts and re-ran our regression. In the randomized data set, the variance was cut in half to $\pm$$\$$5/hour(Figure~\ref{fig:efficiency}). The difference between the distributions of earnings signifies that the actual variation in driver earnings is not due to chance. There are drivers who make a great deal more than the average driver, as well as drivers who make a great deal less. Thus, while anyone can become a cab driver, there are certain skills that distinguish a driver from others. 
+After running our model, we observed a significant variance in earnings, with some drivers consistently making $\pm$$\$$10/hour from the average. However, this model does not necessarily confirm the correlation between drivers and earnings, as the high variance could have been due to chance. To see what we would expect from chance, we randomized the assignment of drivers to shifts and re-ran our regression. In the randomized data set, the variance was cut in half to $\pm$$\$$5/hour (Figure~\ref{fig:efficiency}). The difference between the distributions of earnings signifies that the actual variation in driver earnings is not due to chance. There are drivers who make a great deal more than the average driver, as well as drivers who make a great deal less. Thus, while anyone can become a cab driver, there are certain skills that distinguish a driver from others. 
 \begin{figure}[h]
   \centering
   \includegraphics[width=.9\linewidth]{efficiency}
   \captionof{figure}{Effect of Driver ID on Efficiency}
   \label{fig:efficiency}
 \end{figure}
-This distribution reveals that there is a significant variation in drivers’ earnings, and that this variation is not due to chance. Thus, there is a strong correlation between the driver and the efficiency of a given shift. Anyone can be a taxi driver, but there are certain skills that distinguishes one drivers from others! 
 \section{Carpooling}
 After looking at flow and driver behavior, we wanted to find ways to improve the overall taxi system. Past work have focused on recommender systems~\cite{ZHAN:2014} or information systems~\cite{KIM:2005}, which would require taxi drivers to be notified via a mobile application or a similar solution. We take a different approach and look at a policy that can be implemented at existing taxi stands, with little overhead. We noticed that there were lots of trips occurring between similar locations. As a result, we considered a scenario in which people would carpool. Our thought experiment made the following assumptions: Customers would be willing to (1) share a cab with strangers, (2) wait up to five minutes to find someone to carpool with, (3) walk up to one block, (4) share a destination within ~1 kilometer of their own destination. We also assumed that customers would carpool only for trips between two distinct neighborhoods, because customers would probably not want to wait for trips that are relatively short.
 
