@@ -65,10 +65,8 @@ We show that a taxi stand policy requiring people to wait no more than five minu
 In the remainder of the paper we discuss more details of the data and methods used to obtain these results.
 
 \section{Data and Methods}
-We used data that was released by the NYC TLC after an initial Freedom of Information Law (FOIL) request by Chris Whong~\cite{Whong:2014}. Although more recent data was available, we used data from 2013 because it contained an anonymized driver’s license for each trip. This information allowed us to associate trips with drivers and analyze their behavior. Due to the overwhelming size of that data, we chose to work with the month of July as a sample month for our analysis. 
-
-For each trip, we had relevant information such as the start and end time, pickup and dropoff coordinates, fare paid, distance traveled, total trip time, mode of payment, rate code, and more.
-
+Our data set had records of every single trip in a yellow cab in 2013, with detailed information such as the start and end times, pickup and drop off coordinates, fare paid, an anonymized driver's license, and other useful information for each trip. The anonymized driver's licenses, which were unavailable in more recent data sets (2014 & 2015), allow us to associate trips with drivers and perform all sorts of analysis that might aid in the understanding of driver behavior and whether or not they have certain skills. The locations and times of each trip open up the possibility to look at the flow of people in NYC as well as the taxi system as a whole. For our analysis, we chose to work with the sample month of July, which was a month of more than 13 million rides. 
+ 
 We joined this data with daily weather data obtained from NOAA~\cite{NOAA:2016} to help in our analysis. 
 \section{Flow}
 First, we looked at the overall flow of taxis in NYC to find the general trends that define the movement of people within the city. To understand flow, we mapped geographical coordinates of trips to 266 neighborhoods using shapefiles~\cite{PEDIACITIES:2015} to translate trip pickup and dropoff geographical coordinates into neighborhoods. With the pickup and dropoff neighborhood for each trip added to the dataset, we then grouped trips by neighborhood and for each neighborhood, we looked at the change in population (number of passengers that entered minus number of passengers that left) at every hour for all weekdays in July. We then used the median change in population of each hour to represent the net flow.
