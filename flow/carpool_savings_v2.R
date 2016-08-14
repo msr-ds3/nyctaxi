@@ -119,5 +119,5 @@ ggmap(map) + geom_point(data = top_20_hotspots,
              aes(pickup_lng, pickup_lat, size=top_pct+2), 
              colour="black", shape=21) +
   theme_nothing()
-
+  
 ggsave("../figures/top_25_hotspots.png")
